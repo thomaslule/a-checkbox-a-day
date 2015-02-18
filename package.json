@@ -1,0 +1,9 @@
+{
+  "name": "a-checkbox-a-day",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "^4.11.2",
+    "jade": "^1.9.2",
+    "nconf": "^0.7.1"
+  }
+}
