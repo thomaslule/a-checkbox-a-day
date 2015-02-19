@@ -1,6 +1,13 @@
 {
   "name": "a-checkbox-a-day",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomaslule/a-checkbox-a-day.git"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  },
   "dependencies": {
     "express": "^4.11.2",
     "jade": "^1.9.2",
