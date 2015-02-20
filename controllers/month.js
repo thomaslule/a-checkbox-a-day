@@ -9,7 +9,9 @@ module.exports = function(app) {
 
         post: function(req, res) {
             var task = new Task(req.body.new_task);
-            storage.storeTask(task);
+            storage.storeTask(task, function() {
+                res.json('{}');
+            });
         }
     }
 }
