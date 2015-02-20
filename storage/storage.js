@@ -15,18 +15,22 @@ var multiConnection = mysql.createConnection(connectionConf);
 
 module.exports = {
     execute: function(script, callback) {
-        multiConnection.query(script, function(err, results) {
-            if (err) throw err;
-            if (callback) callback(results);
-        });
+        multiConnection.query(script, processDbResult(callback));
     },
 
-    getAll: function() {
-
+    getTasks: function(callback) {
+        connection.query('select * from tasks order by id', processDbResult(callback));
     },
 
-    storeTask: function(task) {
-
+    storeTask: function(task, callback) {
+        connection.query('insert into tasks (name, done) values (?, ?)', [ task._name, task._done ], processDbResult(callback));
     }
 
+}
+
+function processDbResult(callback) {
+    return function(err, results) {
+        if (err) throw err;
+        if (callback) callback(results);
+    }
 }
