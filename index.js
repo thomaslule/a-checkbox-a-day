@@ -19,7 +19,7 @@ app.set('view engine', 'jade');
 app.locals.pretty = true;
 
 app.get('/', function(req, res) {
-	res.render('month');
+    res.render('month');
 })
 .post('/', function(req, res) {
     console.log(req.body.new_task);
