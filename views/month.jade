@@ -6,7 +6,7 @@ html
         script(type="text/javascript" src="/js/month.js")
     body
         ul#items-list
-        form(method="post" action="new")
+        form#new-item(method="post" action="new")
             // used for html5 validation
             input.hidden(type="submit")
             input(type="hidden" name="done" value="0")

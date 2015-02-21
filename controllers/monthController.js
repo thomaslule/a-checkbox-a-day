@@ -13,8 +13,8 @@ module.exports = {
     },
 
     postNew: function(req, res) {
-        taskModel.store(req.body, function() {
-            res.json('{}');
+        taskModel.store(req.body, function(result) {
+            res.json(result);
         });
     }
 

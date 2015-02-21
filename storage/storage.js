@@ -13,25 +13,31 @@ var connection = mysql.createConnection(connectionConf);
 connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
 
-module.exports = {
+module.exports.execute = function(script, callback) {
+    multiConnection.query(script, processDbResult(callback));
+},
 
-    execute: function(script, callback) {
-        multiConnection.query(script, processDbResult(callback));
-    },
+module.exports.getTask = function(id, callback) {
+    connection.query('select * from tasks where id = ?', [ id ], processDbResult(callback, true));
+},
 
-    getTasks: function(callback) {
-        connection.query('select * from tasks order by id', processDbResult(callback));
-    },
+module.exports.getTasks = function(callback) {
+    connection.query('select * from tasks order by id', processDbResult(callback));
+},
 
-    storeTask: function(task, callback) {
-        connection.query('insert into tasks (name, done) values (?, ?)', [ task.name, task.done ], processDbResult(callback));
-    }
-
+module.exports.storeTask = function(task, callback) {
+    connection.query('insert into tasks (name, done) values (?, ?)', [ task.name, task.done ], function(err, results) {
+        if (err) throw err;
+        module.exports.getTask(results.insertId, callback);
+    });
 }
 
-function processDbResult(callback) {
+function processDbResult(callback, unique) {
+    unique = (typeof unique === 'undefined' ? false : unique);
     return function(err, results) {
         if (err) throw err;
-        if (callback) callback(results);
+        if (callback) {
+            unique ? callback(results[0]) : callback(results);
+        }
     }
 }
