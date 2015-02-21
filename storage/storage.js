@@ -14,6 +14,7 @@ connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
 
 module.exports = {
+
     execute: function(script, callback) {
         multiConnection.query(script, processDbResult(callback));
     },
@@ -23,7 +24,7 @@ module.exports = {
     },
 
     storeTask: function(task, callback) {
-        connection.query('insert into tasks (name, done) values (?, ?)', [ task._name, task._done ], processDbResult(callback));
+        connection.query('insert into tasks (name, done) values (?, ?)', [ task.name, task.done ], processDbResult(callback));
     }
 
 }

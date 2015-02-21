@@ -18,8 +18,9 @@ app.set('view engine', 'jade');
 // output indented html
 app.locals.pretty = true;
 
-var monthController = require('./controllers/month.js')(app);
+var monthController = require('./controllers/monthController.js');
 
 app.get('/', monthController.get)
-.post('/', monthController.post)
+.get('/all', monthController.getAll)
+.post('/new', monthController.postNew)
 .listen(nconf.get('port'));

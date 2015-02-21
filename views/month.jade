@@ -5,7 +5,9 @@ html
         script(type="text/javascript" src="//code.jquery.com/jquery-2.1.3.min.js")
         script(type="text/javascript" src="/js/month.js")
     body
-        form(method="post")
+        ul#items-list
+        form(method="post" action="new")
             // used for html5 validation
             input.hidden(type="submit")
-            input(type="text" name="new_task" required="required")
+            input(type="hidden" name="done" value="0")
+            input(type="text" name="name" required="required")
