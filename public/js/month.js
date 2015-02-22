@@ -5,8 +5,8 @@ $(function() {
         tasks.forEach(function(task) {
             $('#items-list').append(Tasks.taskToHTML(task));
         });
-    });
-    // TODO .fail
+    })
+    .fail(Util.displayError);
 
     $('#new-item').submit(function() {
         var nameInput = $(this).find('input[name="name"]');
@@ -25,19 +25,22 @@ Tasks = {
     }
 };
 
-Util = {
-    post: function(form, callback) {
-        // html5 validation
-        if (!form[0].checkValidity()) {
-            form.find(':submit').click();
-            return false;
-        }
-        // ajax submit
-        $.post(form.attr('action'), form.serialize())
-        .done(function(result) {
-            callback(result);
-        });
-        // TODO .fail
+Util = {}
+Util.post = function(form, callback) {
+    // html5 validation
+    if (!form[0].checkValidity()) {
+        form.find(':submit').click();
         return false;
     }
+    // ajax submit
+    $.post(form.attr('action'), form.serialize())
+    .done(function(result) {
+        callback(result);
+    })
+    .fail(Util.displayError);
+    return false;
+}
+
+Util.displayError = function() {
+    $('#error').show().delay(2000).hide(0);
 }
