@@ -27,11 +27,14 @@ Tasks = {
 
 Util = {}
 Util.post = function(form, callback) {
+    form.removeAttr('novalidate');
     // html5 validation
     if (!form[0].checkValidity()) {
         form.find(':submit').click();
         return false;
     }
+    // set novalidate attr in order to avoid html5 validation after the submit event
+    form.attr('novalidate', 'novalidate');
     // ajax submit
     $.post(form.attr('action'), form.serialize())
     .done(function(result) {
