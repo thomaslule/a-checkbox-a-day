@@ -27,17 +27,23 @@ module.exports.getTasks = function(callback) {
 
 module.exports.storeTask = function(task, callback) {
     connection.query('insert into tasks (name, done) values (?, ?)', [ task.name, task.done ], function(err, results) {
-        if (err) throw err;
-        module.exports.getTask(results.insertId, callback);
+        if (err) {
+            callback(err);
+        } else {
+            module.exports.getTask(results.insertId, callback);
+        }
     });
 }
 
 function processDbResult(callback, unique) {
     unique = (typeof unique === 'undefined' ? false : unique);
     return function(err, results) {
-        if (err) throw err;
         if (callback) {
-            unique ? callback(results[0]) : callback(results);
+            if (err) {
+                callback(err);
+            } else {
+                unique ? callback(null, results[0]) : callback(null, results);
+            }
         }
     }
 }

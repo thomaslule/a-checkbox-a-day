@@ -22,5 +22,17 @@ var monthController = require('./controllers/monthController.js');
 
 app.get('/', monthController.get)
 .get('/all', monthController.getAll)
-.post('/new', monthController.postNew)
-.listen(nconf.get('port'));
+.post('/new', monthController.postNew);
+
+// error handling
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500);
+    if (req.xhr) {
+        res.json({ 'error': err.message });
+    } else {
+        res.send('Internal error: ' + err.message);
+    }
+});
+
+app.listen(nconf.get('port'));
