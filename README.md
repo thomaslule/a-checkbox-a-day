@@ -7,6 +7,7 @@ Progress: [todo.md](https://github.com/thomaslule/a-checkbox-a-day/blob/master/t
 ## Install:
     cp local.json-dist local.json # db credentials go here
     npm install
-    node storage/init_storage.js
+    node bin/init_storage.js
+    node bin/init_jade.js
     npm -g install nodemon
     npm start

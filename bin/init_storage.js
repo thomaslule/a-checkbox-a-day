@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('fs-extra');
 var storage = require('../storage/storage');
 
 fs.readFile('./storage/init_db.sql', 'utf8', function(err, data) {

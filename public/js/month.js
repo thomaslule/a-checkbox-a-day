@@ -3,7 +3,7 @@ $(function() {
     $.get('/all')
     .done(function(tasks) {
         tasks.forEach(function(task) {
-            $('#items-list').append(Tasks.taskToHTML(task));
+            $('#items-list').append(jadeTaskTemplate(task));
         });
     })
     .fail(Util.displayError);
@@ -11,19 +11,12 @@ $(function() {
     $('#new-item').submit(function() {
         var nameInput = $(this).find('input[name="name"]');
         return Util.post($(this), function(task) {
-            $('#items-list').append(Tasks.taskToHTML(task));
+            $('#items-list').append(jadeTaskTemplate(task));
             nameInput.val('');
         })
     });
 
 });
-
-Tasks = {
-    taskToHTML: function(task) {
-        // TODO valid form
-        return $('<li><input type="checkbox" /> ' + task.name + '</li>');
-    }
-};
 
 Util = {}
 Util.post = function(form, callback) {

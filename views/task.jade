@@ -1,0 +1,7 @@
+li
+    form(method="post" action="edit")
+        // used for html5 validation
+        input(type="submit" style={display: 'none'})
+        input(type="hidden" name="id" value="#{id}")
+        input(type="checkbox" name="done" checked=("#{done}" == 1 ? "checked" : undefined))
+        | #{name}
