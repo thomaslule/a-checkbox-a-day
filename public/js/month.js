@@ -16,6 +16,10 @@ $(function() {
         })
     });
 
+    $(document).on('change', '.task-form input', function() {
+        return Util.post($(this).closest('form'));
+    });
+
 });
 
 Util = {}
@@ -28,10 +32,15 @@ Util.post = function(form, callback) {
     }
     // set novalidate attr in order to avoid html5 validation after the submit event
     form.attr('novalidate', 'novalidate');
+    var inputs = form.serializeArray();
+    // for each unchecked box, submit a 0 value
+    form.find('input:checkbox:not(:checked)').each(function() {
+        inputs.push({ name: $(this).attr('name') , value: 0 });
+    });
     // ajax submit
-    $.post(form.attr('action'), form.serialize())
+    $.post(form.attr('action'), inputs)
     .done(function(result) {
-        callback(result);
+        if (callback) callback(result);
     })
     .fail(Util.displayError);
     return false;

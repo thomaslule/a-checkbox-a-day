@@ -12,6 +12,10 @@ module.exports.postNew = function(req, res, next) {
     taskModel.store(req.body, getStorageCallback(res, next));
 }
 
+module.exports.postEdit = function(req, res, next) {
+    taskModel.edit(req.body, getStorageCallback(res, next));
+}
+
 function getStorageCallback(res, next) {
     return function(err, result) {
         if (err) {

@@ -22,7 +22,8 @@ var monthController = require('./controllers/monthController.js');
 
 app.get('/', monthController.get)
 .get('/all', monthController.getAll)
-.post('/new', monthController.postNew);
+.post('/new', monthController.postNew)
+.post('/edit', monthController.postEdit);
 
 // error handling
 app.use(function(err, req, res, next) {

@@ -35,6 +35,16 @@ module.exports.storeTask = function(task, callback) {
     });
 }
 
+module.exports.editTask = function(task, callback) {
+    connection.query('update tasks set name = ?, done = ? where id = ?', [ task.name, task.done, task.id ], function(err, results) {
+        if (err) {
+            callback(err);
+        } else {
+            module.exports.getTask(task.id, callback);
+        }
+    });
+}
+
 function processDbResult(callback, unique) {
     unique = (typeof unique === 'undefined' ? false : unique);
     return function(err, results) {

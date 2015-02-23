@@ -9,6 +9,10 @@ module.exports = {
 
     store: function(task, callback) {
         storage.storeTask(task, callback);
+    },
+
+    edit: function(task, callback) {
+        storage.editTask(task, callback);
     }
 
 }
