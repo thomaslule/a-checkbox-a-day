@@ -6,11 +6,11 @@ $(function() {
             $('#new-item').before(jadeTaskTemplate(task));
         });
     })
-    .fail(Util.displayError);
+    .fail(util.displayError);
 
     $(document).on('submit', '#new-item form', function() {
         var nameInput = $(this).find('input[name="name"]');
-        Util.post($(this), function(task) {
+        util.post($(this), function(task) {
             $('#new-item').before(jadeTaskTemplate(task));
             nameInput.val('');
         })
@@ -18,12 +18,12 @@ $(function() {
     });
 
     $(document).on('change', '.task-form :checkbox', function() {
-        Util.post($(this).closest('form'));
+        util.post($(this).closest('form'));
         return false;
     });
 
     $(document).on('click', '.edit-item-button', function() {
-        Item.enterEdit($(this).closest('li'));
+        item.enterEdit($(this).closest('li'));
         return false;
     });
 
@@ -31,42 +31,42 @@ $(function() {
         li = $(this).closest('li');
         bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
             if (result) {
-                Item.delete(li);
+                item.delete(li);
             }
         });
     });
 
     $(document).on('submit', '.task-form', function() {
         li = $(this).closest('li');
-        Util.post($(this), function(task) {
-            Item.applyEdit(li, task);
+        util.post($(this), function(task) {
+            item.applyEdit(li, task);
         });
         return false;
     });
 
 });
 
-Item = {};
-Item.enterEdit = function(li) {
+item = {};
+item.enterEdit = function(li) {
     li.find('.checkbox').hide();
     li.find('.edit-item-input').show();
 }
 
-Item.applyEdit = function(li, item) {
+item.applyEdit = function(li, item) {
     li.find('.task-name').text(item.name);
     li.find('.edit-item-input').hide();
     li.find('.checkbox').show();
 }
-Item.delete = function(li) {
+item.delete = function(li) {
     $.post('/delete', { id: li.find('input[name="id"]').val() })
     .done(function() {
         li.remove();
     })
-    .fail(Util.displayError);
+    .fail(util.displayError);
 }
 
-Util = {};
-Util.post = function(form, callback) {
+util = {};
+util.post = function(form, callback) {
     form.removeAttr('novalidate');
     // html5 validation
     if (!form[0].checkValidity()) {
@@ -85,9 +85,9 @@ Util.post = function(form, callback) {
     .done(function(result) {
         if (callback) callback(result);
     })
-    .fail(Util.displayError);
+    .fail(util.displayError);
 }
 
-Util.displayError = function() {
+util.displayError = function() {
     $('#error').show().delay(2000).hide(0);
 }
