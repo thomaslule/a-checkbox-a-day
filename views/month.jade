@@ -2,15 +2,26 @@ html
     head
         title A checkbox a day
         link(rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+        link(rel="stylesheet" type="text/css" href="/css/style.css")
         script(type="text/javascript" src="//code.jquery.com/jquery-2.1.3.min.js")
         script(type="text/javascript" src="/js/month.js")
         script(type="text/javascript" src="/js/jade/runtime.js")
         script(type="text/javascript" src="/js/jade/taskTemplate.js")
     body
-        div#error.alert.alert-danger(style={display: 'none'}) Une erreur est survenue
-        ul#items-list
-        form#new-item(method="post" action="new")
-            // used for html5 validation
-            input(type="submit" style={display: 'none'})
-            input(type="hidden" name="done" value="0")
-            input(type="text" name="name" required="required")
+        nav.navbar.navbar-default
+            .container
+                .row
+                    .col-xs-4.col-xs-offset-2
+                        span.navbar-brand A checkbox a day
+        .container
+            .row
+                .col-xs-4.col-xs-offset-2
+                    #error.alert.alert-danger(style={display: 'none'}) Une erreur est survenue
+                    ul#items-list
+                        li#new-item
+                            form(method="post" action="new")
+                                input(type="hidden" name="done" value="0")
+                                .input-group
+                                    input.form-control(type="text" name="name" required="required")
+                                    span.input-group-btn
+                                        button.btn(type="submit") Ajouter

@@ -4,5 +4,6 @@ li
         input(type="submit" style={display: 'none'})
         input(type="hidden" name="id" value="#{id}")
         input(type="hidden" name="name" value="#{name}")
-        input(type="checkbox" name="done" value="1" checked=("#{done}" == 1 ? "checked" : undefined))
-        | #{name}
+        .checkbox
+            input(type="checkbox" name="done" value="1" checked=("#{done}" == 1 ? "checked" : undefined))
+            | #{name}

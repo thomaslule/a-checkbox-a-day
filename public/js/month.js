@@ -3,15 +3,15 @@ $(function() {
     $.get('/all')
     .done(function(tasks) {
         tasks.forEach(function(task) {
-            $('#items-list').append(jadeTaskTemplate(task));
+            $('#new-item').before(jadeTaskTemplate(task));
         });
     })
     .fail(Util.displayError);
 
-    $('#new-item').submit(function() {
+    $('#new-item form').submit(function() {
         var nameInput = $(this).find('input[name="name"]');
         return Util.post($(this), function(task) {
-            $('#items-list').append(jadeTaskTemplate(task));
+            $('#new-item').before(jadeTaskTemplate(task));
             nameInput.val('');
         })
     });
