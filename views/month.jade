@@ -19,7 +19,7 @@ html
             .row
                 .col-xs-4.col-xs-offset-2
                     #error.alert.alert-danger(style={display: 'none'}) Une erreur est survenue
-                    ul#items-list
+                    ul#items-list.list-unstyled
                         li#new-item
                             form(method="post" action="new")
                                 input(type="hidden" name="done" value="0")
