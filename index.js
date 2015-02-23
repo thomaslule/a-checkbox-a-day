@@ -41,5 +41,5 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(nconf.get('port'), function() {
-	console.log("Launched a-checkbox-a-day on port %s", nconf.get('port'));
+    console.log("Launched a-checkbox-a-day on port %s", nconf.get('port'));
 });

@@ -4,8 +4,8 @@
 DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 HOME=$(cd "$DIR/.." && pwd)
 if ! $HOME/bin/build.sh 1> /dev/null; then
-	echo "Build command failed"
-	exit 1
+    echo "Build command failed"
+    exit 1
 fi
 echo "Application container built"
 
@@ -14,27 +14,27 @@ APPLI_IMAGE=$(docker images | grep $IMAGE_NAME)
 
 # First we check if the appli is built
 if [ -z "$APPLI_IMAGE" ]; then
-	echo "No $IMAGE_NAME image found, first build the project"
-	exit 1
+    echo "No $IMAGE_NAME image found, first build the project"
+    exit 1
 fi
 
 # We then test that the application is launched and can be pinged
 # finally cleans everything up
 # if called with no argument, considering that the script failed
 function finally() {
-	if [ -n "$MYSQL_PID" ]; then
-		docker rm -f $MYSQL_PID 1> /dev/null
-		echo "Mysql test container killed $MYSQL_PID"
-	fi
-	if [ -n "$APPLI_PID" ]; then
-		docker rm -f $APPLI_PID 1> /dev/null
-		echo "Appli container killed $APPLI_PID"
-	fi
-	if [ -z "$1" ]; then
-		echo "test failed!"
-	else
-		echo $1
-	fi
+if [ -n "$MYSQL_PID" ]; then
+    docker rm -f $MYSQL_PID 1> /dev/null
+    echo "Mysql test container killed $MYSQL_PID"
+fi
+if [ -n "$APPLI_PID" ]; then
+    docker rm -f $APPLI_PID 1> /dev/null
+    echo "Appli container killed $APPLI_PID"
+fi
+if [ -z "$1" ]; then
+    echo "test failed!"
+else
+    echo $1
+fi
 }
 set -e
 trap finally EXIT
