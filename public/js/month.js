@@ -8,27 +8,54 @@ $(function() {
     })
     .fail(Util.displayError);
 
-    $('#new-item form').submit(function() {
+    $(document).on('submit', '#new-item form', function() {
         var nameInput = $(this).find('input[name="name"]');
-        return Util.post($(this), function(task) {
+        Util.post($(this), function(task) {
             $('#new-item').before(jadeTaskTemplate(task));
             nameInput.val('');
         })
+        return false;
     });
 
-    $(document).on('change', '.task-form input', function() {
-        return Util.post($(this).closest('form'));
+    $(document).on('change', '.task-form :checkbox', function() {
+        Util.post($(this).closest('form'));
+        return false;
+    });
+
+    $(document).on('click', '.edit-item-button', function() {
+        Item.enterEdit($(this).closest('li'));
+        return false;
+    });
+
+    $(document).on('submit', '.task-form', function() {
+        li = $(this).closest('li');
+        Util.post($(this), function(task) {
+            Item.applyEdit(li, task);
+        });
+        return false;
     });
 
 });
 
-Util = {}
+Item = {};
+Item.enterEdit = function(li) {
+    li.find('.checkbox').hide();
+    li.find('.edit-item-input').show();
+}
+
+Item.applyEdit = function(li, item) {
+    li.find('.task-name').text(item.name);
+    li.find('.edit-item-input').hide();
+    li.find('.checkbox').show();
+}
+
+Util = {};
 Util.post = function(form, callback) {
     form.removeAttr('novalidate');
     // html5 validation
     if (!form[0].checkValidity()) {
         form.find(':submit').click();
-        return false;
+        return;
     }
     // set novalidate attr in order to avoid html5 validation after the submit event
     form.attr('novalidate', 'novalidate');
@@ -43,7 +70,6 @@ Util.post = function(form, callback) {
         if (callback) callback(result);
     })
     .fail(Util.displayError);
-    return false;
 }
 
 Util.displayError = function() {

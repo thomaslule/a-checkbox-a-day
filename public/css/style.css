@@ -1,3 +1,8 @@
 ul#items-list {
     list-style-type: none;
 }
+
+a.edit-item-button {
+    text-decoration: none;
+    margin-left: 5px;
+}
