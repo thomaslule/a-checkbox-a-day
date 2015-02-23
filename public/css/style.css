@@ -2,7 +2,7 @@ ul#items-list {
     list-style-type: none;
 }
 
-a.edit-item-button {
+a.edit-item-button, a.delete-item-button {
     text-decoration: none;
     margin-left: 5px;
 }

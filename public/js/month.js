@@ -27,6 +27,15 @@ $(function() {
         return false;
     });
 
+    $(document).on('click', '.delete-item-button', function() {
+        li = $(this).closest('li');
+        bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
+            if (result) {
+                Item.delete(li);
+            }
+        });
+    });
+
     $(document).on('submit', '.task-form', function() {
         li = $(this).closest('li');
         Util.post($(this), function(task) {
@@ -47,6 +56,13 @@ Item.applyEdit = function(li, item) {
     li.find('.task-name').text(item.name);
     li.find('.edit-item-input').hide();
     li.find('.checkbox').show();
+}
+Item.delete = function(li) {
+    $.post('/delete', { id: li.find('input[name="id"]').val() })
+    .done(function() {
+        li.remove();
+    })
+    .fail(Util.displayError);
 }
 
 Util = {};

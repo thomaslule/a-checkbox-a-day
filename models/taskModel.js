@@ -13,6 +13,10 @@ module.exports = {
 
     edit: function(task, callback) {
         storage.editTask(task, callback);
+    },
+
+    delete: function(task, callback) {
+        storage.deleteTask(task, callback);
     }
 
 }

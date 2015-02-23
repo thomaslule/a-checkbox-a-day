@@ -45,6 +45,16 @@ module.exports.editTask = function(task, callback) {
     });
 }
 
+module.exports.deleteTask = function(task, callback) {
+    connection.query('delete from tasks where id = ?', [ task.id ], function(err, results) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, {});
+        }
+    });
+}
+
 function processDbResult(callback, unique) {
     unique = (typeof unique === 'undefined' ? false : unique);
     return function(err, results) {

@@ -23,7 +23,8 @@ var monthController = require('./controllers/monthController.js');
 app.get('/', monthController.get)
 .get('/all', monthController.getAll)
 .post('/new', monthController.postNew)
-.post('/edit', monthController.postEdit);
+.post('/edit', monthController.postEdit)
+.post('/delete', monthController.postDelete);
 
 var applicationHealth = require('./controllers/healthController.js');
 
