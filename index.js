@@ -25,6 +25,10 @@ app.get('/', monthController.get)
 .post('/new', monthController.postNew)
 .post('/edit', monthController.postEdit);
 
+var applicationHealth = require('./controllers/healthController.js');
+
+app.get('/health', applicationHealth.get);
+
 // error handling
 app.use(function(err, req, res, next) {
     console.error(err.stack);
@@ -36,4 +40,6 @@ app.use(function(err, req, res, next) {
     }
 });
 
-app.listen(nconf.get('port'));
+app.listen(nconf.get('port'), function() {
+    console.log("Launched a-checkbox-a-day on port %s", nconf.get('port'));
+});
