@@ -1,7 +1,7 @@
-var connection = require('../storage/storage').connection;
+var storage = require('../storage/storage');
 
 module.exports.get = function(req, res) {
-    connection.connect(function(err) {
+    storage.testConnection(function(err) {
         if (err) {
             console.log("error connecting to mysql: %s", err.stack);
             res.sendStatus(500);
