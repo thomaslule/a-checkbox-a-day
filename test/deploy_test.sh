@@ -10,9 +10,9 @@ fi
 echo "Application container built"
 
 IMAGE_NAME=checkbox/appli
-APPLI_IMAGE=$(docker images | grep $IMAGE_NAME)
 
 # First we check if the appli is built
+APPLI_IMAGE=$(docker images | grep $IMAGE_NAME)
 if [ -z "$APPLI_IMAGE" ]; then
     echo "No $IMAGE_NAME image found, first build the project"
     exit 1
