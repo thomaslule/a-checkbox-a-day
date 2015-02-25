@@ -1,3 +1,12 @@
+var storage = require('../storage/storage');
+
 module.exports.get = function(req, res) {
-    res.sendStatus(200);
+    storage.testConnection(function(err) {
+        if (err) {
+            console.log("error connecting to mysql: %s", err.stack);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
 };

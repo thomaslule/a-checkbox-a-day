@@ -24,13 +24,12 @@ fi
 function finally() {
 if [ -n "$MYSQL_PID" ]; then
     docker rm -f $MYSQL_PID 1> /dev/null
-    echo "Mysql test container killed $MYSQL_PID"
 fi
 if [ -n "$APPLI_PID" ]; then
-    docker rm -f $APPLI_PID 1> /dev/null
-    echo "Appli container killed $APPLI_PID"
+    docker kill $APPLI_PID 1> /dev/null
 fi
 if [ -z "$1" ]; then
+    printf ' X\n'
     echo "test failed!"
 else
     echo $1
@@ -40,14 +39,21 @@ set -e
 trap finally EXIT
 docker rm -f mysql_test &> /dev/null || true
 
-MYSQL_PID=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=test_toor123_password mysql:5.7)
-APPLI_PID=$(docker run -d -P --link mysql_test:mysql $IMAGE_NAME)
-
-echo "Waiting application warmup before tests"
+APPLI_PID=$(docker run -d -P $IMAGE_NAME)
+printf '***** no mysql test'
 sleep 5
 APPLI_URL=$(docker port $APPLI_PID | grep 8080 | awk '{print $3}')
-echo "http://$APPLI_URL/health"
-curl -s -i --retry 10 --retry-delay 5 -L -f http://$APPLI_URL/health | grep "200 OK"
+curl -siL http://$APPLI_URL/health | grep "500 Internal Server Error" 1> /dev/null
+printf ' O\n'
+docker kill $APPLI_PID 1> /dev/null
+
+MYSQL_PID=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=toor123 -e MYSQL_USER=acad -e MYSQL_PASSWORD=secret -e MYSQL_DATABASE=acad_db mysql:5.7)
+APPLI_PID=$(docker run -d -P --link mysql_test:mysql $IMAGE_NAME)
+printf '***** complete application test'
+sleep 5
+APPLI_URL=$(docker port $APPLI_PID | grep 8080 | awk '{print $3}')
+curl -siL http://$APPLI_URL/health | grep "200 OK" 1> /dev/null
+printf ' O\n'
 
 # TODO test mysql connection
 trap - EXIT

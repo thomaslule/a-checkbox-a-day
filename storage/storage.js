@@ -8,10 +8,15 @@ var connectionConf = {
     user: nconf.get('database:user'),
     password: nconf.get('database:password'),
     database: nconf.get('database:database')
-}
+};
+
 var connection = mysql.createConnection(connectionConf);
 connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
+
+module.exports.testConnection = function(callback) {
+    connection.connect(callback);
+};
 
 module.exports.execute = function(script, callback) {
     multiConnection.query(script, processDbResult(callback));
