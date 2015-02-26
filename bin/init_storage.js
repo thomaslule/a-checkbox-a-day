@@ -1,8 +1,21 @@
 var fs = require('fs-extra');
 var storage = require('../storage/storage');
 
-fs.readFile('./storage/init_db.sql', 'utf8', function(err, data) {
+function execute(script, callback) {
+    fs.readFile(script, 'utf8', function(err, data) {
+        if (err) {
+            return callback(err);
+        }
+        storage.execute(data, function(err) {
+            if (err) {
+                return callback(err);
+            }
+            return callback();
+        });
+    });
+}
+
+execute('./storage/drop_db.sql', function(err) {
     if (err) throw err;
-    // execute script, then exit
-    storage.execute(data, process.exit);
+    execute('./storage/init_db.sql', process.exit);
 });
