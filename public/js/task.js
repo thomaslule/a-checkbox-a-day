@@ -70,6 +70,11 @@ $.fn.task = function(method, arg) {
             taskElt.task('edit');
             return false;
         });
+        taskElt.find('.cancel-button').click(function() {
+            taskElt.find('input[name="name"]').val(taskElt.find('.task-name').text());
+            taskElt.find('.edit-item-input').hide();
+            taskElt.find('.checkbox').show();
+        });
         taskElt.find('form').submit(function() {
             doApplyEdit();
             return false;
