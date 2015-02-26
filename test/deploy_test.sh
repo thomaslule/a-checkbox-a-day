@@ -53,7 +53,8 @@ APPLI_PID=$(echo "$PIDS" | tail -1)
 printf '***** complete application test'
 sleep 7
 APPLI_URL=$(docker port $APPLI_PID | grep 8080 | awk '{print $3}')
-curl -siL http://$APPLI_URL/health | grep "200 OK" 1> /dev/null
+OUTPUT=$(curl -siL http://$APPLI_URL/health)
+echo "$OUTPUT" | grep "200 OK" 1> /dev/null
 printf ' O\n'
 
 # TODO test mysql connection
