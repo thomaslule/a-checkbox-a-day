@@ -15,7 +15,7 @@ connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
 
 module.exports.testConnection = function(callback) {
-    connection.connect(callback);
+    multiConnection.connect(callback);
 };
 
 module.exports.execute = function(script, callback) {
