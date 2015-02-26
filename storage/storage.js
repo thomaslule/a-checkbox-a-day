@@ -19,7 +19,14 @@ module.exports.testConnection = function(callback) {
 };
 
 module.exports.execute = function(script, callback) {
-    multiConnection.query(script, processDbResult(callback));
+    multiConnection.query(script, function (err) {
+        if (err) {
+            // the connection needs to be re-initialized if an error occurs
+            multiConnection.destroy();
+            multiConnection = mysql.createConnection(connectionConf);
+        }
+        callback(err);
+    });
 },
 
 module.exports.getTask = function(id, callback) {
@@ -61,6 +68,7 @@ module.exports.deleteTask = function(task, callback) {
 }
 
 function processDbResult(callback, unique) {
+    // TODO this code may be useless (when array is of length 1 it behaves as its first element) it needs tests
     unique = (typeof unique === 'undefined' ? false : unique);
     return function(err, results) {
         if (callback) {

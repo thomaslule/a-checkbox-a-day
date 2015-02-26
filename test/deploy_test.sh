@@ -7,12 +7,12 @@ if ! $HOME/bin/build.sh 1> /dev/null; then
     echo "Build command failed"
     exit 1
 fi
-echo "Application container built"
+echo "Application image built"
 
 IMAGE_NAME=checkbox/appli
-APPLI_IMAGE=$(docker images | grep $IMAGE_NAME)
 
 # First we check if the appli is built
+APPLI_IMAGE=$(docker images | grep $IMAGE_NAME)
 if [ -z "$APPLI_IMAGE" ]; then
     echo "No $IMAGE_NAME image found, first build the project"
     exit 1
@@ -47,10 +47,11 @@ curl -siL http://$APPLI_URL/health | grep "500 Internal Server Error" 1> /dev/nu
 printf ' O\n'
 docker kill $APPLI_PID 1> /dev/null
 
-MYSQL_PID=$(docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=toor123 -e MYSQL_USER=acad -e MYSQL_PASSWORD=secret -e MYSQL_DATABASE=acad_db mysql:5.7)
-APPLI_PID=$(docker run -d -P --link mysql_test:mysql $IMAGE_NAME)
+PIDS=$($HOME/bin/run.sh)
+MYSQL_PID=$(echo "$PIDS" | head -1)
+APPLI_PID=$(echo "$PIDS" | tail -1)
 printf '***** complete application test'
-sleep 5
+sleep 7
 APPLI_URL=$(docker port $APPLI_PID | grep 8080 | awk '{print $3}')
 curl -siL http://$APPLI_URL/health | grep "200 OK" 1> /dev/null
 printf ' O\n'

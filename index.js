@@ -1,10 +1,27 @@
 var express = require('express');
+var retry = require('retry');
 var nconf = require('nconf');
 var bodyParser = require('body-parser');
+var storage = require('./storage/storage');
 var fs = require('fs-extra');
 var jade = require('jade');
 
 nconf.argv().env().file('local.json');
+
+// We try to initialize the database 5 times
+fs.readFile('./storage/init_db.sql', 'utf8', function(err, script) {
+    if (err) throw err;
+    var operation = retry.operation();
+    operation.attempt(function () {
+        storage.execute(script, function(err) {
+            if (operation.retry(err)) {
+                console.log(err.message);
+                return ;
+            }
+            console.log('Database initialized');
+        });
+    });
+});
 
 var app = express();
 
