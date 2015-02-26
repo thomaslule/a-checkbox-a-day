@@ -6,7 +6,7 @@
     "url": "https://github.com/thomaslule/a-checkbox-a-day.git"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon -e js,jade index.js"
   },
   "dependencies": {
     "body-parser": "^1.12.0",
