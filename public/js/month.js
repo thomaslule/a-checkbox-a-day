@@ -3,67 +3,23 @@ $(function() {
     $.get('/all')
     .done(function(tasks) {
         tasks.forEach(function(task) {
-            $('#new-item').before(jadeTaskTemplate(task));
+            $('#new-item').before('<li />');
+            var taskElt = $('#new-item').prev().task(task);
+            taskElt.task('onCheck', function() {
+                util.post(taskElt.task('getForm'));
+            });
+            taskElt.task('onApplyEdit', function() {
+                util.post(taskElt.task('getForm'));
+            });
+            taskElt.task('onDelete', function() {
+                $.post('/delete', { id: taskElt.task('getId') })
+                .fail(util.displayError);
+            });
         });
     })
     .fail(util.displayError);
-
-    $(document).on('submit', '#new-item form', function() {
-        var nameInput = $(this).find('input[name="name"]');
-        util.post($(this), function(task) {
-            $('#new-item').before(jadeTaskTemplate(task));
-            nameInput.val('');
-        })
-        return false;
-    });
-
-    $(document).on('change', '.task-form :checkbox', function() {
-        util.post($(this).closest('form'));
-        return false;
-    });
-
-    $(document).on('click', '.edit-item-button', function() {
-        item.enterEdit($(this).closest('li'));
-        return false;
-    });
-
-    $(document).on('click', '.delete-item-button', function() {
-        li = $(this).closest('li');
-        bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
-            if (result) {
-                item.delete(li);
-            }
-        });
-    });
-
-    $(document).on('submit', '.task-form', function() {
-        li = $(this).closest('li');
-        util.post($(this), function(task) {
-            item.applyEdit(li, task);
-        });
-        return false;
-    });
 
 });
-
-item = {};
-item.enterEdit = function(li) {
-    li.find('.checkbox').hide();
-    li.find('.edit-item-input').show();
-}
-
-item.applyEdit = function(li, item) {
-    li.find('.task-name').text(item.name);
-    li.find('.edit-item-input').hide();
-    li.find('.checkbox').show();
-}
-item.delete = function(li) {
-    $.post('/delete', { id: li.find('input[name="id"]').val() })
-    .done(function() {
-        li.remove();
-    })
-    .fail(util.displayError);
-}
 
 util = {};
 util.post = function(form, callback) {

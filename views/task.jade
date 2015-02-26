@@ -1,12 +1,11 @@
-li
-    form.task-form(method="post" action="edit")
-        input(type="hidden" name="id" value="#{id}")
-        .checkbox
-            input(type="checkbox" name="done" value="1" checked=("#{done}" == 1 ? "checked" : undefined))
-            span.task-name #{name}
-            a.glyphicon.glyphicon-pencil.edit-item-button(href="#")
-            a.glyphicon.glyphicon-remove.delete-item-button(href="#")
-        .input-group.edit-item-input(style={display: 'none'})
-            input.form-control(type="text" name="name" value="#{name}" required="required")
-            span.input-group-btn
-                button.btn(type="submit") Modifier
+form(method="post" action="edit")
+    input(type="hidden" name="id" value="#{id}")
+    .checkbox
+        input(type="checkbox" name="done" value="1" checked=("#{done}" == 1 ? "checked" : undefined))
+        span.task-name #{name}
+        a.glyphicon.glyphicon-pencil.edit-item-button(href="#")
+        a.glyphicon.glyphicon-remove.delete-item-button(href="#")
+    .input-group.edit-item-input(style={display: 'none'})
+        input.form-control(type="text" name="name" value="#{name}" required="required")
+        span.input-group-btn
+            button.btn(type="submit") Modifier
