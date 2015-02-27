@@ -5,21 +5,36 @@ $(function() {
         tasks.forEach(function(task) {
             $('#new-item').before('<li />');
             var taskElt = $('#new-item').prev().task(task);
-            taskElt.task('onCheck', function() {
-                util.post(taskElt.task('getForm'));
-            });
-            taskElt.task('onApplyEdit', function() {
-                util.post(taskElt.task('getForm'));
-            });
-            taskElt.task('onDelete', function() {
-                $.post('/delete', { id: taskElt.task('getId') })
-                .fail(util.displayError);
-            });
+            attachEvents(taskElt);
         });
     })
     .fail(util.displayError);
 
+    $('#new-item form').submit(function() {
+        $('#new-item').before('<li />');
+        var nameInput = $(this).find('input[name="name"]');
+        util.post($(this), function(task) {
+            var taskElt = $('#new-item').prev().task(task);
+            attachEvents(taskElt);
+            nameInput.val('');
+        });
+        return false;
+    });
+
 });
+
+function attachEvents(taskElt) {
+    taskElt.task('onCheck', function() {
+        util.post(taskElt.task('getForm'));
+    });
+    taskElt.task('onApplyEdit', function() {
+        util.post(taskElt.task('getForm'));
+    });
+    taskElt.task('onDelete', function() {
+        $.post('/delete', { id: taskElt.task('getId') })
+        .fail(util.displayError);
+    });
+}
 
 util = {};
 util.post = function(form, callback) {
