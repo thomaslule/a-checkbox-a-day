@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
+# Author Thomas Bracher "thomas.bracher@cpe.fr"
 
 # run acceptance tests
 

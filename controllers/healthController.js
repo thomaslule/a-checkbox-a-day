@@ -1,3 +1,6 @@
+/**
+ * @author Thomas Bracher "thomas.bracher@cpe.fr"
+ */
 var storage = require('../storage/storage');
 
 module.exports.get = function(req, res) {

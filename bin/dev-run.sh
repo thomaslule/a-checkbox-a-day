@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
+# Author Thomas Bracher "thomas.bracher@cpe.fr"
 
 # 1) build the application (using docker cache more smartly to reduce this step)
 # 2) kill every container running
