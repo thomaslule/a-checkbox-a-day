@@ -1,16 +1,14 @@
 machine:
-    services:
-        - docker
+    ruby:
+        version: 2.2.0
 
 dependencies:
-    cache_directories:
-        - "~/docker"
     override:
-        - docker info
-        - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
-        - docker build -t checkbox/appli .
-        - mkdir -p ~/docker; docker save checkbox/appli > ~/docker/image.tar
+        - bundle install:
+            timeout: 240
+            pwd:
+                test/acceptance
+
 test:
     override:
-        - docker run -d -p 8080:8080 checkbox/appli; sleep 10
-        - curl -i http://localhost:8080/health
+        - ruby test/acceptance/smoke_test.rb
