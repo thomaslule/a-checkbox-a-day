@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/thomaslule/a-checkbox-a-day.svg)](https://travis-ci.org/thomaslule/a-checkbox-a-day)
+
 # A checkbox a day
 
 Learning javascript and node.js by implementing a todolist vaguely inspired by the "bullet journal".
