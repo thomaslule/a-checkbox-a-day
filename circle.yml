@@ -1,0 +1,16 @@
+machine:
+    services:
+        - docker
+
+dependencies:
+    cache_directories:
+        - "~/docker"
+    override:
+        - docker info
+        - if [[ -e ~/docker/image.tar ]]; then docker load --input ~/docker/image.tar; fi
+        - docker build -t checkbox/appli .
+        - mkdir -p ~/docker; docker save checkbox/appli > ~/docker/image.tar
+test:
+    override:
+        - docker run -d -p 8080:8080 checkbox/appli; sleep 10
+        - curl -i http://localhost:8080/health
