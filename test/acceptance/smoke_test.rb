@@ -1,5 +1,4 @@
 ## Author Thomas Bracher "thomas.bracher@cpe.fr"
-require 'test/unit'
 require 'selenium-webdriver'
 require 'uri'
 
