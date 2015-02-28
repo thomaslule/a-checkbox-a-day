@@ -5,7 +5,7 @@ form.task(method="post" action="edit")
         span.task-name #{name}
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#")
         a.glyphicon.glyphicon-remove.delete-item-button(href="#")
-    .input-group.edit-item-input(style={display: 'none'})
+    .input-group.edit-item-input(style="display: none;")
         input.form-control(type="text" name="name" value="#{name}" required="required")
         span.input-group-btn
             button.btn.btn-primary(type="submit") Modifier
