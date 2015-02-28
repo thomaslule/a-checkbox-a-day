@@ -20,6 +20,9 @@ html
                 .col-xs-4.col-xs-offset-2
                     #error.alert.alert-danger(style={display: 'none'}) Une erreur est survenue
                     ul#items-list.list-unstyled
+                        each task in tasks
+                            li
+                                include task
                         li#new-item
                             form(method="post" action="new")
                                 input(type="hidden" name="done" value="0")

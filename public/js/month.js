@@ -1,15 +1,4 @@
 $(function() {
-
-    $.get('/all')
-    .done(function(tasks) {
-        tasks.forEach(function(task) {
-            $('#new-item').before('<li />');
-            var taskElt = $('#new-item').prev().task(task);
-            attachEvents(taskElt);
-        });
-    })
-    .fail(util.displayError);
-
     $('#new-item form').submit(function() {
         $('#new-item').before('<li />');
         var nameInput = $(this).find('input[name="name"]');
@@ -20,7 +9,6 @@ $(function() {
         });
         return false;
     });
-
 });
 
 function attachEvents(taskElt) {

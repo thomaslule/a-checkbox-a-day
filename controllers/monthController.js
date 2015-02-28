@@ -1,7 +1,14 @@
 var taskModel = require('../models/taskModel');
 
 module.exports.get = function(req, res) {
-    res.render('month');
+    taskModel.getAll(function(err, tasks) {
+        if (err) {
+            return next(err);
+        }
+        res.render('month', {
+            tasks: tasks
+        });
+    });
 }
 
 module.exports.getAll = function(req, res, next) {

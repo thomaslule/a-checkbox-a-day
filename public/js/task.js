@@ -75,7 +75,7 @@ $.fn.task = function(method, arg) {
 
     if ($.isPlainObject(method)) {
         // it's not a method, it's the initial task
-        taskElt.append(jadeTaskTemplate(method));
+        taskElt.append(jadeTaskTemplate({ task: method }));
 
         taskElt.find('.edit-item-button').click(function() {
             taskElt.task('edit');
