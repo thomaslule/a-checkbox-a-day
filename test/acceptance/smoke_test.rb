@@ -13,7 +13,7 @@ class SmokeTest < Test::Unit::TestCase
         @driver = Selenium::WebDriver.for(:remote, :url => selenium_uri.to_s, :desired_capabilities => :chrome)
 
         appli_url = URI::HTTP.build({
-            :host => "172.17.42.1",
+            :host => ENV['APPLI_HOST'] || "172.17.42.1",
             :port => (ENV['APPLI_URL'].split ':').last.to_i
         }).to_s
         @driver.navigate.to appli_url
