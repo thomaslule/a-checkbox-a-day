@@ -24,6 +24,17 @@ $.fn.task = function(method, arg) {
         taskElt.removeClass('editing');
     };
 
+    methods.cancel = function() {
+        taskElt.find('input[name="status"]').val('cancelled');
+        taskElt.attr('data-status', 'cancelled');
+        taskElt.trigger('cancel');
+    };
+
+    methods.delete = function() {
+        taskElt.trigger('delete');
+        taskElt.remove();
+    };
+
     if (method == undefined) {
         // called with no argument
         return taskElt;
@@ -32,6 +43,7 @@ $.fn.task = function(method, arg) {
     if ($.isPlainObject(method)) {
         // it's not a method, it's the initial task
         taskElt.addClass('task');
+        taskElt.attr('data-status', method.status);
         taskElt.append(jadeTaskTemplate(method));
         return taskElt;
     }
@@ -51,17 +63,21 @@ $(document).on('click', '.task .edit-item-button', function() {
     return false;
 });
 
-$(document).on('click', '.task .cancel-button', function() {
+$(document).on('click', '.task .cancel-edit-button', function() {
     $(this).closest('.task').task('cancelEdit');
+    return false;
+});
+
+$(document).on('click', '.task .cancel-item-button', function() {
+    $(this).closest('.task').task('cancel');
     return false;
 });
 
 $(document).on('click', '.task .delete-item-button', function() {
     var taskElt = $(this).closest('.task');
-    bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
+    bootbox.confirm('Voulez-vous supprimer définitivement cet item ?', function(result) {
         if (result) {
-            taskElt.trigger('delete');
-            taskElt.remove();
+            taskElt.task('delete');
         }
     });
     return false;

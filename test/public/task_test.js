@@ -12,7 +12,7 @@ describe('task', function() {
         defaultTask = { id: 1, name: 'my task', status: 'todo' };
         jsdom.env({
             html: '<div id="root" />',
-            scripts: [ "https://code.jquery.com/jquery-1.11.2.min.js" ],
+            scripts: [ "https://code.jquery.com/jquery-2.1.3.min.js" ],
             src: [
                 fs.readFileSync("public/js/task.js").toString(),
                 fs.readFileSync('node_modules/jade/runtime.js').toString(),
@@ -29,7 +29,10 @@ describe('task', function() {
 
         it('should build a task form', function() {
             window.$('#root').task(defaultTask);
+            assert(window.$('#root').hasClass('task'));
             assert.equal(1, window.$('input[name="id"]').val());
+            assert.equal('todo', window.$('input[name="status"]').val());
+            assert.equal('todo', window.$('#root').attr('data-status'));
             assert.equal('my task', window.$('.task-name').text());
             assert.equal(false, window.$(':checkbox').is(':checked'));
         })
@@ -74,36 +77,41 @@ describe('task', function() {
 
     describe('#edit', function() {
 
-        it('should make the "name" input visible', function() {
+        it('should add a .editing class', function() {
             window.$('#root').task(defaultTask);
-            assert(isHidden(window.$('input[name="name"]')));
+            assert.equal(false, window.$('#root').hasClass('editing'));
             window.$('#root').task('edit');
-            assert(isVisible(window.$('input[name="name"]')));
-            assert.equal('my task', window.$('input[name="name"]').val());
+            assert(window.$('#root').hasClass('editing'));
         })
 
-        it('should hide the other tasks inputs', function() {
+        it('should remove the .editing class to the other tasks', function() {
             window.$('#root').html('<div id="task1" /><div id="task2" />')
             window.$('#task1, #task2').task(defaultTask);
-            assert(isHidden(window.$('#task1 input[name="name"]')));
-            assert(isHidden(window.$('#task2 input[name="name"]')));
             window.$('#task1').task('edit');
-            assert(isVisible(window.$('#task1 input[name="name"]')));
+            assert(window.$('#task1').hasClass('editing'));
             window.$('#task2').task('edit');
-            assert(isVisible(window.$('#task2 input[name="name"]')));
-            assert(isHidden(window.$('#task1 input[name="name"]')));
+            assert.equal(false, window.$('#task1').hasClass('editing'));
         })
 
     })
 
     describe('#cancelEdit', function() {
 
-        it('should hide the "name" input', function() {
+        it('should reset the "name" input', function() {
             window.$('#root').task(defaultTask);
             window.$('#root').task('edit');
-            assert(isVisible(window.$('input[name="name"]')));
+            window.$('input[name="name"]').val('modified');
+            assert.equal('modified', window.$('input[name="name"]').val());
             window.$('#root').task('cancelEdit');
-            assert(isHidden(window.$('input[name="name"]')));
+            assert.equal('my task', window.$('input[name="name"]').val());
+        })
+
+        it('should remove the .editing class', function() {
+            window.$('#root').task(defaultTask);
+            window.$('#root').task('edit');
+            assert(window.$('#root').hasClass('editing'));
+            window.$('#root').task('cancelEdit');
+            assert.equal(false, window.$('#root').hasClass('editing'));
         })
 
     })
@@ -121,12 +129,42 @@ describe('task', function() {
 
     })
 
-    // cannot directly use :hidden/:visible https://github.com/tmpvar/jsdom/issues/1048
-    function isHidden(jQueryElt) {
-        return jQueryElt.is(':hidden') || jQueryElt.parents().is(':hidden');
-    }
-    function isVisible(jQueryElt) {
-        return !isHidden(jQueryElt);
-    }
+    describe('#cancel', function() {
+
+        it('should set the task cancelled', function() {
+            window.$('#root').task(defaultTask);
+            assert.equal('todo', window.$('input[name="status"]').val());
+            window.$('#root').task('cancel');
+            assert.equal('cancelled', window.$('input[name="status"]').val());
+            assert.equal('cancelled', window.$('#root').attr('data-status'));
+        })
+
+        it('should trigger the "cancel" event', function(done) {
+            window.$('#root').task(defaultTask);
+            window.$('#root').on('cancel', function() {
+                done();
+            });
+            window.$('#root').task('cancel');
+        })
+
+    })
+
+    describe('#delete', function() {
+
+        it('should remove the task', function() {
+            window.$('#root').task(defaultTask);
+            window.$('#root').task('delete');
+            assert.equal(0, window.$('#root').length);
+        })
+
+        it('should trigger the "delete" event', function(done) {
+            window.$('#root').task(defaultTask);
+            window.$('#root').on('delete', function() {
+                done();
+            });
+            window.$('#root').task('delete');
+        })
+
+    })
 
 })
