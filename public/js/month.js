@@ -29,9 +29,17 @@ $(document).on('checkUncheck', '.task', function() {
     util.post($(this).task('getForm'));
 });
 
+$(document).on('cancel', '.task', function() {
+    util.post($(this).task('getForm'));
+});
+
 $(document).on('delete', '.task', function() {
-    $.post('/delete', { id: taskElt.task('getId') })
+    $.post('/delete', { id: $(this).task('getId') })
     .fail(util.displayError);
+});
+
+$(document).on('restore', '.task', function() {
+    util.post($(this).task('getForm'));
 });
 
 util = {};

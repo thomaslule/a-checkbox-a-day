@@ -1,4 +1,29 @@
-a.edit-item-button, a.delete-item-button {
+.action-buttons a {
     text-decoration: none;
     margin-left: 5px;
+}
+
+.task:not(.editing) .edit-item-input {
+    display:none;
+}
+
+.task.editing .checkbox,
+.task.editing .task-name,
+.task.editing .action-buttons {
+    display:none;
+}
+
+.task:not([data-status=cancelled]) .delete-item-button,
+.task:not([data-status=cancelled]) .restore-item-button {
+    display:none;
+}
+
+.task[data-status=cancelled] .cancel-item-button,
+.task[data-status=cancelled] .edit-item-button,
+.task[data-status=cancelled] .checkbox {
+    display:none;
+}
+
+.task[data-status=cancelled] .task-name {
+    text-decoration: line-through;
 }
