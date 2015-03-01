@@ -35,6 +35,12 @@ $.fn.task = function(method, arg) {
         taskElt.remove();
     };
 
+    methods.restore = function() {
+        taskElt.find('input[name="status"]').val('todo');
+        taskElt.attr('data-status', 'todo');
+        taskElt.trigger('restore');
+    };
+
     if (method == undefined) {
         // called with no argument
         return taskElt;
@@ -80,6 +86,11 @@ $(document).on('click', '.task .delete-item-button', function() {
             taskElt.task('delete');
         }
     });
+    return false;
+});
+
+$(document).on('click', '.task .restore-item-button', function() {
+    $(this).closest('.task').task('restore');
     return false;
 });
 

@@ -7,7 +7,8 @@ form(method="post" action="edit")
     span.action-buttons
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#")
         a.glyphicon.glyphicon-remove.cancel-item-button(href="#")
-        a.glyphicon.glyphicon-remove.delete-item-button(href="#")
+        a.glyphicon.glyphicon-asterisk.restore-item-button(href="#")
+        a.glyphicon.glyphicon-trash.delete-item-button(href="#")
     .input-group.edit-item-input
         input.form-control(type="text" name="name" value="#{name}" required="required")
         span.input-group-btn

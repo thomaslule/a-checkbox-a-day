@@ -13,7 +13,8 @@
     display:none;
 }
 
-.task:not([data-status=cancelled]) .delete-item-button {
+.task:not([data-status=cancelled]) .delete-item-button,
+.task:not([data-status=cancelled]) .restore-item-button {
     display:none;
 }
 

@@ -38,6 +38,10 @@ $(document).on('delete', '.task', function() {
     .fail(util.displayError);
 });
 
+$(document).on('restore', '.task', function() {
+    util.post($(this).task('getForm'));
+});
+
 util = {};
 util.post = function(form, callback) {
     form.removeAttr('novalidate');

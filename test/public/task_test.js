@@ -152,17 +152,40 @@ describe('task', function() {
     describe('#delete', function() {
 
         it('should remove the task', function() {
+            defaultTask.status = 'cancelled';
             window.$('#root').task(defaultTask);
             window.$('#root').task('delete');
             assert.equal(0, window.$('#root').length);
         })
 
         it('should trigger the "delete" event', function(done) {
+            defaultTask.status = 'cancelled';
             window.$('#root').task(defaultTask);
             window.$('#root').on('delete', function() {
                 done();
             });
             window.$('#root').task('delete');
+        })
+
+    })
+
+    describe('#restore', function() {
+
+        it('should put back a cancelled task to status: todo', function() {
+            defaultTask.status = 'cancelled';
+            window.$('#root').task(defaultTask);
+            assert.equal('cancelled', window.$('input[name="status"]').val());
+            window.$('#root').task('restore');
+            assert.equal('todo', window.$('input[name="status"]').val());
+            assert.equal('todo', window.$('#root').attr('data-status'));
+        })
+
+        it('should trigger the "restore" event', function(done) {
+            window.$('#root').task(defaultTask);
+            window.$('#root').on('restore', function() {
+                done();
+            });
+            window.$('#root').task('restore');
         })
 
     })
