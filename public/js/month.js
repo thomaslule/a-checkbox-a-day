@@ -5,7 +5,6 @@ $(function() {
         tasks.forEach(function(task) {
             $('#new-item').before('<li />');
             var taskElt = $('#new-item').prev().task(task);
-            attachEvents(taskElt);
         });
     })
     .fail(util.displayError);
@@ -15,7 +14,6 @@ $(function() {
         var nameInput = $(this).find('input[name="name"]');
         util.post($(this), function(task) {
             var taskElt = $('#new-item').prev().task(task);
-            attachEvents(taskElt);
             nameInput.val('');
         });
         return false;
@@ -23,18 +21,18 @@ $(function() {
 
 });
 
-function attachEvents(taskElt) {
-    taskElt.task('onCheck', function() {
-        util.post(taskElt.task('getForm'));
-    });
-    taskElt.task('onApplyEdit', function() {
-        util.post(taskElt.task('getForm'));
-    });
-    taskElt.task('onDelete', function() {
-        $.post('/delete', { id: taskElt.task('getId') })
-        .fail(util.displayError);
-    });
-}
+$(document).on('applyEdit', '.task', function() {
+    util.post($(this).task('getForm'));
+});
+
+$(document).on('checkUncheck', '.task', function() {
+    util.post($(this).task('getForm'));
+});
+
+$(document).on('delete', '.task', function() {
+    $.post('/delete', { id: taskElt.task('getId') })
+    .fail(util.displayError);
+});
 
 util = {};
 util.post = function(form, callback) {

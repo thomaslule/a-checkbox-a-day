@@ -1,4 +1,4 @@
-form.task(method="post" action="edit")
+form(method="post" action="edit")
     input(type="hidden" name="id" value="#{id}")
     .checkbox
         input(type="checkbox" name="done" value="1" checked=("#{done}" == 1 ? "checked" : undefined))
