@@ -60,8 +60,8 @@ $(document).on('click', '.task .delete-item-button', function() {
     var taskElt = $(this).closest('.task');
     bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
         if (result) {
-            taskElt.remove();
             taskElt.trigger('delete');
+            taskElt.remove();
         }
     });
     return false;

@@ -30,7 +30,7 @@ $(document).on('checkUncheck', '.task', function() {
 });
 
 $(document).on('delete', '.task', function() {
-    $.post('/delete', { id: taskElt.task('getId') })
+    $.post('/delete', { id: $(this).task('getId') })
     .fail(util.displayError);
 });
 
