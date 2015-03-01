@@ -21,23 +21,7 @@ $(function() {
 
 });
 
-$(document).on('applyEdit', '.task', function() {
-    util.post($(this).task('getForm'));
-});
-
-$(document).on('checkUncheck', '.task', function() {
-    util.post($(this).task('getForm'));
-});
-
-$(document).on('cancel', '.task', function() {
-    util.post($(this).task('getForm'));
-});
-
-$(document).on('delete', '.task', function() {
-    util.post($(this).task('getForm'));
-});
-
-$(document).on('restore', '.task', function() {
+$(document).on('update', '.task', function() {
     util.post($(this).task('getForm'));
 });
 

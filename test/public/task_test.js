@@ -40,7 +40,7 @@ describe('task', function() {
         it('should build a checked task form', function() {
             defaultTask.status = 'done';
             window.$('#root').task(defaultTask);
-            assert.equal(true, window.$(':checkbox').is(':checked'));
+            assert(window.$(':checkbox').is(':checked'));
         })
 
     })
@@ -63,14 +63,14 @@ describe('task', function() {
 
     })
     
-    describe('#onCheckUncheck', function() {
+    describe('#onChangeCheckbox', function() {
 
-        it('should trigger checkUncheck event when checkbox state changes', function(done) {
+        it('should change status when checkbox state changes', function() {
             window.$('#root').task(defaultTask);
-            window.$('#root').on('checkUncheck', function() {
-                done();
-            });
+            assert.equal('todo', window.$('#root input[name="status"]').val());
+            window.$(':checkbox').prop('checked', true);
             window.$(':checkbox').change();
+            assert.equal('done', window.$('#root input[name="status"]').val());
         })
 
     })
@@ -116,11 +116,28 @@ describe('task', function() {
 
     })
 
-    describe('#onApplyEdit', function() {
+    describe('#onSubmitEdit', function() {
 
-        it('should trigger applyEdit event when edit form is submitted', function(done) {
+        it('should update the task name', function() {
             window.$('#root').task(defaultTask);
-            window.$('#root').on('applyEdit', function() {
+            window.$('#root').task('edit');
+            window.$('input[name="name"]').val('modified');
+            assert.equal('my task', window.$('.task-name').text());
+            window.$('#root form').submit();
+            assert.equal('modified', window.$('.task-name').text());
+        })
+
+        it('should remove the .editing class', function() {
+            window.$('#root').task(defaultTask);
+            window.$('#root').task('edit');
+            assert(window.$('#root').hasClass('editing'));
+            window.$('#root form').submit();
+            assert.equal(false, window.$('#root').hasClass('editing'));
+        })
+
+        it('should trigger the update event', function(done) {
+            window.$('#root').task(defaultTask);
+            window.$('#root').on('update', function() {
                 done();
             });
             window.$('#root').task('edit');
@@ -129,64 +146,23 @@ describe('task', function() {
 
     })
 
-    describe('#cancel', function() {
+    describe('#changeStatus', function() {
 
-        it('should set the task cancelled', function() {
+        it('should change the tasks status', function() {
             window.$('#root').task(defaultTask);
-            assert.equal('todo', window.$('input[name="status"]').val());
-            window.$('#root').task('cancel');
-            assert.equal('cancelled', window.$('input[name="status"]').val());
-            assert.equal('cancelled', window.$('#root').attr('data-status'));
-        })
-
-        it('should trigger the "cancel" event', function(done) {
-            window.$('#root').task(defaultTask);
-            window.$('#root').on('cancel', function() {
-                done();
-            });
-            window.$('#root').task('cancel');
-        })
-
-    })
-
-    describe('#delete', function() {
-
-        it('should set the task deleted', function() {
-            defaultTask.status = 'cancelled';
-            window.$('#root').task(defaultTask);
-            assert.equal('cancelled', window.$('input[name="status"]').val());
-            window.$('#root').task('delete');
-            assert.equal('deleted', window.$('input[name="status"]').val());
-            assert.equal('deleted', window.$('#root').attr('data-status'));
-        })
-
-        it('should trigger the "delete" event', function(done) {
-            window.$('#root').task(defaultTask);
-            window.$('#root').on('delete', function() {
-                done();
-            });
-            window.$('#root').task('delete');
-        })
-
-    })
-
-    describe('#restore', function() {
-
-        it('should put back a cancelled task to status: todo', function() {
-            defaultTask.status = 'cancelled';
-            window.$('#root').task(defaultTask);
-            assert.equal('cancelled', window.$('input[name="status"]').val());
-            window.$('#root').task('restore');
             assert.equal('todo', window.$('input[name="status"]').val());
             assert.equal('todo', window.$('#root').attr('data-status'));
+            window.$('#root').task('changeStatus', 'something');
+            assert.equal('something', window.$('input[name="status"]').val());
+            assert.equal('something', window.$('#root').attr('data-status'));
         })
 
-        it('should trigger the "restore" event', function(done) {
+        it('should trigger the "update" event', function(done) {
             window.$('#root').task(defaultTask);
-            window.$('#root').on('restore', function() {
+            window.$('#root').on('update', function() {
                 done();
             });
-            window.$('#root').task('restore');
+            window.$('#root').task('changeStatus', 'something');
         })
 
     })
