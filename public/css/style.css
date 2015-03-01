@@ -2,3 +2,13 @@ a.edit-item-button, a.delete-item-button {
     text-decoration: none;
     margin-left: 5px;
 }
+
+.task:not(.editing) .edit-item-input {
+    display:none;
+}
+
+.task.editing .checkbox,
+.task.editing .task-name,
+.task.editing .action-buttons {
+    display:none;
+}

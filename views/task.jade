@@ -1,12 +1,13 @@
-form(method="post" action="edit")
+form(method="post" action="edit" class="task-#{status}")
     input(type="hidden" name="id" value="#{id}")
     input(type="hidden" name="status" value="#{status}")
     .checkbox
         input(type="checkbox" checked=("#{status}" == 'done' ? "checked" : undefined))
-        span.task-name #{name}
+    span.task-name #{name}
+    span.action-buttons
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#")
         a.glyphicon.glyphicon-remove.delete-item-button(href="#")
-    .input-group.edit-item-input(style="display: none;")
+    .input-group.edit-item-input
         input.form-control(type="text" name="name" value="#{name}" required="required")
         span.input-group-btn
             button.btn.btn-primary(type="submit") Modifier
