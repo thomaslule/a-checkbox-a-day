@@ -34,7 +34,7 @@ module.exports.getTask = function(id, callback) {
 },
 
 module.exports.getTasks = function(callback) {
-    connection.query('select * from tasks order by id', processDbResult(callback));
+    connection.query('select * from tasks where status != "deleted" order by id', processDbResult(callback));
 },
 
 module.exports.storeTask = function(task, callback) {

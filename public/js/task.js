@@ -24,22 +24,11 @@ $.fn.task = function(method, arg) {
         taskElt.removeClass('editing');
     };
 
-    methods.cancel = function() {
-        taskElt.find('input[name="status"]').val('cancelled');
-        taskElt.attr('data-status', 'cancelled');
-        taskElt.trigger('cancel');
-    };
-
-    methods.delete = function() {
-        taskElt.trigger('delete');
-        taskElt.remove();
-    };
-
-    methods.restore = function() {
-        taskElt.find('input[name="status"]').val('todo');
-        taskElt.attr('data-status', 'todo');
-        taskElt.trigger('restore');
-    };
+    methods.changeStatus = function() {
+        taskElt.find('input[name="status"]').val(arg);
+        taskElt.attr('data-status', arg);
+        taskElt.trigger('update');
+    }
 
     if (method == undefined) {
         // called with no argument
@@ -59,9 +48,7 @@ $.fn.task = function(method, arg) {
 }
 
 $(document).on('change', '.task :checkbox', function() {
-    var taskElt = $(this).closest('.task');
-    taskElt.find('input[name="status"]').val($(this).is(':checked') ? 'done' : 'todo');
-    taskElt.trigger('checkUncheck');
+    $(this).closest('.task').task('changeStatus', $(this).is(':checked') ? 'done' : 'todo');
 });
 
 $(document).on('click', '.task .edit-item-button', function() {
@@ -74,8 +61,16 @@ $(document).on('click', '.task .cancel-edit-button', function() {
     return false;
 });
 
+$(document).on('submit', '.task form', function() {
+    var taskElt = $(this).closest('.task');
+    taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
+    taskElt.removeClass('editing');
+    taskElt.trigger('update');
+    return false;
+});
+
 $(document).on('click', '.task .cancel-item-button', function() {
-    $(this).closest('.task').task('cancel');
+    $(this).closest('.task').task('changeStatus', 'cancelled');
     return false;
 });
 
@@ -83,21 +78,13 @@ $(document).on('click', '.task .delete-item-button', function() {
     var taskElt = $(this).closest('.task');
     bootbox.confirm('Voulez-vous supprimer définitivement cet item ?', function(result) {
         if (result) {
-            taskElt.task('delete');
+            taskElt.task('changeStatus', 'deleted');
         }
     });
     return false;
 });
 
 $(document).on('click', '.task .restore-item-button', function() {
-    $(this).closest('.task').task('restore');
-    return false;
-});
-
-$(document).on('submit', '.task form', function() {
-    var taskElt = $(this).closest('.task');
-    taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
-    taskElt.removeClass('editing');
-    taskElt.trigger('applyEdit');
+    $(this).closest('.task').task('changeStatus', 'todo');
     return false;
 });
