@@ -22,7 +22,7 @@ html
                     ul#items-list.list-unstyled
                         li#new-item
                             form(method="post" action="new")
-                                input(type="hidden" name="done" value="0")
+                                input(type="hidden" name="status" value="todo")
                                 .input-group
                                     input.form-control(type="text" name="name" required="required")
                                     span.input-group-btn

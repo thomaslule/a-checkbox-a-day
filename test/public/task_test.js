@@ -9,7 +9,7 @@ describe('task', function() {
     var defaultTask;
 
     beforeEach(function(done) {
-        defaultTask = { id: 1, name: 'my task', done: 0 };
+        defaultTask = { id: 1, name: 'my task', status: 'todo' };
         jsdom.env({
             html: '<div id="root" />',
             scripts: [ "https://code.jquery.com/jquery-1.11.2.min.js" ],
@@ -35,7 +35,7 @@ describe('task', function() {
         })
 
         it('should build a checked task form', function() {
-            defaultTask.done = 1;
+            defaultTask.status = 'done';
             window.$('#root').task(defaultTask);
             assert.equal(true, window.$(':checkbox').is(':checked'));
         })

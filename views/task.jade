@@ -1,7 +1,8 @@
 form(method="post" action="edit")
     input(type="hidden" name="id" value="#{id}")
+    input(type="hidden" name="status" value="#{status}")
     .checkbox
-        input(type="checkbox" name="done" value="1" checked=("#{done}" == 1 ? "checked" : undefined))
+        input(type="checkbox" checked=("#{status}" == 'done' ? "checked" : undefined))
         span.task-name #{name}
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#")
         a.glyphicon.glyphicon-remove.delete-item-button(href="#")

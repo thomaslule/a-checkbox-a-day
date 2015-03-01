@@ -37,37 +37,45 @@ $.fn.task = function(method, arg) {
         // it's not a method, it's the initial task
         taskElt.addClass('task');
         taskElt.append(jadeTaskTemplate(method));
-
-        taskElt.find(':checkbox').change(function() {
-            taskElt.trigger('checkUncheck');
-        });
-        taskElt.find('.edit-item-button').click(function() {
-            taskElt.task('edit');
-            return false;
-        });
-        taskElt.find('.cancel-button').click(function() {
-            taskElt.task('cancelEdit');
-            return false;
-        });
-        taskElt.find('.delete-item-button').click(function() {
-            bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
-                if (result) {
-                    taskElt.remove();
-                    taskElt.trigger('delete');
-                }
-            });
-            return false;
-        });
-        taskElt.find('form').submit(function() {
-            taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
-            taskElt.find('.edit-item-input').hide();
-            taskElt.find('.checkbox').show();
-            taskElt.trigger('applyEdit');
-            return false;
-        })
         return taskElt;
     }
 
     return methods[method]();
 
 }
+
+$(document).on('change', '.task :checkbox', function() {
+    var taskElt = $(this).closest('.task');
+    taskElt.find('input[name="status"]').val($(this).is(':checked') ? 'done' : 'todo');
+    taskElt.trigger('checkUncheck');
+});
+
+$(document).on('click', '.task .edit-item-button', function() {
+    $(this).closest('.task').task('edit');
+    return false;
+});
+
+$(document).on('click', '.task .cancel-button', function() {
+    $(this).closest('.task').task('cancelEdit');
+    return false;
+});
+
+$(document).on('click', '.task .delete-item-button', function() {
+    var taskElt = $(this).closest('.task');
+    bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
+        if (result) {
+            taskElt.remove();
+            taskElt.trigger('delete');
+        }
+    });
+    return false;
+});
+
+$(document).on('submit', '.task form', function() {
+    var taskElt = $(this).closest('.task');
+    taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
+    taskElt.find('.edit-item-input').hide();
+    taskElt.find('.checkbox').show();
+    taskElt.trigger('applyEdit');
+    return false;
+});
