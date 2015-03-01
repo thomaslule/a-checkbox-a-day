@@ -3,34 +3,12 @@ $.fn.task = function(method, arg) {
     var taskElt = this;
     var methods = {};
 
-    var doApplyEdit = function(callback) {
-        taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
-        taskElt.find('.edit-item-input').hide();
-        taskElt.find('.checkbox').show();
-        if (callback) callback();
-    }
-
-    var doDelete = function(callback) {
-        bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
-            if (result) {
-                taskElt.remove();
-                if (callback) callback();
-            }
-        });
-    }
-
     methods.getForm = function() {
         return taskElt.find('form');
     };
 
     methods.getId = function() {
         return taskElt.find('input[name="id"]').val();
-    };
-
-    // arg must be a callback function
-    methods.onCheck = function() {
-        taskElt.find(':checkbox').change(arg);
-        return taskElt;
     };
 
     methods.edit = function() {
@@ -50,24 +28,6 @@ $.fn.task = function(method, arg) {
         }
     };
 
-    // arg must be a callback function
-    methods.onApplyEdit = function() {
-        taskElt.find('form').submit(function() {
-            doApplyEdit(arg);
-            return false;
-        });
-        return taskElt;
-    };
-
-    // arg must be a callback function
-    methods.onDelete = function() {
-        taskElt.find('.delete-item-button').click(function() {
-            doDelete(arg);
-            return false;
-        });
-        return taskElt;
-    };
-
     if (method == undefined) {
         // called with no argument
         return taskElt;
@@ -75,8 +35,12 @@ $.fn.task = function(method, arg) {
 
     if ($.isPlainObject(method)) {
         // it's not a method, it's the initial task
+        taskElt.addClass('task');
         taskElt.append(jadeTaskTemplate(method));
 
+        taskElt.find(':checkbox').change(function() {
+            taskElt.trigger('checkUncheck');
+        });
         taskElt.find('.edit-item-button').click(function() {
             taskElt.task('edit');
             return false;
@@ -85,8 +49,20 @@ $.fn.task = function(method, arg) {
             taskElt.task('cancelEdit');
             return false;
         });
+        taskElt.find('.delete-item-button').click(function() {
+            bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
+                if (result) {
+                    taskElt.remove();
+                    taskElt.trigger('delete');
+                }
+            });
+            return false;
+        });
         taskElt.find('form').submit(function() {
-            doApplyEdit();
+            taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
+            taskElt.find('.edit-item-input').hide();
+            taskElt.find('.checkbox').show();
+            taskElt.trigger('applyEdit');
             return false;
         })
         return taskElt;

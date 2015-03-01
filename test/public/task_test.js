@@ -60,11 +60,11 @@ describe('task', function() {
 
     })
     
-    describe('#onCheck', function() {
+    describe('#onCheckUncheck', function() {
 
-        it('should trigger arg when checkbox state changes', function(done) {
+        it('should trigger checkUncheck event when checkbox state changes', function(done) {
             window.$('#root').task(defaultTask);
-            window.$('#root').task('onCheck', function() {
+            window.$('#root').on('checkUncheck', function() {
                 done();
             });
             window.$(':checkbox').change();
@@ -110,10 +110,9 @@ describe('task', function() {
 
     describe('#onApplyEdit', function() {
 
-        it('should trigger arg when form is submitted', function(done) {
+        it('should trigger applyEdit event when edit form is submitted', function(done) {
             window.$('#root').task(defaultTask);
-            window.$('#root').task('onApplyEdit', function() {
-                console.log('here');
+            window.$('#root').on('applyEdit', function() {
                 done();
             });
             window.$('#root').task('edit');
