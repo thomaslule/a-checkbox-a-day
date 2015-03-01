@@ -31,8 +31,9 @@ $.fn.task = function(method, arg) {
     };
 
     methods.delete = function() {
+        taskElt.find('input[name="status"]').val('deleted');
+        taskElt.attr('data-status', 'deleted');
         taskElt.trigger('delete');
-        taskElt.remove();
     };
 
     methods.restore = function() {

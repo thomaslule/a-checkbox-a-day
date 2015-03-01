@@ -34,8 +34,7 @@ $(document).on('cancel', '.task', function() {
 });
 
 $(document).on('delete', '.task', function() {
-    $.post('/delete', { id: $(this).task('getId') })
-    .fail(util.displayError);
+    util.post($(this).task('getForm'));
 });
 
 $(document).on('restore', '.task', function() {

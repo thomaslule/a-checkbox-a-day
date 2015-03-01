@@ -151,15 +151,16 @@ describe('task', function() {
 
     describe('#delete', function() {
 
-        it('should remove the task', function() {
+        it('should set the task deleted', function() {
             defaultTask.status = 'cancelled';
             window.$('#root').task(defaultTask);
+            assert.equal('cancelled', window.$('input[name="status"]').val());
             window.$('#root').task('delete');
-            assert.equal(0, window.$('#root').length);
+            assert.equal('deleted', window.$('input[name="status"]').val());
+            assert.equal('deleted', window.$('#root').attr('data-status'));
         })
 
         it('should trigger the "delete" event', function(done) {
-            defaultTask.status = 'cancelled';
             window.$('#root').task(defaultTask);
             window.$('#root').on('delete', function() {
                 done();
