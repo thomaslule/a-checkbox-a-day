@@ -40,11 +40,13 @@ var jadeTemplates = fs.readFileSync('node_modules/jade/runtime.js').toString() +
 
 var monthController = require('./controllers/monthController.js');
 
-app.get('/', monthController.get)
-.get('/all', monthController.getAll)
-.post('/new', monthController.postNew)
-.post('/edit', monthController.postEdit)
-.post('/delete', monthController.postDelete)
+app.get('/', function(req, res) {
+    res.location('/month');
+    res.send(301);
+})
+.get('/month', monthController.get)
+.post('/task', monthController.newTask)
+.post('/task/:id', monthController.editTask)
 .get('/jade_templates.js', function(req, res) {
     res.type('text/javascript');
     res.send(jadeTemplates);

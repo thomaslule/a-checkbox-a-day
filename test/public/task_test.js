@@ -34,7 +34,7 @@ describe('task', function() {
         it('should build a task form', function() {
             $('#root').task(defaultTask);
             assert($('#root').hasClass('task'));
-            assert.equal(1, $('input[name="id"]').val());
+            assert.equal(1, $('#root').task('getId'));
             assert.equal('todo', $('input[name="status"]').val());
             assert.equal('todo', $('#root').attr('data-status'));
             assert.equal('my task', $('.task-name').text());

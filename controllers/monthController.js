@@ -1,7 +1,7 @@
-var taskModel = require('../models/taskModel');
+var storage = require('../storage/storage');
 
 module.exports.get = function(req, res) {
-    taskModel.getAll(function(err, tasks) {
+    storage.getTasks(function(err, tasks) {
         if (err) {
             return next(err);
         }
@@ -11,20 +11,14 @@ module.exports.get = function(req, res) {
     });
 }
 
-module.exports.getAll = function(req, res, next) {
-    taskModel.getAll(getStorageCallback(res, next));
+module.exports.newTask = function(req, res, next) {
+    storage.storeTask(req.body, getStorageCallback(res, next));
 }
 
-module.exports.postNew = function(req, res, next) {
-    taskModel.store(req.body, getStorageCallback(res, next));
-}
-
-module.exports.postEdit = function(req, res, next) {
-    taskModel.edit(req.body, getStorageCallback(res, next));
-}
-
-module.exports.postDelete = function(req, res, next) {
-    taskModel.delete(req.body, getStorageCallback(res, next));
+module.exports.editTask = function(req, res, next) {
+    var task = req.body;
+    task.id = req.params.id;
+    storage.editTask(task, getStorageCallback(res, next));
 }
 
 function getStorageCallback(res, next) {

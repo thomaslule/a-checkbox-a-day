@@ -8,7 +8,7 @@ $.fn.task = function(method, arg) {
     };
 
     methods.getId = function() {
-        return taskElt.find('input[name="id"]').val();
+        return taskElt.find('form').attr('data-id');
     };
 
     methods.edit = function() {
