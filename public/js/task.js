@@ -31,7 +31,9 @@ $.fn.task = function(method, arg) {
     }
 
     if (method == undefined) {
-        // called with no argument
+        // called with no argument: make it a task object without modifying the html inside
+        taskElt.addClass('task');
+        taskElt.attr('data-status', taskElt.find('input[name="status"]').val());
         return taskElt;
     }
 
@@ -39,7 +41,7 @@ $.fn.task = function(method, arg) {
         // it's not a method, it's the initial task
         taskElt.addClass('task');
         taskElt.attr('data-status', method.status);
-        taskElt.append(jadeTaskTemplate(method));
+        taskElt.append(jadeTaskTemplate({ task: method }));
         return taskElt;
     }
 

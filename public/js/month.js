@@ -1,13 +1,8 @@
 $(function() {
 
-    $.get('/all')
-    .done(function(tasks) {
-        tasks.forEach(function(task) {
-            $('#new-item').before('<li />');
-            var taskElt = $('#new-item').prev().task(task);
-        });
-    })
-    .fail(util.displayError);
+    $('#items-list li:not(#new-item)').each(function() {
+        $(this).task();
+    });
 
     $('#new-item form').submit(function() {
         $('#new-item').before('<li />');
