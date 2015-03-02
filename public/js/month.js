@@ -4,16 +4,6 @@ $(function() {
         $(this).task();
     });
 
-    $('#new-item form').submit(function() {
-        $('#new-item').before('<li />');
-        var nameInput = $(this).find('input[name="name"]');
-        util.post($(this), function(task) {
-            var taskElt = $('#new-item').prev().task(task);
-            nameInput.val('');
-        });
-        return false;
-    });
-
 });
 
 $(document).on('submit', '#new-item form', function() {
