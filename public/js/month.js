@@ -1,28 +1,20 @@
 $(function() {
+
     $('#new-item form').submit(function() {
         $('#new-item').before('<li />');
         var nameInput = $(this).find('input[name="name"]');
         util.post($(this), function(task) {
             var taskElt = $('#new-item').prev().task(task);
-            attachEvents(taskElt);
             nameInput.val('');
         });
         return false;
     });
+
 });
 
-function attachEvents(taskElt) {
-    taskElt.task('onCheck', function() {
-        util.post(taskElt.task('getForm'));
-    });
-    taskElt.task('onApplyEdit', function() {
-        util.post(taskElt.task('getForm'));
-    });
-    taskElt.task('onDelete', function() {
-        $.post('/delete', { id: taskElt.task('getId') })
-        .fail(util.displayError);
-    });
-}
+$(document).on('update', '.task', function() {
+    util.post($(this).task('getForm'));
+});
 
 util = {};
 util.post = function(form, callback) {

@@ -34,11 +34,11 @@ module.exports.getTask = function(id, callback) {
 },
 
 module.exports.getTasks = function(callback) {
-    connection.query('select * from tasks order by id', processDbResult(callback));
+    connection.query('select * from tasks where status != "deleted" order by id', processDbResult(callback));
 },
 
 module.exports.storeTask = function(task, callback) {
-    connection.query('insert into tasks (name, done) values (?, ?)', [ task.name, task.done ], function(err, results) {
+    connection.query('insert into tasks (name, status) values (?, ?)', [ task.name, task.status ], function(err, results) {
         if (err) {
             callback(err);
         } else {
@@ -48,7 +48,7 @@ module.exports.storeTask = function(task, callback) {
 }
 
 module.exports.editTask = function(task, callback) {
-    connection.query('update tasks set name = ?, done = ? where id = ?', [ task.name, task.done, task.id ], function(err, results) {
+    connection.query('update tasks set name = ?, status = ? where id = ?', [ task.name, task.status, task.id ], function(err, results) {
         if (err) {
             callback(err);
         } else {

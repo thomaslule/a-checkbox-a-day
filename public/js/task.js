@@ -3,22 +3,6 @@ $.fn.task = function(method, arg) {
     var taskElt = this;
     var methods = {};
 
-    var doApplyEdit = function(callback) {
-        taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
-        taskElt.find('.edit-item-input').hide();
-        taskElt.find('.checkbox').show();
-        if (callback) callback();
-    }
-
-    var doDelete = function(callback) {
-        bootbox.confirm('Voulez-vous supprimer cet item ?', function(result) {
-            if (result) {
-                taskElt.remove();
-                if (callback) callback();
-            }
-        });
-    }
-
     methods.getForm = function() {
         return taskElt.find('form');
     };
@@ -27,46 +11,24 @@ $.fn.task = function(method, arg) {
         return taskElt.find('input[name="id"]').val();
     };
 
-    // arg must be a callback function
-    methods.onCheck = function() {
-        taskElt.find(':checkbox').change(arg);
-        return taskElt;
-    };
-
     methods.edit = function() {
-        $('.task').each(function() {
+        $('.task.editing').removeClass(function() {
             $(this).task('cancelEdit');
         });
-        taskElt.find('.checkbox').hide();
-        taskElt.find('.edit-item-input').show();
+        taskElt.addClass('editing');
         return taskElt;
     };
 
     methods.cancelEdit = function() {
-        if (taskElt.find('.edit-item-input').is(':visible')) {
-            taskElt.find('input[name="name"]').val(taskElt.find('.task-name').text());
-            taskElt.find('.edit-item-input').hide();
-            taskElt.find('.checkbox').show();
-        }
+        taskElt.find('input[name="name"]').val(taskElt.find('.task-name').text());
+        taskElt.removeClass('editing');
     };
 
-    // arg must be a callback function
-    methods.onApplyEdit = function() {
-        taskElt.find('form').submit(function() {
-            doApplyEdit(arg);
-            return false;
-        });
-        return taskElt;
-    };
-
-    // arg must be a callback function
-    methods.onDelete = function() {
-        taskElt.find('.delete-item-button').click(function() {
-            doDelete(arg);
-            return false;
-        });
-        return taskElt;
-    };
+    methods.changeStatus = function() {
+        taskElt.find('input[name="status"]').val(arg);
+        taskElt.attr('data-status', arg);
+        taskElt.trigger('update');
+    }
 
     if (method == undefined) {
         // called with no argument
@@ -75,23 +37,54 @@ $.fn.task = function(method, arg) {
 
     if ($.isPlainObject(method)) {
         // it's not a method, it's the initial task
+        taskElt.addClass('task');
+        taskElt.attr('data-status', method.status);
         taskElt.append(jadeTaskTemplate({ task: method }));
-
-        taskElt.find('.edit-item-button').click(function() {
-            taskElt.task('edit');
-            return false;
-        });
-        taskElt.find('.cancel-button').click(function() {
-            taskElt.task('cancelEdit');
-            return false;
-        });
-        taskElt.find('form').submit(function() {
-            doApplyEdit();
-            return false;
-        })
         return taskElt;
     }
 
     return methods[method]();
 
 }
+
+$(document).on('change', '.task :checkbox', function() {
+    $(this).closest('.task').task('changeStatus', $(this).is(':checked') ? 'done' : 'todo');
+});
+
+$(document).on('click', '.task .edit-item-button', function() {
+    $(this).closest('.task').task('edit');
+    return false;
+});
+
+$(document).on('click', '.task .cancel-edit-button', function() {
+    $(this).closest('.task').task('cancelEdit');
+    return false;
+});
+
+$(document).on('submit', '.task form', function() {
+    var taskElt = $(this).closest('.task');
+    taskElt.find('.task-name').text(taskElt.find('input[name="name"]').val());
+    taskElt.removeClass('editing');
+    taskElt.trigger('update');
+    return false;
+});
+
+$(document).on('click', '.task .cancel-item-button', function() {
+    $(this).closest('.task').task('changeStatus', 'cancelled');
+    return false;
+});
+
+$(document).on('click', '.task .delete-item-button', function() {
+    var taskElt = $(this).closest('.task');
+    bootbox.confirm('Voulez-vous supprimer définitivement cet item ?', function(result) {
+        if (result) {
+            taskElt.task('changeStatus', 'deleted');
+        }
+    });
+    return false;
+});
+
+$(document).on('click', '.task .restore-item-button', function() {
+    $(this).closest('.task').task('changeStatus', 'todo');
+    return false;
+});
