@@ -1,5 +1,9 @@
 $(function() {
 
+    $('#items-list li:not(#new-item)').each(function() {
+        $(this).task();
+    });
+
     $('#new-item form').submit(function() {
         $('#new-item').before('<li />');
         var nameInput = $(this).find('input[name="name"]');
