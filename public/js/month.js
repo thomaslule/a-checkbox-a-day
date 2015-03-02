@@ -4,24 +4,23 @@ $(function() {
         $(this).task();
     });
 
-    $('#new-item form').submit(function() {
-        $('#new-item').before('<li />');
-        var nameInput = $(this).find('input[name="name"]');
-        util.post($(this), function(task) {
-            var taskElt = $('#new-item').prev().task(task);
-            nameInput.val('');
-        });
-        return false;
-    });
+});
 
+$(document).on('submit', '#new-item form', function() {
+    $('#new-item').before('<li />');
+    util.post($(this), '/task', function(task) {
+        var taskElt = $('#new-item').prev().task(task);
+        $('#new-item form input[name="name"]').val('');
+    });
+    return false;
 });
 
 $(document).on('update', '.task', function() {
-    util.post($(this).task('getForm'));
+    util.post($(this).task('getForm'), '/task/' + $(this).task('getId'));
 });
 
 util = {};
-util.post = function(form, callback) {
+util.post = function(form, url, callback) {
     form.removeAttr('novalidate');
     // html5 validation
     if (!form[0].checkValidity()) {
@@ -31,12 +30,8 @@ util.post = function(form, callback) {
     // set novalidate attr in order to avoid html5 validation after the submit event
     form.attr('novalidate', 'novalidate');
     var inputs = form.serializeArray();
-    // for each unchecked box, submit a 0 value
-    form.find('input:checkbox:not(:checked)').each(function() {
-        inputs.push({ name: $(this).attr('name') , value: 0 });
-    });
     // ajax submit
-    $.post(form.attr('action'), inputs)
+    $.post(url, inputs)
     .done(function(result) {
         if (callback) callback(result);
     })
