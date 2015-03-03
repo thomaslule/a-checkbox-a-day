@@ -42,7 +42,7 @@ var monthController = require('./controllers/monthController.js');
 
 app.get('/', function(req, res) {
     res.location('/month');
-    res.send(301);
+    res.sendStatus(301);
 })
 .get('/month', monthController.get)
 .post('/task', monthController.newTask)
