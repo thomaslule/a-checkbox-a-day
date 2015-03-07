@@ -1,5 +1,5 @@
 node_modules
 local.json
-public/js/jade
 *.swp
 .vagrant
+bin/selenium-server-standalone-2.45.0.jar

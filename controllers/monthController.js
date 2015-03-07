@@ -1,6 +1,6 @@
 var storage = require('../storage/storage');
 
-module.exports.get = function(req, res) {
+module.exports.get = function(req, res, next) {
     storage.getTasks(function(err, tasks) {
         if (err) {
             return next(err);

@@ -4,6 +4,7 @@ GEM
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
     ffi (1.9.6)
+    ffi (1.9.6-x64-mingw32)
     multi_json (1.10.1)
     rubyzip (1.1.7)
     selenium-webdriver (2.44.0)
@@ -15,6 +16,7 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   selenium-webdriver (~> 2.44.0)

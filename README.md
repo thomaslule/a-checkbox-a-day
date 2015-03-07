@@ -4,13 +4,25 @@
 
 Learning javascript and node.js by implementing a todolist vaguely inspired by the "bullet journal".
 
-## Install:
-    cp local.json-dist local.json # db credentials go here
-    npm install
-    node bin/init_storage.js
-    npm start
+## Install the application
 
-## Linux environment
+#### Prerequisites
+
+- Node.js
+- A mysql database
+
+#### Install
+
+```` bash
+cp local.json-dist local.json # put your database credentials here
+npm install
+node bin/init_storage.js
+npm start
+````
+
+## Setup a development environment
+
+### Linux environment
 
 If docker is available on your platform, it's pretty straight forward.
 
@@ -22,14 +34,20 @@ If docker is available on your platform, it's pretty straight forward.
 ./test/functional_test.sh # test the application with selenium tests (everything still in docker, you have nothing to do)
 ````
 
-## Windows environment
+### Windows environment
 
-You can install vagrant to have a linux environment, yet to be improve:
+#### Prerequisites
+
+- Node.js
+- Boot2docker
+- Ruby
+
+#### Install
 
 ```` powershell
-vagrant up
-vagrant ssh 
-# if you can't run docker as vagrant user, try:
-# vagrant halt
-# Then up once more
+.\bin\build_env.ps1        # setup the environment (you need to launch this only once)
+.\bin\start_env.ps1        # starts the application
+.\bin\stop_env.ps1         # stops the application
+node .\bin\init_storage.js # empty the database
+npm test                   # launch the tests
 ````
