@@ -1,4 +1,3 @@
-$start = $pwd
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 
 # Download nodejs dependencies
@@ -21,6 +20,4 @@ $fileFixed = (gc $scriptPath\..\local.json-dist) -replace 'localhost', '192.168.
 
 # Configure ruby
 gem install bundler
-cd $scriptPath\..\test\acceptance
-bundle install
-cd $start
+bundle install --gemfile=$scriptPath\..\test\acceptance\Gemfile

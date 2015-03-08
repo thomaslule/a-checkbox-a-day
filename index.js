@@ -39,6 +39,7 @@ app.locals.pretty = true;
 var jadeTemplates = fs.readFileSync('node_modules/jade/runtime.js').toString() + jade.compileFileClient('views/task.jade', {name: 'jadeTaskTemplate'});
 
 var monthController = require('./controllers/monthController.js');
+var applicationHealth = require('./controllers/healthController.js');
 
 app.get('/', function(req, res) {
     res.location('/month');
@@ -50,11 +51,22 @@ app.get('/', function(req, res) {
 .get('/jade_templates.js', function(req, res) {
     res.type('text/javascript');
     res.send(jadeTemplates);
+})
+.get('/health', applicationHealth.get)
+.get('/clear', function(req, res, next) {
+    storage.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
+        if (err) {
+            next(err);
+        }
+        storage.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
+            if (err) {
+                next(err);
+            } else {
+                res.sendStatus(200);
+            }
+        })
+    })
 });
-
-var applicationHealth = require('./controllers/healthController.js');
-
-app.get('/health', applicationHealth.get);
 
 // error handling
 app.use(function(err, req, res, next) {
