@@ -7,7 +7,7 @@ class SmokeTest < Test::Unit::TestCase
     def setup
         selenium_url = nil
         capabilities = nil
-        if ENV['travis']
+        if ENV['TRAVIS']
             selenium_url = 'http://' + ENV['SAUCE_USERNAME'] + ':' + ENV['SAUCE_ACCESS_KEY'] + '@ondemand.saucelabs.com:80/wd/hub'
             capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
             capabilities['tunnel-identifier'] = ENV['TRAVIS_JOB_NUMBER']
