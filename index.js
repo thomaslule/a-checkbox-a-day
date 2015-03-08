@@ -67,12 +67,12 @@ app.get('/', function(req, res) {
 
 // error handling
 app.use(function(err, req, res, next) {
-    console.error(err.stack);
+    console.error(err.stack ? err.stack : err);
     res.status(500);
     if (req.xhr) {
-        res.json({ 'error': err.message });
+        res.json({ 'error': (err.message ? err.message : err) });
     } else {
-        res.send('Internal error: ' + err.message);
+        res.send('Internal error: ' + (err.message ? err.message : err));
     }
 });
 
