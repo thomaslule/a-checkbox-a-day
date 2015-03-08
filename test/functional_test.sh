@@ -20,6 +20,7 @@ if [ -z "$IMAGE" ]; then
     exit 1
 fi
 
+IN_DOCKER=true
 PIDS=$($DIR/../bin/run.sh)
 MYSQL_PID=$(echo "$PIDS" | head -1)
 APPLI_PID=$(echo "$PIDS" | tail -1)

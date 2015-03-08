@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node_modules/.bin/nodemon -e js,jade index.js",
-    "test": "node_modules/.bin/mocha test/public"
+    "test": "node_modules/.bin/mocha test/public && ruby test/acceptance/smoke_test.rb"
   },
   "dependencies": {
     "body-parser": "^1.12.0",
