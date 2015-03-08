@@ -6,14 +6,14 @@ require 'uri'
 class SmokeTest < Test::Unit::TestCase
     def setup
         selenium_url = nil
-        browser = nil
+        capabilities = nil
         if ENV['travis']
             selenium_url = 'http://' + ENV['SAUCE_USERNAME'] + ':' + ENV['SAUCE_ACCESS_KEY'] + '@ondemand.saucelabs.com:80/wd/hub'
             capabilities = Selenium::WebDriver::Remote::Capabilities.firefox
-            capabilities["tunnel-identifier"] = ENV["TRAVIS_JOB_NUMBER"]
+            capabilities['tunnel-identifier'] = ENV['TRAVIS_JOB_NUMBER']
             capabilities.version = '36.0'
             capabilities.platform = 'Windows 7'
-            capabilities["name"] = "Travis " + ENV['TRAVIS_JOB_NUMBER']
+            capabilities['name'] = 'Travis ' + ENV['TRAVIS_JOB_NUMBER']
             @appli_url = 'http://localhost:8080'
         elsif ENV['IN_DOCKER']
             selenium_url = 'http://selenium:4444/wd/hub'
