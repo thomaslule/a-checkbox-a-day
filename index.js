@@ -40,6 +40,7 @@ app.locals.pretty = true;
 var jadeTemplates = fs.readFileSync('node_modules/jade/runtime.js').toString() + jade.compileFileClient('views/task.jade', {name: 'jadeTaskTemplate'});
 
 var monthController = require('./controllers/monthController.js');
+var taskController = require('./controllers/taskController.js');
 var applicationHealth = require('./controllers/healthController.js');
 
 app.get('/', function(req, res) {
@@ -47,8 +48,8 @@ app.get('/', function(req, res) {
     res.sendStatus(301);
 })
 .get('/month/:month', monthController.get)
-.post('/task', monthController.newTask)
-.post('/task/:id', monthController.editTask)
+.post('/task', taskController.new)
+.post('/task/:id', taskController.edit)
 .get('/jade_templates.js', function(req, res) {
     res.type('text/javascript');
     res.send(jadeTemplates);
