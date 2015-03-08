@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/thomaslule/a-checkbox-a-day.svg)](https://travis-ci.org/thomaslule/a-checkbox-a-day)
+[![Build Status](https://travis-ci.org/thomaslule/a-checkbox-a-day.svg?branch=master)](https://travis-ci.org/thomaslule/a-checkbox-a-day)
 
 # A checkbox a day
 
