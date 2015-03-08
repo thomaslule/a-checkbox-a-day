@@ -3,10 +3,6 @@
     margin-left: 5px;
 }
 
-.task[data-status=deleted] {
-    display: none;
-}
-
 .task:not(.editing) .edit-item-input {
     display:none;
 }

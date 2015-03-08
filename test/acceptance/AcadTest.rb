@@ -1,7 +1,7 @@
 ## Author Thomas Bracher "thomas.bracher@cpe.fr"
 require 'test/unit'
 require 'selenium-webdriver'
-require 'uri'
+require_relative 'MonthTest'
 
 class AcadMiniTest
     class Unit < MiniTest::Unit
@@ -29,13 +29,16 @@ class AcadMiniTest
             end
 
             $driver = Selenium::WebDriver.for(:remote, :url => selenium_url, :desired_capabilities => capabilities)
-            $driver.manage.timeouts.implicit_wait = 5 # seconds
+            $driver.manage.timeouts.implicit_wait = 1 # seconds
         end
 
         def after_suites
             # code to run after the last test
+            $driver.get($appli_url + '/clear')
             if ENV['TRAVIS']
                 $driver.quit
+            else
+                $driver.close
             end
         end
 
@@ -61,22 +64,10 @@ end
 
 MiniTest::Unit.runner = AcadMiniTest::Unit.new
 
-class SmokeTest < Test::Unit::TestCase
-    def setup
-        $driver.get($appli_url + '/clear')
-    end
-
-    def teardown
-        $driver.close
-    end
-
-    def test_add_simple_task
-        $driver.get($appli_url + '/month')
-        name = $driver.find_element(:name, 'name')
-        name.send_keys('some task')
-        name.submit
-
-        last_task_name = $driver.find_element(:css, '.task-name')
-        assert_equal(last_task_name.text, 'some task')
+class AcadTest
+    def self.suite
+        suite = Test::Unit::TestSuite.new
+        suite << MonthTest.suite
+        return suite
     end
 end
