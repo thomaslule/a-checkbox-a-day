@@ -55,17 +55,12 @@ app.get('/', function(req, res) {
 })
 .get('/health', applicationHealth.get)
 .get('/clear', function(req, res, next) {
-    storage.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
+    storage.clearDb(function(err) {
         if (err) {
             next(err);
+            return;
         }
-        storage.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
-            if (err) {
-                next(err);
-            } else {
-                res.sendStatus(200);
-            }
-        })
+        res.sendStatus(200);
     })
 });
 

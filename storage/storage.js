@@ -1,5 +1,6 @@
 var nconf = require('nconf');
 var mysql = require('mysql');
+var fs = require('fs-extra');
 
 nconf.argv().env().file('local.json');
 
@@ -14,9 +15,25 @@ var connection = mysql.createConnection(connectionConf);
 connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
 
+module.exports.clearDb = function(callback) {
+    module.exports.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
+        if (err) {
+            callback(err);
+            return;
+        }
+        module.exports.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            callback();
+        })
+    })
+}
+
 module.exports.testConnection = function(callback) {
     connection.connect(callback);
-};
+}
 
 module.exports.execute = function(script, callback) {
     multiConnection.query(script, function (err) {
@@ -27,16 +44,16 @@ module.exports.execute = function(script, callback) {
         }
         callback(err);
     });
-},
+}
 
 module.exports.getTask = function(id, callback) {
     connection.query('select * from tasks where id = ?', [ id ], processDbResult(callback, true));
-},
+}
 
 module.exports.getTasksForMonth = function(month, callback) {
     connection.query('select * from tasks where list_type = ? and list_id = ? and status != "deleted" order by id',
         [ 'month', month ], processDbResult(callback));
-},
+}
 
 module.exports.storeTask = function(task, callback) {
     connection.query('insert into tasks (name, status, list_type, list_id) values (?, ?, ?, ?)',
