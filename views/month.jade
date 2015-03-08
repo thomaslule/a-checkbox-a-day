@@ -26,6 +26,8 @@ html
                         li#new-item
                             form(method="post")
                                 input(type="hidden" name="status" value="todo")
+                                input(type="hidden" name="list_type" value="month")
+                                input(type="hidden" name="list_id" value="#{monthId}")
                                 .input-group
                                     input.form-control(type="text" name="name" required="required")
                                     span.input-group-btn

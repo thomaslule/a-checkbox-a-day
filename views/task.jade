@@ -1,5 +1,7 @@
 form(method="post" data-id="#{task.id}")
     input(type="hidden" name="status" value="#{task.status}")
+    input(type="hidden" name="list_type" value="#{task.list_type}")
+    input(type="hidden" name="list_id" value="#{task.list_id}")
     .checkbox
         input(type="checkbox" checked=("#{task.status}" == 'done' ? "checked" : undefined))
     span.task-name #{task.name}

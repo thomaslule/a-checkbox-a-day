@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var storage = require('./storage/storage');
 var fs = require('fs-extra');
 var jade = require('jade');
+var moment = require('moment');
 
 nconf.argv().env().file('local.json');
 
@@ -42,10 +43,10 @@ var monthController = require('./controllers/monthController.js');
 var applicationHealth = require('./controllers/healthController.js');
 
 app.get('/', function(req, res) {
-    res.location('/month');
+    res.location('/month/' + moment().format('YYYYMM'));
     res.sendStatus(301);
 })
-.get('/month', monthController.get)
+.get('/month/:month', monthController.get)
 .post('/task', monthController.newTask)
 .post('/task/:id', monthController.editTask)
 .get('/jade_templates.js', function(req, res) {
