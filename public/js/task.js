@@ -11,6 +11,10 @@ $.fn.task = function(method, arg) {
         return taskElt.find('form').attr('data-id');
     };
 
+    methods.getStatus = function() {
+        return taskElt.attr('data-status');
+    };
+
     methods.edit = function() {
         $('.task.editing').removeClass(function() {
             $(this).task('cancelEdit');
