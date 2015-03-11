@@ -52,7 +52,7 @@ module.exports.getTask = function(id, callback) {
 
 module.exports.getTasksForMonth = function(month, callback) {
     connection.query('select * from tasks where list_type = ? and list_id = ? and status != "deleted" order by id',
-        [ 'month', month ], processDbResult(callback));
+        [ 'month', month.toString() ], processDbResult(callback));
 }
 
 module.exports.storeTask = function(task, callback) {

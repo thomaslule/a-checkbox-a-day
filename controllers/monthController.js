@@ -3,16 +3,13 @@ var Month = require('../models/monthModel');
 
 module.exports.get = function(req, res, next) {
     var month = new Month(req.params.month);
-    if (!month.isValid()) {
-        next('month invalid');
-        return;
-    }
-    storage.getTasksForMonth(req.params.month, function(err, tasks) {
+    if (!month.isValid()) return next('month invalid');
+    storage.getTasksForMonth(month, function(err, tasks) {
         if (err) {
             return next(err);
         }
         res.render('month', {
-            monthId: req.params.month,
+            month: month,
             tasks: tasks
         });
     });

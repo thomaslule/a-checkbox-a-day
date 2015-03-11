@@ -43,6 +43,8 @@ var monthController = require('./controllers/monthController.js');
 var taskController = require('./controllers/taskController.js');
 var applicationHealth = require('./controllers/healthController.js');
 
+moment.locale('fr');
+
 app.get('/', function(req, res) {
     res.location('/month/' + moment().format('YYYYMM'));
     res.sendStatus(301);
