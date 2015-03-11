@@ -15,6 +15,14 @@ html
                 .row
                     .col-xs-4.col-xs-offset-2
                         span.navbar-brand A checkbox a day
+                    .col-xs-4
+                        ul.nav.navbar-nav.navbar-right
+                            li
+                                a.glyphicon.glyphicon-arrow-left#previous-month(href="/month/#{month.previous()}" title="Mois précédent")
+                            li.navbar-text
+                                time#displayed-month(datetime="#{month.toISOString()}") #{month.toPrettyString()}
+                            li
+                                a.glyphicon.glyphicon-arrow-right#next-month(href="/month/#{month.next()}" title="Mois suivant")
         .container
             .row
                 .col-xs-4.col-xs-offset-2
@@ -26,6 +34,8 @@ html
                         li#new-item
                             form(method="post")
                                 input(type="hidden" name="status" value="todo")
+                                input(type="hidden" name="list_type" value="month")
+                                input(type="hidden" name="list_id" value="#{month}")
                                 .input-group
                                     input.form-control(type="text" name="name" required="required")
                                     span.input-group-btn

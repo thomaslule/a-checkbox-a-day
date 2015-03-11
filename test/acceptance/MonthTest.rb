@@ -3,27 +3,27 @@ require 'test/unit'
 class MonthTest < Test::Unit::TestCase
     def setup
         $driver.get($appli_url + '/clear')
-        $driver.get($appli_url + '/month')
+        $driver.get($appli_url + '/')
     end
 
     def test_add_task
         add_task('some task')
         check_persisted {
-            assert_equal('some task', $driver.find_element(:css, '.task .task-name').text)
-            refute($driver.find_element(:css, '.task input[type="checkbox"]').attribute('checked'))
+            assert_equal('some task', $driver.find_element(:css, '.task .task-name').text, 'task not created')
+            refute($driver.find_element(:css, '.task input[type="checkbox"]').attribute('checked'), 'task created in done state')
         }
     end
 
     def test_check_task
         add_task('some task')
         $driver.find_element(:css, '.task input[type="checkbox"]').click
-        check_persisted { assert($driver.find_element(:css, '.task input[type="checkbox"]').attribute('checked')) }
+        check_persisted { assert($driver.find_element(:css, '.task input[type="checkbox"]').attribute('checked'), 'done state not saved') }
     end
 
     def test_cancel_task
         add_task('some task')
         $driver.find_element(:css, '.task .cancel-item-button').click
-        check_persisted { assert_equal('cancelled', $driver.find_element(:css, '.task').attribute('data-status')) }
+        check_persisted { assert_equal('cancelled', $driver.find_element(:css, '.task').attribute('data-status'), 'task not correctly cancelled') }
     end
 
     def test_delete_task
@@ -32,8 +32,18 @@ class MonthTest < Test::Unit::TestCase
         $driver.find_element(:css, '.task .delete-item-button').click
         refute_empty($driver.find_elements(:css, '.task'))
         $driver.find_element(:css, '.bootbox-confirm .btn-primary').click
-        wait = Selenium::WebDriver::Wait.new(:timeout => 2)
-        check_persisted { give_time { assert_empty($driver.find_elements(:css, '.task')) } }
+        check_persisted { give_time { assert_empty($driver.find_elements(:css, '.task'), 'task not correctly deleted') } }
+    end
+
+    def test_change_month
+        $driver.get($appli_url + '/month/205504')
+        assert_equal('avril 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
+        add_task('some task')
+        $driver.find_element(:css, '#previous-month').click
+        assert_equal('mars 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
+        assert_empty($driver.find_elements(:css, '.task'), 'task found in wrong month')
+        $driver.find_element(:css, '#next-month').click
+        assert_equal('some task', $driver.find_element(:css, '.task .task-name').text, 'task not saved in month')
     end
 
     def add_task(name)

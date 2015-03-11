@@ -1,5 +1,6 @@
 var nconf = require('nconf');
 var mysql = require('mysql');
+var fs = require('fs-extra');
 
 nconf.argv().env().file('local.json');
 
@@ -14,9 +15,25 @@ var connection = mysql.createConnection(connectionConf);
 connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
 
+module.exports.clearDb = function(callback) {
+    module.exports.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
+        if (err) {
+            callback(err);
+            return;
+        }
+        module.exports.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            callback();
+        })
+    })
+}
+
 module.exports.testConnection = function(callback) {
     connection.connect(callback);
-};
+}
 
 module.exports.execute = function(script, callback) {
     multiConnection.query(script, function (err) {
@@ -27,18 +44,20 @@ module.exports.execute = function(script, callback) {
         }
         callback(err);
     });
-},
+}
 
 module.exports.getTask = function(id, callback) {
     connection.query('select * from tasks where id = ?', [ id ], processDbResult(callback, true));
-},
+}
 
-module.exports.getTasks = function(callback) {
-    connection.query('select * from tasks where status != "deleted" order by id', processDbResult(callback));
-},
+module.exports.getTasksForMonth = function(month, callback) {
+    connection.query('select * from tasks where list_type = ? and list_id = ? and status != "deleted" order by id',
+        [ 'month', month.toString() ], processDbResult(callback));
+}
 
 module.exports.storeTask = function(task, callback) {
-    connection.query('insert into tasks (name, status) values (?, ?)', [ task.name, task.status ], function(err, results) {
+    connection.query('insert into tasks (name, status, list_type, list_id) values (?, ?, ?, ?)',
+        [ task.name, task.status, task.list_type, task.list_id ], function(err, results) {
         if (err) {
             callback(err);
         } else {
@@ -48,7 +67,8 @@ module.exports.storeTask = function(task, callback) {
 }
 
 module.exports.editTask = function(task, callback) {
-    connection.query('update tasks set name = ?, status = ? where id = ?', [ task.name, task.status, task.id ], function(err, results) {
+    connection.query('update tasks set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
+        [ task.name, task.status, task.list_type, task.list_id, task.id ], function(err, results) {
         if (err) {
             callback(err);
         } else {
@@ -68,7 +88,6 @@ module.exports.deleteTask = function(task, callback) {
 }
 
 function processDbResult(callback, unique) {
-    // TODO this code may be useless (when array is of length 1 it behaves as its first element) it needs tests
     unique = (typeof unique === 'undefined' ? false : unique);
     return function(err, results) {
         if (callback) {
