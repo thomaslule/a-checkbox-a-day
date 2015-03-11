@@ -4,6 +4,7 @@ node_js:
 addons:
   sauce_connect: true
 before_script:
+ - env: LC_CTYPE=en_US.UTF-8
  - mysql -e 'create database acad_db;'
  - bundle install --gemfile=test/acceptance/Gemfile
  - cp local.json-travis local.json
