@@ -18,10 +18,10 @@ html
                     .col-xs-4
                         ul.nav.navbar-nav.navbar-right
                             li
-                                a.glyphicon.glyphicon-arrow-left(href="/month/#{month.previousMonth()}" title="Mois précédent")
+                                a.glyphicon.glyphicon-arrow-left(href="/month/#{month.previous()}" title="Mois précédent")
                             li.navbar-text #{month.toPrettyString()}
                             li
-                                a.glyphicon.glyphicon-arrow-right(href="/month/#{month.nextMonth()}" title="Mois suivant")
+                                a.glyphicon.glyphicon-arrow-right(href="/month/#{month.next()}" title="Mois suivant")
         .container
             .row
                 .col-xs-4.col-xs-offset-2

@@ -1,7 +1,7 @@
 var moment = require('moment');
 
 var Month = function(month) {
-    this.month = moment.isMoment(month) ? month : moment(month, 'YYYYMM', true);
+    this.month = moment.isMoment(month) ? month.startOf('month') : moment(month, 'YYYYMM', true);
 }
 
 Month.prototype.isValid = function() {
@@ -16,11 +16,11 @@ Month.prototype.toPrettyString = function() {
     return this.month.format('MMMM YYYY');
 }
 
-Month.prototype.previousMonth = function() {
+Month.prototype.previous = function() {
     return new Month(moment(this.month).subtract(1, 'months'));
 }
 
-Month.prototype.nextMonth = function() {
+Month.prototype.next = function() {
     return new Month(moment(this.month).add(1, 'months'));
 }
 
