@@ -36,11 +36,11 @@ class MonthTest < Test::Unit::TestCase
     end
 
     def test_change_month
-        $driver.get($appli_url + '/month/205501')
-        assert_equal('janvier 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
+        $driver.get($appli_url + '/month/205504')
+        assert_equal('avril 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
         add_task('some task')
         $driver.find_element(:css, '#previous-month').click
-        assert_equal('décembre 2054', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
+        assert_equal('mars 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
         assert_empty($driver.find_elements(:css, '.task'), 'task found in wrong month')
         $driver.find_element(:css, '#next-month').click
         assert_equal('some task', $driver.find_element(:css, '.task .task-name').text, 'task not saved in month')
