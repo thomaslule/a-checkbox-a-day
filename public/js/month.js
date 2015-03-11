@@ -22,6 +22,10 @@ $(document).on('update', '.task', function() {
     }
 });
 
+$(document).on('delete', '.task', function() {
+    util.post($(this).task('getForm'), '/task/' + $(this).task('getId') + '/delete');
+});
+
 util = {};
 util.post = function(form, url, callback) {
     form.removeAttr('novalidate');

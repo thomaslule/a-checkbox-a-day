@@ -51,6 +51,7 @@ app.get('/', function(req, res) {
 })
 .get('/month/:month', monthController.get)
 .post('/task', taskController.new)
+.post('/task/:id/delete', taskController.delete)
 .post('/task/:id', taskController.edit)
 .get('/jade_templates.js', function(req, res) {
     res.type('text/javascript');

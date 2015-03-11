@@ -84,7 +84,8 @@ $(document).on('click', '.task .delete-item-button', function() {
     var taskElt = $(this).closest('.task');
     bootbox.confirm('Voulez-vous supprimer définitivement cet item ?', function(result) {
         if (result) {
-            taskElt.task('changeStatus', 'deleted');
+            taskElt.trigger('delete');
+            taskElt.remove();
         }
     });
     return false;
