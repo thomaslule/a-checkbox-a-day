@@ -16,6 +16,10 @@ Month.prototype.toPrettyString = function() {
     return this.month.format('MMMM YYYY');
 }
 
+Month.prototype.toISOString = function() {
+    return this.month.format('YYYY-MM');
+}
+
 Month.prototype.previous = function() {
     return new Month(moment(this.month).subtract(1, 'months'));
 }

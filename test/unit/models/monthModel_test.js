@@ -41,6 +41,14 @@ describe('Month', function() {
         })
     })
 
+    describe('#toISOString', function() {
+
+        it('should return an ISO string', function() {
+            var month = new Month('201501');
+            assert.equal('2015-01', month.toISOString());
+        })
+    })
+
     describe('#previous', function() {
 
         it('should return the previous month', function() {

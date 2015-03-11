@@ -35,6 +35,17 @@ class MonthTest < Test::Unit::TestCase
         check_persisted { give_time { assert_empty($driver.find_elements(:css, '.task'), 'task not correctly deleted') } }
     end
 
+    def test_change_month
+        $driver.get($appli_url + '/month/205501')
+        assert_equal('janvier 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
+        add_task('some task')
+        $driver.find_element(:css, '#previous-month').click
+        assert_equal('décembre 2054', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
+        assert_empty($driver.find_elements(:css, '.task'), 'task found in wrong month')
+        $driver.find_element(:css, '#next-month').click
+        assert_equal('some task', $driver.find_element(:css, '.task .task-name').text, 'task not saved in month')
+    end
+
     def add_task(name)
         input = $driver.find_element(:css, '#new-item input[name="name"]')
         input.send_keys(name)
