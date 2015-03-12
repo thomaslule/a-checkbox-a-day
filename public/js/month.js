@@ -17,9 +17,6 @@ $(document).on('submit', '#new-item form', function() {
 
 $(document).on('update', '.task', function() {
     util.post($(this).task('getForm'), '/task/' + $(this).task('getId'));
-    if ($(this).task('getStatus') == 'deleted') {
-        $(this).remove();
-    }
 });
 
 $(document).on('delete', '.task', function() {
