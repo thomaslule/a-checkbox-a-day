@@ -3,7 +3,9 @@
  */
 var storage = require('../storage/storage');
 
-module.exports.get = function(req, res) {
+var healthController = {}
+
+healthController.get = function(req, res) {
     storage.testConnection(function(err) {
         if (err) {
             console.log("error connecting to mysql: %s", err.stack);
@@ -13,3 +15,5 @@ module.exports.get = function(req, res) {
         }
     });
 };
+
+module.exports = healthController;

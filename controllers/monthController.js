@@ -1,7 +1,9 @@
 var storage = require('../storage/storage');
 var Month = require('../models/monthModel');
 
-module.exports.get = function(req, res, next) {
+var monthController = {};
+
+monthController.get = function(req, res, next) {
     var month = new Month(req.params.month);
     if (!month.isValid()) return next('month invalid');
     storage.getTasksForMonth(month, function(err, tasks) {
@@ -14,3 +16,5 @@ module.exports.get = function(req, res, next) {
         });
     });
 }
+
+module.exports = monthController;

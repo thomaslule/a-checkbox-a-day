@@ -15,13 +15,15 @@ var connection = mysql.createConnection(connectionConf);
 connectionConf.multipleStatements = true;
 var multiConnection = mysql.createConnection(connectionConf);
 
-module.exports.clearDb = function(callback) {
-    module.exports.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
+var storage = {}
+
+storage.clearDb = function(callback) {
+    storage.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
         if (err) {
             callback(err);
             return;
         }
-        module.exports.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
+        storage.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
             if (err) {
                 callback(err);
                 return;
@@ -31,11 +33,11 @@ module.exports.clearDb = function(callback) {
     })
 }
 
-module.exports.testConnection = function(callback) {
+storage.testConnection = function(callback) {
     connection.connect(callback);
 }
 
-module.exports.execute = function(script, callback) {
+storage.execute = function(script, callback) {
     multiConnection.query(script, function (err) {
         if (err) {
             // the connection needs to be re-initialized if an error occurs
@@ -46,39 +48,39 @@ module.exports.execute = function(script, callback) {
     });
 }
 
-module.exports.getTask = function(id, callback) {
+storage.getTask = function(id, callback) {
     connection.query('select * from tasks where id = ?', [ id ], processDbResult(callback, true));
 }
 
-module.exports.getTasksForMonth = function(month, callback) {
+storage.getTasksForMonth = function(month, callback) {
     connection.query('select * from tasks where list_type = ? and list_id = ? order by id',
         [ 'month', month.toString() ], processDbResult(callback));
 }
 
-module.exports.storeTask = function(task, callback) {
+storage.storeTask = function(task, callback) {
     connection.query('insert into tasks (name, status, list_type, list_id) values (?, ?, ?, ?)',
-        [ task.name, task.status, task.list_type, task.list_id ], function(err, results) {
+        [ task.data.name, task.data.status, task.data.list_type, task.data.list_id ], function(err, results) {
         if (err) {
             callback(err);
         } else {
-            module.exports.getTask(results.insertId, callback);
+            storage.getTask(results.insertId, callback);
         }
     });
 }
 
-module.exports.editTask = function(task, callback) {
+storage.editTask = function(task, callback) {
     connection.query('update tasks set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
-        [ task.name, task.status, task.list_type, task.list_id, task.id ], function(err, results) {
+        [ task.data.name, task.data.status, task.data.list_type, task.data.list_id, task.data.id ], function(err, results) {
         if (err) {
             callback(err);
         } else {
-            module.exports.getTask(task.id, callback);
+            storage.getTask(task.data.id, callback);
         }
     });
 }
 
-module.exports.deleteTask = function(task, callback) {
-    connection.query('delete from tasks where id = ?', [ task.id ], function(err, results) {
+storage.deleteTask = function(task, callback) {
+    connection.query('delete from tasks where id = ?', [ task.data.id ], function(err, results) {
         if (err) {
             callback(err);
         } else {
@@ -99,3 +101,5 @@ function processDbResult(callback, unique) {
         }
     }
 }
+
+module.exports = storage;

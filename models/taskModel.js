@@ -1,15 +1,16 @@
 var Month = require('./monthModel');
 
-module.exports = function(task) {
-
-    task.isValid = function() {
-        if (this.list_type == 'month') {
-            var month = new Month(this.list_id);
-            return month.isValid();
-        } else {
-            return true;
-        }
-    }
-
-    return task;
+var Task = function(task) {
+    this.data = task;
 }
+
+Task.prototype.isValid = function() {
+    if (this.data.list_type == 'month') {
+        var month = new Month(this.data.list_id);
+        return month.isValid();
+    } else {
+        return true;
+    }
+}
+
+module.exports = Task;
