@@ -8,7 +8,7 @@ $(function() {
 
 $(document).on('submit', '#new-item form', function() {
     $('#new-item').before('<li />');
-    util.post($(this), '/task', function(task) {
+    util.post($(this), '/task', 'POST', function(task) {
         var taskElt = $('#new-item').prev().task(task);
         $('#new-item form input[name="name"]').val('');
     });
@@ -16,15 +16,15 @@ $(document).on('submit', '#new-item form', function() {
 });
 
 $(document).on('update', '.task', function() {
-    util.post($(this).task('getForm'), '/task/' + $(this).task('getId'));
+    util.post($(this).task('getForm'), '/task/' + $(this).task('getId'), 'PUT');
 });
 
 $(document).on('delete', '.task', function() {
-    util.post($(this).task('getForm'), '/task/' + $(this).task('getId') + '/delete');
+    util.post($(this).task('getForm'), '/task/' + $(this).task('getId'), 'DELETE');
 });
 
 util = {};
-util.post = function(form, url, callback) {
+util.post = function(form, url, method, callback) {
     form.removeAttr('novalidate');
     // html5 validation
     if (!form[0].checkValidity()) {
@@ -35,7 +35,11 @@ util.post = function(form, url, callback) {
     form.attr('novalidate', 'novalidate');
     var inputs = form.serializeArray();
     // ajax submit
-    $.post(url, inputs)
+    $.ajax({
+        url: url,
+        type: method,
+        data: inputs
+    })
     .done(function(result) {
         if (callback) callback(result);
     })
