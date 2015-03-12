@@ -24,6 +24,18 @@ taskController.delete = function(req, res, next) {
     storage.deleteTask(task, getStorageCallback(res, next));
 }
 
+taskController.move = function(req, res, next) {
+    storage.getTask(req.params.id, function(err, result) {
+        if (err) return next(err);
+        task = new Task(result);
+        newTask = task.move(req.body.list_id);
+        storage.storeTask(newTask, function(err, result) {
+            if (err) return next(err);
+            storage.editTask(task, getStorageCallback(res, next));
+        });
+    });
+}
+
 function getStorageCallback(res, next) {
     return function(err, result) {
         if (err) {
