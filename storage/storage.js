@@ -49,12 +49,18 @@ storage.execute = function(script, callback) {
 }
 
 storage.getTask = function(id, callback) {
-    connection.query('select * from tasks where id = ?', [ id ], processDbResult(callback, true));
+    connection.query('select * from tasks where id = ?', [ id ], function(err, result) {
+        if (err) return callback(err);
+        callback(null, result[0]);
+    });
 }
 
 storage.getTasksForMonth = function(month, callback) {
     connection.query('select * from tasks where list_type = ? and list_id = ? order by id',
-        [ 'month', month.toString() ], processDbResult(callback));
+        [ 'month', month.toString() ], function(err, result) {
+        if (err) return callback(err);
+        callback(null, result);
+    });
 }
 
 storage.storeTask = function(task, callback) {
@@ -87,19 +93,6 @@ storage.deleteTask = function(task, callback) {
             callback(null, {});
         }
     });
-}
-
-function processDbResult(callback, unique) {
-    unique = (typeof unique === 'undefined' ? false : unique);
-    return function(err, results) {
-        if (callback) {
-            if (err) {
-                callback(err);
-            } else {
-                unique ? callback(null, results[0]) : callback(null, results);
-            }
-        }
-    }
 }
 
 module.exports = storage;

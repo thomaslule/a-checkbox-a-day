@@ -1,6 +1,6 @@
 var storage = require('../storage/storage');
 var moment = require('moment');
-var Task = require('../models/taskModel.js')
+var Task = require('../models/taskModel.js');
 
 var taskController = {};
 

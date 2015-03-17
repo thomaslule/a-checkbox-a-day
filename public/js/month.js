@@ -7,8 +7,8 @@ $(function() {
 });
 
 $(document).on('submit', '#new-item form', function() {
-    $('#new-item').before('<li />');
     util.send($(this), '/task', 'POST', function(task) {
+        $('#new-item').before('<li />');
         var taskElt = $('#new-item').prev().task(task);
         $('#new-item form input[name="name"]').val('');
     });

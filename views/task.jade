@@ -1,17 +1,27 @@
-form(method="post" data-id="#{task.id}")
-    input(type="hidden" name="status" value="#{task.status}")
-    input(type="hidden" name="list_type" value="#{task.list_type}")
-    input(type="hidden" name="list_id" value="#{task.list_id}")
+form(method="post" data-id="#{task.data.id}")
+    input(type="hidden" name="status" value="#{task.data.status}")
+    input(type="hidden" name="list_type" value="#{task.data.list_type}")
+    input(type="hidden" name="list_id" value="#{task.data.list_id}")
     .checkbox
-        input(type="checkbox" checked=("#{task.status}" == 'done' ? "checked" : undefined))
-    span.task-name #{task.name}
+        input(type="checkbox" checked=("#{task.data.status}" == 'done' ? "checked" : undefined))
+    span.task-name #{task.data.name}
     span.action-buttons
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#" title="Éditer")
         a.glyphicon.glyphicon-remove.cancel-item-button(href="#" title="Annuler")
+        //- span.dropdown
+        //-     a.dropdown-toggle.glyphicon.glyphicon-arrow-right.move-item-button(href="#" title="Déplacer" data-toggle="dropdown")
+        //-     ul.dropdown-menu
+        //-         li.dropdown-header Déplacer vers...
+        //-         li
+        //-             a(tabindex="-1" href="#") #{month.previous().toPrettyString()}
+        //-         li
+        //-             a(tabindex="-1" href="#") #{month.next().toPrettyString()}
+        //-         li
+        //-             a(tabindex="-1" href="#") #{month.next().next().toPrettyString()}
         a.glyphicon.glyphicon-asterisk.restore-item-button(href="#" title="Rétablir")
         a.glyphicon.glyphicon-trash.delete-item-button(href="#" title="Supprimer")
     .input-group.edit-item-input
-        input.form-control(type="text" name="name" value="#{task.name}" required="required")
+        input.form-control(type="text" name="name" value="#{task.data.name}" required="required")
         span.input-group-btn
             button.btn.btn-primary(type="submit") Modifier
             button.btn.cancel-edit-button(type="button") Annuler

@@ -41,11 +41,12 @@ $.fn.task = function(method, arg) {
         return taskElt;
     }
 
-    if ($.isPlainObject(method)) {
+    if (typeof(method) != 'string') {
         // it's not a method, it's the initial task
         taskElt.addClass('task');
+        // TODO task = new Task(method)
         taskElt.attr('data-status', method.status);
-        taskElt.append(jadeTaskTemplate({ task: method }));
+        taskElt.append(jadeTaskTemplate({ task: { data: method } }));
         return taskElt;
     }
 
