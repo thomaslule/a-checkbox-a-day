@@ -18,7 +18,7 @@ describe('task', function() {
     }
 
     beforeEach(function(done) {
-        defaultTask = new Task({ id: 1, name: 'my task', status: 'todo' });
+        defaultTask = new Task({ id: 1, name: 'my task', status: 'todo', list_type: 'month', list_id: '201501' });
         jsdom.env({
             html: '<div id="root" />',
             scripts: [ "https://code.jquery.com/jquery-2.1.3.min.js" ],
@@ -125,14 +125,14 @@ describe('task', function() {
 
     })
 
-    describe('#onSubmitEdit', function() {
+    describe('#applyEdit', function() {
 
         it('should update the task name', function() {
             $('#root').task(render(defaultTask));
             $('#root').task('edit');
             $('input[name="name"]').val('modified');
             assert.equal('my task', $('.task-name').text());
-            $('#root form').submit();
+            $('#root').task('applyEdit');
             assert.equal('modified', $('.task-name').text());
         })
 
@@ -140,7 +140,7 @@ describe('task', function() {
             $('#root').task(render(defaultTask));
             $('#root').task('edit');
             assert($('#root').hasClass('editing'));
-            $('#root form').submit();
+            $('#root').task('applyEdit');
             assert.equal(false, $('#root').hasClass('editing'));
         })
 
@@ -150,7 +150,7 @@ describe('task', function() {
                 done();
             });
             $('#root').task('edit');
-            $('#root form').submit();
+            $('#root').task('applyEdit');
         })
 
     })
@@ -172,6 +172,44 @@ describe('task', function() {
                 done();
             });
             $('#root').task('changeStatus', 'something');
+        })
+
+    })
+
+    describe('#delete', function() {
+
+        it('should remove the node', function() {
+            $('#root').task(render(defaultTask));
+            $('#root').task('delete');
+            assert.equal(0, $('#root').length);
+        })
+
+        it('should trigger the "delete" event', function(done) {
+            $('#root').task(render(defaultTask));
+            $('#root').on('delete', function() {
+                done();
+            });
+            $('#root').task('delete');
+        })
+
+    })
+
+    describe('#move', function() {
+
+        it('should set the tasks status to "moved"', function() {
+            $('#root').task(render(defaultTask));
+            $('#root').task('move', { type: 'month', id: '201502' });
+            assert.equal('moved', $('#root').task('getStatus'));
+        })
+
+        it('should trigger the "move" event', function(done) {
+            $('#root').task(render(defaultTask));
+            $('#root').on('move', function(event, destination) {
+                assert.equal('month', destination.type);
+                assert.equal('201502', destination.id);
+                done();
+            });
+            $('#root').task('move', { type: 'month', id: '201502' });
         })
 
     })

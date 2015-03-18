@@ -46,7 +46,7 @@ app.get('/', function(req, res) {
 .get('/month/:month', monthController.get)
 .post('/task', taskController.new)
 .put('/task/:id', taskController.edit)
-.post('/task/:id/list', taskController.move)
+.put('/task/:id/list', taskController.move)
 .delete('/task/:id', taskController.delete)
 .get('/health', applicationHealth.get)
 .get('/clear', function(req, res, next) {

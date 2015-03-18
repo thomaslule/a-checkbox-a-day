@@ -3,7 +3,7 @@ require 'test/unit'
 class MonthTest < Test::Unit::TestCase
     def setup
         $driver.get($appli_url + '/clear')
-        $driver.get($appli_url + '/')
+        $driver.get($appli_url + '/month/205001')
     end
 
     def test_add_task
@@ -44,6 +44,15 @@ class MonthTest < Test::Unit::TestCase
         assert_empty($driver.find_elements(:css, '.task'), 'task found in wrong month')
         $driver.find_element(:css, '#next-month').click
         assert_equal('some task', $driver.find_element(:css, '.task .task-name').text, 'task not saved in month')
+    end
+
+    def test_move_task
+        add_task('some task')
+        $driver.find_element(:css, '.task .move-item-button').click
+        $driver.find_element(:css, 'a.move-button[data-destination-id="205002"]').click
+        assert_equal('moved', $driver.find_element(:css, '.task').attribute('data-status'), 'task not moved')
+        $driver.find_element(:css, '#next-month').click
+        assert_equal('some task', $driver.find_element(:css, '.task .task-name').text, 'new task not created')
     end
 
     def add_task(name)

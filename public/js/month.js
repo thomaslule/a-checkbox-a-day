@@ -7,7 +7,7 @@ $(function() {
 });
 
 $(document).on('submit', '#new-item form', function() {
-    util.send($(this), '/task', 'POST', function(task) {
+    util.sendForm($(this), '/task', 'POST', function(task) {
         $('#new-item').before('<li />');
         var taskElt = $('#new-item').prev().task($(task));
         $('#new-item form input[name="name"]').val('');
@@ -16,15 +16,23 @@ $(document).on('submit', '#new-item form', function() {
 });
 
 $(document).on('update', '.task', function() {
-    util.send($(this).task('getForm'), '/task/' + $(this).task('getId'), 'PUT');
+    util.sendForm($(this).task('getForm'), '/task/' + $(this).task('getId'), 'PUT');
+});
+
+$(document).on('move', '.task', function(event, destination) {
+    util.send('/task/' + $(this).task('getId') + '/list', 'PUT', {
+        list_type: destination.type,
+        list_id: destination.id
+    });
 });
 
 $(document).on('delete', '.task', function() {
-    util.send($(this).task('getForm'), '/task/' + $(this).task('getId'), 'DELETE');
+    util.sendForm($(this).task('getForm'), '/task/' + $(this).task('getId'), 'DELETE');
 });
 
 util = {};
-util.send = function(form, url, method, callback) {
+
+util.sendForm = function(form, url, method, callback) {
     form.removeAttr('novalidate');
     // html5 validation
     if (!form[0].checkValidity()) {
@@ -33,19 +41,22 @@ util.send = function(form, url, method, callback) {
     }
     // set novalidate attr in order to avoid html5 validation after the submit event
     form.attr('novalidate', 'novalidate');
-    var inputs = form.serializeArray();
     // ajax submit
+    util.send(url, method, form.serializeArray(), callback);
+};
+
+util.send = function(url, method, data, callback) {
     $.ajax({
         url: url,
         type: method,
-        data: inputs
+        data: data
     })
     .done(function(result) {
         if (callback) callback(result);
     })
     .fail(util.displayError);
-}
+};
 
 util.displayError = function() {
     $('#error').show().delay(2000).hide(0);
-}
+};

@@ -33,10 +33,9 @@ taskController.delete = function(req, res, next) {
 }
 
 taskController.move = function(req, res, next) {
-    storage.getTask(req.params.id, function(err, result) {
+    storage.getTask(req.params.id, function(err, task) {
         if (err) return next(err);
-        task = new Task(result);
-        newTask = task.move(req.body.list_id);
+        newTask = task.move(req.body.list_type, req.body.list_id);
         storage.storeTask(newTask, function(err) {
             if (err) return next(err);
             storage.editTask(task, function(err) {

@@ -56,6 +56,7 @@ storage.execute = function(script, callback) {
 storage.getTask = function(id, callback) {
     connection.query('select * from tasks where id = ?', [ id ], function(err, result) {
         if (err) return callback(err);
+        if (result.length == 0) return callback('task not found');
         callback(null, new Task(result[0]));
     });
 }

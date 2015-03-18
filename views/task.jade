@@ -8,16 +8,13 @@ form(method="post" data-id="#{task.data.id}")
     span.action-buttons
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#" title="Éditer")
         a.glyphicon.glyphicon-remove.cancel-item-button(href="#" title="Annuler")
-        //- span.dropdown
-        //-     a.dropdown-toggle.glyphicon.glyphicon-arrow-right.move-item-button(href="#" title="Déplacer" data-toggle="dropdown")
-        //-     ul.dropdown-menu
-        //-         li.dropdown-header Déplacer vers...
-        //-         li
-        //-             a(tabindex="-1" href="#") #{month.previous().toPrettyString()}
-        //-         li
-        //-             a(tabindex="-1" href="#") #{month.next().toPrettyString()}
-        //-         li
-        //-             a(tabindex="-1" href="#") #{month.next().next().toPrettyString()}
+        span.dropdown.move-list
+            a.dropdown-toggle.glyphicon.glyphicon-arrow-right.move-item-button(href="#" title="Déplacer" data-toggle="dropdown")
+            ul.dropdown-menu
+                li.dropdown-header Déplacer vers...
+                each month in task.getMoveList()
+                    li
+                        a.move-button(tabindex="-1" href="#" data-destination-type="month" data-destination-id="#{month.toString()}") #{month.toPrettyString()}
         a.glyphicon.glyphicon-asterisk.restore-item-button(href="#" title="Rétablir")
         a.glyphicon.glyphicon-trash.delete-item-button(href="#" title="Supprimer")
     .input-group.edit-item-input

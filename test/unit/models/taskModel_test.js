@@ -53,4 +53,15 @@ describe('Task', function() {
 
     })
 
+    describe('#getMoveList', function() {
+
+        it('should return a list of months', function() {
+            var list = simpleTask.getMoveList();
+            assert.equal('201412', list[0].toString());
+            assert.equal('201502', list[1].toString());
+            assert.equal('201503', list[2].toString());
+        })
+
+    })
+
 })
