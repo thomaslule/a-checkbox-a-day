@@ -41,12 +41,11 @@ $.fn.task = function(method, arg) {
         return taskElt;
     }
 
-    if (typeof(method) != 'string') {
+    if (method instanceof jQuery) {
         // it's not a method, it's the initial task
         taskElt.addClass('task');
-        // TODO task = new Task(method)
-        taskElt.attr('data-status', method.status);
-        taskElt.append(jadeTaskTemplate({ task: { data: method } }));
+        taskElt.attr('data-status', method.find('input[name="status"]').val());
+        taskElt.append(method);
         return taskElt;
     }
 

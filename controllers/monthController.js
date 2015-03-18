@@ -11,9 +11,7 @@ monthController.get = function(req, res, next) {
         if (err) return next(err);
         res.render('month', {
             month: month,
-            tasks: tasks.map(function(task) {
-                return new Task(task);
-            })
+            tasks: tasks
         });
     });
 }

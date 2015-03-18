@@ -6,22 +6,30 @@ var taskController = {};
 
 taskController.new = function(req, res, next) {
     task = new Task(req.body);
-    if (!task.isValid()) return next('task invalid');
-    storage.storeTask(task, getStorageCallback(res, next));
+    storage.storeTask(task, function(err) {
+        if (err) return next(err);
+        res.render('task', {
+            task: task
+        });
+    });
 }
 
 taskController.edit = function(req, res, next) {
     var task = new Task(req.body);
-    if (!task.isValid()) return next('task invalid');
     task.data.id = req.params.id;
-    storage.editTask(task, getStorageCallback(res, next));
+    storage.editTask(task, function(err) {
+        if (err) return next(err);
+        res.json(task.data);
+    });
 }
 
 taskController.delete = function(req, res, next) {
     var task = new Task(req.body);
-    if (!task.isValid()) return next('task invalid');
     task.data.id = req.params.id;
-    storage.deleteTask(task, getStorageCallback(res, next));
+    storage.deleteTask(task, function(err) {
+        if (err) return next(err);
+        res.sendStatus(200);
+    });
 }
 
 taskController.move = function(req, res, next) {
@@ -29,21 +37,14 @@ taskController.move = function(req, res, next) {
         if (err) return next(err);
         task = new Task(result);
         newTask = task.move(req.body.list_id);
-        storage.storeTask(newTask, function(err, result) {
+        storage.storeTask(newTask, function(err) {
             if (err) return next(err);
-            storage.editTask(task, getStorageCallback(res, next));
+            storage.editTask(task, function(err) {
+                if (err) return next(err);
+                res.sendStatus(200);
+            });
         });
     });
-}
-
-function getStorageCallback(res, next) {
-    return function(err, result) {
-        if (err) {
-            next(err);
-        } else {
-            res.json(result);
-        }
-    }
 }
 
 module.exports = taskController;
