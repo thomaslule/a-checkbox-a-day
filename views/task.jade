@@ -5,6 +5,7 @@ form(method="post" data-id="#{task.data.id}")
     .checkbox
         input(type="checkbox" checked=("#{task.data.status}" == 'done' ? "checked" : undefined))
     span.task-name #{task.data.name}
+    span.moved-label (déplacée)
     span.action-buttons
         a.glyphicon.glyphicon-pencil.edit-item-button(href="#" title="Éditer")
         a.glyphicon.glyphicon-remove.cancel-item-button(href="#" title="Annuler")
