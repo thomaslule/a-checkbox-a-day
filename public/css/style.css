@@ -3,7 +3,8 @@
     margin-left: 5px;
 }
 
-.moved-label {
+.moved-label,
+.task[data-status=done] .task-name {
     color:grey;
     margin-left: 5px;
 }
@@ -23,7 +24,10 @@
 .task[data-status=moved] .checkbox,
 .task[data-status=moved] .move-list, 
 .task[data-status=moved] .restore-item-button,
-.task:not([data-status=moved]) .moved-label {
+.task:not([data-status=moved]) .moved-label,
+.task[data-status=done] .move-list,
+.task[data-status=done] .cancel-item-button,
+.task[data-status=done] .edit-item-button {
     display:none;
 }
 
