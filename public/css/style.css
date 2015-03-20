@@ -3,27 +3,35 @@
     margin-left: 5px;
 }
 
-.task:not(.editing) .edit-item-input {
-    display:none;
+.moved-label,
+.task[data-status=done] .task-name {
+    color:grey;
+    margin-left: 5px;
 }
 
+.task:not(.editing) .edit-item-input,
 .task.editing .checkbox,
 .task.editing .task-name,
-.task.editing .action-buttons {
-    display:none;
-}
-
-.task:not([data-status=cancelled]) .delete-item-button,
-.task:not([data-status=cancelled]) .restore-item-button {
-    display:none;
-}
-
+.task.editing .action-buttons,
+.task:not([data-status=cancelled]) .restore-item-button,
+.task:not([data-status=cancelled]):not([data-status=moved]) .delete-item-button,
 .task[data-status=cancelled] .cancel-item-button,
 .task[data-status=cancelled] .edit-item-button,
-.task[data-status=cancelled] .checkbox {
+.task[data-status=cancelled] .checkbox,
+.task[data-status=cancelled] .move-list,
+.task[data-status=moved] .cancel-item-button,
+.task[data-status=moved] .edit-item-button,
+.task[data-status=moved] .checkbox,
+.task[data-status=moved] .move-list, 
+.task[data-status=moved] .restore-item-button,
+.task:not([data-status=moved]) .moved-label,
+.task[data-status=done] .move-list,
+.task[data-status=done] .cancel-item-button,
+.task[data-status=done] .edit-item-button {
     display:none;
 }
 
+.task[data-status=moved] .task-name,
 .task[data-status=cancelled] .task-name {
     text-decoration: line-through;
 }

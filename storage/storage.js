@@ -1,6 +1,7 @@
 var nconf = require('nconf');
 var mysql = require('mysql');
 var fs = require('fs-extra');
+var Task = require('../models/taskModel.js');
 
 nconf.argv().env().file('local.json');
 
@@ -17,20 +18,24 @@ var multiConnection = mysql.createConnection(connectionConf);
 
 var storage = {}
 
-storage.clearDb = function(callback) {
-    storage.execute(fs.readFileSync('./storage/drop_db.sql', 'utf8'), function(err) {
-        if (err) {
-            callback(err);
-            return;
-        }
-        storage.execute(fs.readFileSync('./storage/init_db.sql', 'utf8'), function(err) {
-            if (err) {
-                callback(err);
-                return;
-            }
+storage.initDb = function(callback) {
+    fs.readFile('./storage/init_db.sql', 'utf8', function(err, script) {
+        if (err) return callback(err);
+        storage.execute(script, function(err) {
+            if (err) return callback(err);
             callback();
-        })
-    })
+        });
+    });
+}
+
+storage.clearDb = function(callback) {
+    fs.readFile('./storage/drop_db.sql', 'utf8', function(err, script) {
+        if (err) return callback(err);
+        storage.execute(script, function(err) {
+            if (err) return callback(err);
+            storage.initDb(callback);
+        });
+    });
 }
 
 storage.testConnection = function(callback) {
@@ -49,57 +54,47 @@ storage.execute = function(script, callback) {
 }
 
 storage.getTask = function(id, callback) {
-    connection.query('select * from tasks where id = ?', [ id ], processDbResult(callback, true));
+    connection.query('select * from tasks where id = ?', [ id ], function(err, result) {
+        if (err) return callback(err);
+        if (result.length == 0) return callback('task not found');
+        callback(null, new Task(result[0]));
+    });
 }
 
 storage.getTasksForMonth = function(month, callback) {
     connection.query('select * from tasks where list_type = ? and list_id = ? order by id',
-        [ 'month', month.toString() ], processDbResult(callback));
+        [ 'month', month.toString() ], function(err, result) {
+        if (err) return callback(err);
+        callback(null, result.map(function(task) {
+            return new Task(task);
+        }));
+    });
 }
 
 storage.storeTask = function(task, callback) {
+    if (!task.isValid()) return callback('task invalid');
     connection.query('insert into tasks (name, status, list_type, list_id) values (?, ?, ?, ?)',
         [ task.data.name, task.data.status, task.data.list_type, task.data.list_id ], function(err, results) {
-        if (err) {
-            callback(err);
-        } else {
-            storage.getTask(results.insertId, callback);
-        }
+        if (err) return callback(err);
+        task.data.id = results.insertId;
+        callback(null);
     });
 }
 
 storage.editTask = function(task, callback) {
+    if (!task.isValid()) return callback('task invalid');
     connection.query('update tasks set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
         [ task.data.name, task.data.status, task.data.list_type, task.data.list_id, task.data.id ], function(err, results) {
-        if (err) {
-            callback(err);
-        } else {
-            storage.getTask(task.data.id, callback);
-        }
+        if (err) return callback(err);
+        callback(null);
     });
 }
 
 storage.deleteTask = function(task, callback) {
     connection.query('delete from tasks where id = ?', [ task.data.id ], function(err, results) {
-        if (err) {
-            callback(err);
-        } else {
-            callback(null, {});
-        }
+        if (err) return callback(err);
+        callback(null);
     });
-}
-
-function processDbResult(callback, unique) {
-    unique = (typeof unique === 'undefined' ? false : unique);
-    return function(err, results) {
-        if (callback) {
-            if (err) {
-                callback(err);
-            } else {
-                unique ? callback(null, results[0]) : callback(null, results);
-            }
-        }
-    }
 }
 
 module.exports = storage;

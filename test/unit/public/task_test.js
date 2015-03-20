@@ -2,6 +2,7 @@ var assert = require("assert");
 var jsdom = require("jsdom");
 var fs = require("fs-extra");
 var jade = require('jade');
+var Task = require('../../../models/taskModel.js')
 
 describe('task', function() {
 
@@ -12,8 +13,12 @@ describe('task', function() {
         return window.$(arg);
     }
 
+    function render(task) {
+        return $(jade.renderFile('views/task.jade', { task: task }));
+    }
+
     beforeEach(function(done) {
-        defaultTask = { id: 1, name: 'my task', status: 'todo' };
+        defaultTask = new Task({ id: 1, name: 'my task', status: 'todo', list_type: 'month', list_id: '201501' });
         jsdom.env({
             html: '<div id="root" />',
             scripts: [ "https://code.jquery.com/jquery-2.1.3.min.js" ],
@@ -32,7 +37,7 @@ describe('task', function() {
     describe('#construct', function() {
 
         it('should build a task form', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             assert($('#root').hasClass('task'));
             assert.equal(1, $('#root').task('getId'));
             assert.equal('todo', $('input[name="status"]').val());
@@ -42,8 +47,8 @@ describe('task', function() {
         })
 
         it('should build a checked task form', function() {
-            defaultTask.status = 'done';
-            $('#root').task(defaultTask);
+            defaultTask.data.status = 'done';
+            $('#root').task(render(defaultTask));
             assert($(':checkbox').is(':checked'));
         })
 
@@ -52,7 +57,7 @@ describe('task', function() {
     describe('#getForm', function() {
 
         it('should get the form', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             assert($('#root').task('getForm').is('form'));
         })
 
@@ -61,7 +66,7 @@ describe('task', function() {
     describe('#getId', function() {
 
         it('should get the id', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             assert.equal(1, $('#root').task('getId'));
         })
 
@@ -70,7 +75,7 @@ describe('task', function() {
     describe('#onChangeCheckbox', function() {
 
         it('should change status when checkbox state changes', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             assert.equal('todo', $('#root input[name="status"]').val());
             $(':checkbox').prop('checked', true);
             $(':checkbox').change();
@@ -82,7 +87,7 @@ describe('task', function() {
     describe('#edit', function() {
 
         it('should add a .editing class', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             assert.equal(false, $('#root').hasClass('editing'));
             $('#root').task('edit');
             assert($('#root').hasClass('editing'));
@@ -90,7 +95,7 @@ describe('task', function() {
 
         it('should remove the .editing class to the other tasks', function() {
             $('#root').html('<div id="task1" /><div id="task2" />')
-            $('#task1, #task2').task(defaultTask);
+            $('#task1, #task2').task(render(defaultTask));
             $('#task1').task('edit');
             assert($('#task1').hasClass('editing'));
             $('#task2').task('edit');
@@ -102,7 +107,7 @@ describe('task', function() {
     describe('#cancelEdit', function() {
 
         it('should reset the "name" input', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             $('#root').task('edit');
             $('input[name="name"]').val('modified');
             assert.equal('modified', $('input[name="name"]').val());
@@ -111,7 +116,7 @@ describe('task', function() {
         })
 
         it('should remove the .editing class', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             $('#root').task('edit');
             assert($('#root').hasClass('editing'));
             $('#root').task('cancelEdit');
@@ -120,32 +125,32 @@ describe('task', function() {
 
     })
 
-    describe('#onSubmitEdit', function() {
+    describe('#applyEdit', function() {
 
         it('should update the task name', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             $('#root').task('edit');
             $('input[name="name"]').val('modified');
             assert.equal('my task', $('.task-name').text());
-            $('#root form').submit();
+            $('#root').task('applyEdit');
             assert.equal('modified', $('.task-name').text());
         })
 
         it('should remove the .editing class', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             $('#root').task('edit');
             assert($('#root').hasClass('editing'));
-            $('#root form').submit();
+            $('#root').task('applyEdit');
             assert.equal(false, $('#root').hasClass('editing'));
         })
 
         it('should trigger the update event', function(done) {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             $('#root').on('update', function() {
                 done();
             });
             $('#root').task('edit');
-            $('#root form').submit();
+            $('#root').task('applyEdit');
         })
 
     })
@@ -153,7 +158,7 @@ describe('task', function() {
     describe('#changeStatus', function() {
 
         it('should change the tasks status', function() {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             assert.equal('todo', $('input[name="status"]').val());
             assert.equal('todo', $('#root').attr('data-status'));
             $('#root').task('changeStatus', 'something');
@@ -162,11 +167,49 @@ describe('task', function() {
         })
 
         it('should trigger the "update" event', function(done) {
-            $('#root').task(defaultTask);
+            $('#root').task(render(defaultTask));
             $('#root').on('update', function() {
                 done();
             });
             $('#root').task('changeStatus', 'something');
+        })
+
+    })
+
+    describe('#delete', function() {
+
+        it('should remove the node', function() {
+            $('#root').task(render(defaultTask));
+            $('#root').task('delete');
+            assert.equal(0, $('#root').length);
+        })
+
+        it('should trigger the "delete" event', function(done) {
+            $('#root').task(render(defaultTask));
+            $('#root').on('delete', function() {
+                done();
+            });
+            $('#root').task('delete');
+        })
+
+    })
+
+    describe('#move', function() {
+
+        it('should set the tasks status to "moved"', function() {
+            $('#root').task(render(defaultTask));
+            $('#root').task('move', { type: 'month', id: '201502' });
+            assert.equal('moved', $('#root').task('getStatus'));
+        })
+
+        it('should trigger the "move" event', function(done) {
+            $('#root').task(render(defaultTask));
+            $('#root').on('move', function(event, destination) {
+                assert.equal('month', destination.type);
+                assert.equal('201502', destination.id);
+                done();
+            });
+            $('#root').task('move', { type: 'month', id: '201502' });
         })
 
     })

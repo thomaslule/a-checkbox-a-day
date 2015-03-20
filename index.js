@@ -3,24 +3,19 @@ var retry = require('retry');
 var nconf = require('nconf');
 var bodyParser = require('body-parser');
 var storage = require('./storage/storage');
-var fs = require('fs-extra');
-var jade = require('jade');
 var moment = require('moment');
 
 nconf.argv().env().file('local.json');
 
 // We try to initialize the database 5 times
-fs.readFile('./storage/init_db.sql', 'utf8', function(err, script) {
-    if (err) throw err;
-    var operation = retry.operation();
-    operation.attempt(function () {
-        storage.execute(script, function(err) {
-            if (operation.retry(err)) {
-                console.log(err.message);
-                return ;
-            }
-            console.log('Database initialized');
-        });
+var operation = retry.operation();
+operation.attempt(function () {
+    storage.initDb(function (err) {
+        if (operation.retry(err)) {
+            console.log(err.message);
+            return;
+        }
+        console.log('Database initialized');
     });
 });
 
@@ -37,7 +32,6 @@ app.set('views', './views');
 app.set('view engine', 'jade');
 // output indented html
 app.locals.pretty = true;
-var jadeTemplates = fs.readFileSync('node_modules/jade/runtime.js').toString() + jade.compileFileClient('views/task.jade', {name: 'jadeTaskTemplate'});
 
 var monthController = require('./controllers/monthController.js');
 var taskController = require('./controllers/taskController.js');
@@ -52,11 +46,8 @@ app.get('/', function(req, res) {
 .get('/month/:month', monthController.get)
 .post('/task', taskController.new)
 .put('/task/:id', taskController.edit)
+.put('/task/:id/list', taskController.move)
 .delete('/task/:id', taskController.delete)
-.get('/jade_templates.js', function(req, res) {
-    res.type('text/javascript');
-    res.send(jadeTemplates);
-})
 .get('/health', applicationHealth.get)
 .get('/clear', function(req, res, next) {
     storage.clearDb(function(err) {
