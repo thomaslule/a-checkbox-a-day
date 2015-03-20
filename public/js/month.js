@@ -1,33 +1,33 @@
 $(function() {
 
     $('#items-list li:not(#new-item)').each(function() {
-        $(this).task();
+        $(this).item();
     });
 
 });
 
 $(document).on('submit', '#new-item form', function() {
-    util.sendForm($(this), '/task', 'POST', function(task) {
+    util.sendForm($(this), '/item', 'POST', function(item) {
         $('#new-item').before('<li />');
-        var taskElt = $('#new-item').prev().task($(task));
+        var itemElt = $('#new-item').prev().item($(item));
         $('#new-item form input[name="name"]').val('');
     });
     return false;
 });
 
-$(document).on('update', '.task', function() {
-    util.sendForm($(this).task('getForm'), '/task/' + $(this).task('getId'), 'PUT');
+$(document).on('update', '.item', function() {
+    util.sendForm($(this).item('getForm'), '/item/' + $(this).item('getId'), 'PUT');
 });
 
-$(document).on('move', '.task', function(event, destination) {
-    util.send('/task/' + $(this).task('getId') + '/list', 'PUT', {
+$(document).on('move', '.item', function(event, destination) {
+    util.send('/item/' + $(this).item('getId') + '/list', 'PUT', {
         list_type: destination.type,
         list_id: destination.id
     });
 });
 
-$(document).on('delete', '.task', function() {
-    util.sendForm($(this).task('getForm'), '/task/' + $(this).task('getId'), 'DELETE');
+$(document).on('delete', '.item', function() {
+    util.sendForm($(this).item('getForm'), '/item/' + $(this).item('getId'), 'DELETE');
 });
 
 util = {};

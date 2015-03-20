@@ -2,7 +2,7 @@
 
 # A checkbox a day
 
-Learning javascript and node.js by implementing a todolist vaguely inspired by the "bullet journal".
+Learning javascript and node.js by implementing a todolist inspired by the "bullet journal".
 
 ## Install the application
 

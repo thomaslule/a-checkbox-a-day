@@ -1,7 +1,7 @@
 var nconf = require('nconf');
 var mysql = require('mysql');
 var fs = require('fs-extra');
-var Task = require('../models/taskModel.js');
+var Item = require('../models/itemModel.js');
 
 nconf.argv().env().file('local.json');
 
@@ -53,45 +53,45 @@ storage.execute = function(script, callback) {
     });
 }
 
-storage.getTask = function(id, callback) {
-    connection.query('select * from tasks where id = ?', [ id ], function(err, result) {
+storage.getItem = function(id, callback) {
+    connection.query('select * from items where id = ?', [ id ], function(err, result) {
         if (err) return callback(err);
-        if (result.length == 0) return callback('task not found');
-        callback(null, new Task(result[0]));
+        if (result.length == 0) return callback('item not found');
+        callback(null, new Item(result[0]));
     });
 }
 
-storage.getTasksForMonth = function(month, callback) {
-    connection.query('select * from tasks where list_type = ? and list_id = ? order by id',
+storage.getItemsForMonth = function(month, callback) {
+    connection.query('select * from items where list_type = ? and list_id = ? order by id',
         [ 'month', month.toString() ], function(err, result) {
         if (err) return callback(err);
-        callback(null, result.map(function(task) {
-            return new Task(task);
+        callback(null, result.map(function(item) {
+            return new Item(item);
         }));
     });
 }
 
-storage.storeTask = function(task, callback) {
-    if (!task.isValid()) return callback('task invalid');
-    connection.query('insert into tasks (name, status, list_type, list_id) values (?, ?, ?, ?)',
-        [ task.data.name, task.data.status, task.data.list_type, task.data.list_id ], function(err, results) {
+storage.storeItem = function(item, callback) {
+    if (!item.isValid()) return callback('item invalid');
+    connection.query('insert into items (name, status, list_type, list_id) values (?, ?, ?, ?)',
+        [ item.data.name, item.data.status, item.data.list_type, item.data.list_id ], function(err, results) {
         if (err) return callback(err);
-        task.data.id = results.insertId;
+        item.data.id = results.insertId;
         callback(null);
     });
 }
 
-storage.editTask = function(task, callback) {
-    if (!task.isValid()) return callback('task invalid');
-    connection.query('update tasks set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
-        [ task.data.name, task.data.status, task.data.list_type, task.data.list_id, task.data.id ], function(err, results) {
+storage.editItem = function(item, callback) {
+    if (!item.isValid()) return callback('item invalid');
+    connection.query('update items set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
+        [ item.data.name, item.data.status, item.data.list_type, item.data.list_id, item.data.id ], function(err, results) {
         if (err) return callback(err);
         callback(null);
     });
 }
 
-storage.deleteTask = function(task, callback) {
-    connection.query('delete from tasks where id = ?', [ task.data.id ], function(err, results) {
+storage.deleteItem = function(item, callback) {
+    connection.query('delete from items where id = ?', [ item.data.id ], function(err, results) {
         if (err) return callback(err);
         callback(null);
     });

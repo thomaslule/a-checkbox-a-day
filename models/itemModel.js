@@ -1,10 +1,10 @@
 var Month = require('./monthModel');
 
-var Task = function(task) {
-    this.data = task;
+var Item = function(item) {
+    this.data = item;
 }
 
-Task.prototype.isValid = function() {
+Item.prototype.isValid = function() {
     if (['todo', 'done', 'cancelled', 'moved'].indexOf(this.data.status) == -1) {
         return false
     }
@@ -16,9 +16,9 @@ Task.prototype.isValid = function() {
     }
 }
 
-Task.prototype.move = function(list_type, list_id) {
+Item.prototype.move = function(list_type, list_id) {
     this.data.status = 'moved';
-    return new Task({
+    return new Item({
         name: this.data.name,
         status: 'todo',
         list_type: list_type,
@@ -26,7 +26,7 @@ Task.prototype.move = function(list_type, list_id) {
     });
 }
 
-Task.prototype.getMoveList = function() {
+Item.prototype.getMoveList = function() {
     var month = new Month(this.data.list_id);
     return [
         month.previous(),
@@ -35,4 +35,4 @@ Task.prototype.getMoveList = function() {
     ];
 }
 
-module.exports = Task;
+module.exports = Item;
