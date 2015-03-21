@@ -10,7 +10,7 @@ describe('Item', function() {
             id: '42',
             type: 'task',
             name: 'some item',
-            status: 'todo',
+            status: 'active',
             list_type: 'month',
             list_id: '201501'
         });
@@ -20,13 +20,13 @@ describe('Item', function() {
 
         it('should only accept certain type/status combination', function() {
             var valid = {
-                'task': [ 'todo', 'done', 'cancelled', 'moved' ],
+                'task': [ 'active', 'done', 'cancelled', 'moved' ],
                 'event': [ 'active', 'cancelled', 'moved' ],
                 'note': [ 'active', 'cancelled', 'moved' ],
                 'other': []
             };
             var typesToTest = [ 'task', 'event', 'note', 'other' ];
-            var statusToTest = [ 'todo', 'done', 'cancelled', 'moved', 'active', 'other' ];
+            var statusToTest = [ 'active', 'done', 'cancelled', 'moved', 'other' ];
             typesToTest.forEach(function(type) {
                 statusToTest.forEach(function(status) {
                     simpleItem.data.type = type;
@@ -47,7 +47,7 @@ describe('Item', function() {
     describe('#move', function() {
 
         it('should set the status to moved', function() {
-            assert.equal('todo', simpleItem.data.status);
+            assert.equal('active', simpleItem.data.status);
             simpleItem.move('month', '201502');
             assert.equal('moved', simpleItem.data.status);
         })
@@ -55,7 +55,7 @@ describe('Item', function() {
         it('should return a new item', function() {
             var newItem = simpleItem.move('month', '201502');
             assert.equal('task', newItem.data.type);
-            assert.equal('todo', newItem.data.status);
+            assert.equal('active', newItem.data.status);
             assert.equal('some item', newItem.data.name);
             assert.equal('month', newItem.data.list_type);
             assert.equal('201502', newItem.data.list_id);

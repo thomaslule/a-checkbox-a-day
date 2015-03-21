@@ -6,7 +6,7 @@ var Item = function(item) {
 
 Item.prototype.isValid = function() {
     var validTypeStatus = {
-        'task': [ 'todo', 'done', 'cancelled', 'moved' ],
+        'task': [ 'active', 'done', 'cancelled', 'moved' ],
         'event': [ 'active', 'cancelled', 'moved' ],
         'note': [ 'active', 'cancelled', 'moved' ]
     };

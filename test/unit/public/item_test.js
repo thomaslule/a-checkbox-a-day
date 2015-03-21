@@ -18,7 +18,7 @@ describe('item', function() {
     }
 
     beforeEach(function(done) {
-        defaultItem = new Item({ id: 1, type: 'task', name: 'my item', status: 'todo', list_type: 'month', list_id: '201501' });
+        defaultItem = new Item({ id: 1, type: 'task', name: 'my item', status: 'active', list_type: 'month', list_id: '201501' });
         jsdom.env({
             html: '<div id="root" />',
             scripts: [ 'http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js' ],
@@ -38,8 +38,8 @@ describe('item', function() {
             $('#root').item(render(defaultItem));
             assert($('#root').hasClass('item'));
             assert.equal(1, $('#root').item('getId'));
-            assert.equal('todo', $('input[name="status"]').val());
-            assert.equal('todo', $('#root').attr('data-status'));
+            assert.equal('active', $('input[name="status"]').val());
+            assert.equal('active', $('#root').attr('data-status'));
             assert.equal('my item', $('.item-name').text());
             assert.equal(false, $(':checkbox').is(':checked'));
         })
@@ -74,7 +74,7 @@ describe('item', function() {
 
         it('should change status when checkbox state changes', function() {
             $('#root').item(render(defaultItem));
-            assert.equal('todo', $('#root input[name="status"]').val());
+            assert.equal('active', $('#root input[name="status"]').val());
             $(':checkbox').prop('checked', true);
             $(':checkbox').change();
             assert.equal('done', $('#root input[name="status"]').val());
@@ -157,8 +157,8 @@ describe('item', function() {
 
         it('should change the items status', function() {
             $('#root').item(render(defaultItem));
-            assert.equal('todo', $('input[name="status"]').val());
-            assert.equal('todo', $('#root').attr('data-status'));
+            assert.equal('active', $('input[name="status"]').val());
+            assert.equal('active', $('#root').attr('data-status'));
             $('#root').item('changeStatus', 'something');
             assert.equal('something', $('input[name="status"]').val());
             assert.equal('something', $('#root').attr('data-status'));

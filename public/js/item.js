@@ -71,7 +71,7 @@ $.fn.item = function(method, arg) {
 }
 
 $(document).on('change', '.item :checkbox', function() {
-    $(this).closest('.item').item('changeStatus', $(this).is(':checked') ? 'done' : 'todo');
+    $(this).closest('.item').item('changeStatus', $(this).is(':checked') ? 'done' : 'active');
 });
 
 $(document).on('click', '.item .edit-item-button', function() {
@@ -105,7 +105,7 @@ $(document).on('click', '.item .delete-item-button', function() {
 });
 
 $(document).on('click', '.item .restore-item-button', function() {
-    $(this).closest('.item').item('changeStatus', 'todo');
+    $(this).closest('.item').item('changeStatus', 'active');
     return false;
 });
 
