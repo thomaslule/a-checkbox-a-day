@@ -25,23 +25,9 @@ $.fn.item = function(method, arg) {
         })[0];
     };
 
-    methods.edit = function() {
-        $('.item.editing').removeClass(function() {
-            $(this).item('cancelEdit');
-        });
-        itemElt.addClass('editing');
-        return itemElt;
-    };
-
-    methods.applyEdit = function() {
-        itemElt.find('.item-name').text(itemElt.find('input[name="name"]').val());
-        itemElt.removeClass('editing');
+    methods.changeName = function(newName) {
+        itemElt.find('input[name="name"]').val(newName);
         itemElt.trigger('update');
-    };
-
-    methods.cancelEdit = function() {
-        itemElt.find('input[name="name"]').val(itemElt.find('.item-name').text());
-        itemElt.removeClass('editing');
     };
 
     methods.changeStatus = function(status) {
@@ -84,19 +70,16 @@ $(document).on('change', '.task :checkbox', function() {
     $(this).closest('.task').item('changeStatus', $(this).is(':checked') ? 'done' : 'active');
 });
 
-$(document).on('click', '.item .edit-item-button', function() {
-    $(this).closest('.item').item('edit');
-    return false;
+$(document).on('focusout', '.item .item-name', function() {
+    $(this).closest('.item').item('changeName', $(this).text());
 });
 
-$(document).on('click', '.item .cancel-edit-button', function() {
-    $(this).closest('.item').item('cancelEdit');
-    return false;
-});
-
-$(document).on('submit', '.item form', function() {
-    $(this).closest('.item').item('applyEdit');
-    return false;
+$(document).on('keypress', '.item .item-name', function(e) {
+    if (e.keyCode == 13) {
+        // enter key
+        $(this).blur();
+        return false;
+    }
 });
 
 $(document).on('click', '.item .cancel-item-button', function() {

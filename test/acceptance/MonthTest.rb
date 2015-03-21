@@ -18,9 +18,16 @@ class MonthTest < Test::Unit::TestCase
         add_item('some task')
         $driver.find_element(:css, '.item input[type="checkbox"]').click
         check_persisted { assert($driver.find_element(:css, '.item input[type="checkbox"]').attribute('checked'), 'done state not saved') }
-        refute($driver.find_element(:css, '.item .edit-item-button').displayed?)
         refute($driver.find_element(:css, '.item .cancel-item-button').displayed?)
         refute($driver.find_element(:css, '.item .move-item-button').displayed?)
+    end
+
+    def test_rename_item
+        add_item('abc')
+        span = $driver.find_element(:css, '.item .item-name')
+        span.click
+        $driver.action.send_keys(span, :arrow_right).send_keys(span, :arrow_right).send_keys(span, :arrow_right).send_keys(span, ' modified').send_keys(span, :return).perform
+        check_persisted { assert_equal('abc modified', $driver.find_element(:css, '.item .item-name').text, 'item not renamed') }
     end
 
     def test_cancel_item
