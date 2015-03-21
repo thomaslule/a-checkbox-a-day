@@ -54,6 +54,7 @@ $.fn.item = function(method, arg) {
     if (method == undefined) {
         // called with no argument: make it a item object without modifying the html inside
         itemElt.addClass('item');
+        itemelt.addClass(itemElt.find('input[name="status"]').val());
         itemElt.attr('data-status', itemElt.find('input[name="status"]').val());
         return itemElt;
     }
@@ -61,6 +62,7 @@ $.fn.item = function(method, arg) {
     if (method instanceof jQuery) {
         // it's not a method, it's the initial item
         itemElt.addClass('item');
+        itemElt.addClass(method.find('input[name="type"]').val());
         itemElt.attr('data-status', method.find('input[name="status"]').val());
         itemElt.append(method);
         return itemElt;

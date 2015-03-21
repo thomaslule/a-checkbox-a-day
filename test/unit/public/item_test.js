@@ -40,14 +40,27 @@ describe('item', function() {
             assert.equal(1, $('#root').item('getId'));
             assert.equal('active', $('input[name="status"]').val());
             assert.equal('active', $('#root').attr('data-status'));
+            assert($('#root').hasClass('task'));
             assert.equal('my item', $('.item-name').text());
             assert.equal(false, $(':checkbox').is(':checked'));
         })
 
-        it('should build a checked item form', function() {
+        it('should build a checked item form for done tasks', function() {
             defaultItem.data.status = 'done';
             $('#root').item(render(defaultItem));
             assert($(':checkbox').is(':checked'));
+        })
+
+        it('should build an event form', function() {
+            defaultItem.data.type = 'event';
+            $('#root').item(render(defaultItem));
+            assert($('#root').hasClass('event'))
+        })
+
+        it('should build a note form', function() {
+            defaultItem.data.type = 'note';
+            $('#root').item(render(defaultItem));
+            assert($('#root').hasClass('note'))
         })
 
     })
