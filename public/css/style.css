@@ -1,14 +1,3 @@
-.action-buttons a {
-    text-decoration: none;
-    margin-left: 5px;
-}
-
-.moved-label,
-.item.done .item-name {
-    color:grey;
-    margin-left: 5px;
-}
-
 .item:not(.editing) .edit-item-input,
 .item.editing .checkbox,
 .item.editing .item-name,
@@ -17,18 +6,35 @@
 .item:not(.cancelled):not(.moved) .delete-item-button,
 .item.cancelled .cancel-item-button,
 .item.cancelled .edit-item-button,
-.item.cancelled .checkbox,
 .item.cancelled .move-list,
+.item:not(.moved) .moved-label,
 .item.moved .cancel-item-button,
 .item.moved .edit-item-button,
-.item.moved .checkbox,
 .item.moved .move-list,
 .item.moved .restore-item-button,
-.item:not(.moved) .moved-label,
 .item.done .move-list,
 .item.done .cancel-item-button,
-.item.done .edit-item-button {
+.item.done .edit-item-button,
+.event .checkbox,
+.event .move-list,
+.note .checkbox,
+.note .move-list {
     display:none;
+}
+
+.action-buttons a {
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.moved-label {
+    margin-left: 5px;
+}
+
+.item.done,
+.item.cancelled,
+.item.moved {
+    color:grey;
 }
 
 .item.moved .item-name,
@@ -38,4 +44,17 @@
 
 .dropdown-toggle .caret {
     margin-left: 5px;
+}
+
+.note {
+    list-style-type: disc;
+}
+
+.event {
+    list-style-type: circle;
+}
+
+.note.editing,
+.event.editing {
+    list-style-type: none;
 }

@@ -4,9 +4,11 @@ $.fn.item = function(method, arg) {
     var methods = {};
     var statuses = [ 'active', 'done', 'cancelled', 'moved' ];
 
-    function changeStatusClass(newStatus) {
+    function doChangeStatus(newStatus) {
+        itemElt.find('input[name="status"]').val(newStatus);
         itemElt.removeClass(statuses.join(' '));
         itemElt.addClass(newStatus);
+        itemElt.find(':checkbox').prop('disabled', newStatus != 'active' && newStatus != 'done');
     }
 
     methods.getForm = function() {
@@ -43,8 +45,7 @@ $.fn.item = function(method, arg) {
     };
 
     methods.changeStatus = function(status) {
-        itemElt.find('input[name="status"]').val(status);
-        changeStatusClass(status);
+        doChangeStatus(status);
         itemElt.trigger('update');
     };
 
@@ -54,8 +55,7 @@ $.fn.item = function(method, arg) {
     };
 
     methods.move = function(destination) {
-        itemElt.find('input[name="status"]').val('moved');
-        changeStatusClass('moved');
+        doChangeStatus('moved');
         itemElt.trigger('move', [ destination ]);
     };
 
@@ -80,8 +80,8 @@ $.fn.item = function(method, arg) {
 
 }
 
-$(document).on('change', '.item :checkbox', function() {
-    $(this).closest('.item').item('changeStatus', $(this).is(':checked') ? 'done' : 'active');
+$(document).on('change', '.task :checkbox', function() {
+    $(this).closest('.task').item('changeStatus', $(this).is(':checked') ? 'done' : 'active');
 });
 
 $(document).on('click', '.item .edit-item-button', function() {

@@ -6,16 +6,16 @@ class MonthTest < Test::Unit::TestCase
         $driver.get($appli_url + '/month/205001')
     end
 
-    def test_add_item
-        add_item('some item')
+    def test_add_task
+        add_item('some task')
         check_persisted {
-            assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'item not created')
-            refute($driver.find_element(:css, '.item input[type="checkbox"]').attribute('checked'), 'item created in done state')
+            assert_equal('some task', $driver.find_element(:css, '.item .item-name').text, 'task not created')
+            refute($driver.find_element(:css, '.item input[type="checkbox"]').attribute('checked'), 'task created in done state')
         }
     end
 
-    def test_check_item
-        add_item('some item')
+    def test_check_task
+        add_item('some task')
         $driver.find_element(:css, '.item input[type="checkbox"]').click
         check_persisted { assert($driver.find_element(:css, '.item input[type="checkbox"]').attribute('checked'), 'done state not saved') }
         refute($driver.find_element(:css, '.item .edit-item-button').displayed?)
@@ -27,6 +27,20 @@ class MonthTest < Test::Unit::TestCase
         add_item('some item')
         $driver.find_element(:css, '.item .cancel-item-button').click
         check_persisted { assert_has_class('cancelled', $driver.find_element(:css, '.item'), 'item not correctly cancelled') }
+    end
+
+    def test_add_event
+        $driver.find_element(:css, '#new-item-type-selected').click
+        $driver.find_element(:css, '#new-item-type-list a[data-type="event"]').click
+        add_item('some event')
+        check_persisted { assert_has_class('event', $driver.find_element(:css, '.item'), 'event not saved') }
+    end
+
+    def test_add_note
+        $driver.find_element(:css, '#new-item-type-selected').click
+        $driver.find_element(:css, '#new-item-type-list a[data-type="note"]').click
+        add_item('some event')
+        check_persisted { assert_has_class('note', $driver.find_element(:css, '.item'), 'event not saved') }
     end
 
     def test_delete_item

@@ -196,6 +196,15 @@ describe('item', function() {
             $('#root').item('changeStatus', 'something');
         })
 
+        it('should enable/disable the checkbox', function() {
+            $('#root').item(render(defaultItem));
+            assert.equal(false, $(':checkbox').prop('disabled'));
+            $('#root').item('changeStatus', 'cancelled');
+            assert($(':checkbox').prop('disabled'));
+            $('#root').item('changeStatus', 'done');
+            assert.equal(false, $(':checkbox').prop('disabled'));
+        })
+
     })
 
     describe('#delete', function() {
