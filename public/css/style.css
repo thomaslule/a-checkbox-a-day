@@ -1,37 +1,60 @@
+.item:not(.editing) .edit-item-input,
+.item.editing .checkbox,
+.item.editing .item-name,
+.item.editing .action-buttons,
+.item:not(.cancelled) .restore-item-button,
+.item:not(.cancelled):not(.moved) .delete-item-button,
+.item.cancelled .cancel-item-button,
+.item.cancelled .edit-item-button,
+.item.cancelled .move-list,
+.item:not(.moved) .moved-label,
+.item.moved .cancel-item-button,
+.item.moved .edit-item-button,
+.item.moved .move-list,
+.item.moved .restore-item-button,
+.item.done .move-list,
+.item.done .cancel-item-button,
+.item.done .edit-item-button,
+.event .checkbox,
+.event .move-list,
+.note .checkbox,
+.note .move-list {
+    display:none;
+}
+
 .action-buttons a {
     text-decoration: none;
     margin-left: 5px;
 }
 
-.moved-label,
-.task[data-status=done] .task-name {
-    color:grey;
+.moved-label {
     margin-left: 5px;
 }
 
-.task:not(.editing) .edit-item-input,
-.task.editing .checkbox,
-.task.editing .task-name,
-.task.editing .action-buttons,
-.task:not([data-status=cancelled]) .restore-item-button,
-.task:not([data-status=cancelled]):not([data-status=moved]) .delete-item-button,
-.task[data-status=cancelled] .cancel-item-button,
-.task[data-status=cancelled] .edit-item-button,
-.task[data-status=cancelled] .checkbox,
-.task[data-status=cancelled] .move-list,
-.task[data-status=moved] .cancel-item-button,
-.task[data-status=moved] .edit-item-button,
-.task[data-status=moved] .checkbox,
-.task[data-status=moved] .move-list, 
-.task[data-status=moved] .restore-item-button,
-.task:not([data-status=moved]) .moved-label,
-.task[data-status=done] .move-list,
-.task[data-status=done] .cancel-item-button,
-.task[data-status=done] .edit-item-button {
-    display:none;
+.item.done,
+.item.cancelled,
+.item.moved {
+    color:grey;
 }
 
-.task[data-status=moved] .task-name,
-.task[data-status=cancelled] .task-name {
+.item.moved .item-name,
+.item.cancelled .item-name {
     text-decoration: line-through;
+}
+
+.dropdown-toggle .caret {
+    margin-left: 5px;
+}
+
+.note {
+    list-style-type: disc;
+}
+
+.event {
+    list-style-type: circle;
+}
+
+.note.editing,
+.event.editing {
+    list-style-type: none;
 }

@@ -34,7 +34,7 @@ app.set('view engine', 'jade');
 app.locals.pretty = true;
 
 var monthController = require('./controllers/monthController.js');
-var taskController = require('./controllers/taskController.js');
+var itemController = require('./controllers/itemController.js');
 var applicationHealth = require('./controllers/healthController.js');
 
 moment.locale('fr');
@@ -44,10 +44,10 @@ app.get('/', function(req, res) {
     res.sendStatus(301);
 })
 .get('/month/:month', monthController.get)
-.post('/task', taskController.new)
-.put('/task/:id', taskController.edit)
-.put('/task/:id/list', taskController.move)
-.delete('/task/:id', taskController.delete)
+.post('/item', itemController.new)
+.put('/item/:id', itemController.edit)
+.put('/item/:id/list', itemController.move)
+.delete('/item/:id', itemController.delete)
 .get('/health', applicationHealth.get)
 .get('/clear', function(req, res, next) {
     storage.clearDb(function(err) {

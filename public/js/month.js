@@ -1,62 +1,42 @@
+/* Items */
+
 $(function() {
 
-    $('#items-list li:not(#new-item)').each(function() {
-        $(this).task();
+    $('#items-list > li:not(#new-item)').each(function() {
+        $(this).item();
     });
 
 });
 
-$(document).on('submit', '#new-item form', function() {
-    util.sendForm($(this), '/task', 'POST', function(task) {
-        $('#new-item').before('<li />');
-        var taskElt = $('#new-item').prev().task($(task));
-        $('#new-item form input[name="name"]').val('');
-    });
-    return false;
+$(document).on('update', '.item', function() {
+    util.sendForm($(this).item('getForm'), '/item/' + $(this).item('getId'), 'PUT');
 });
 
-$(document).on('update', '.task', function() {
-    util.sendForm($(this).task('getForm'), '/task/' + $(this).task('getId'), 'PUT');
-});
-
-$(document).on('move', '.task', function(event, destination) {
-    util.send('/task/' + $(this).task('getId') + '/list', 'PUT', {
+$(document).on('move', '.item', function(event, destination) {
+    util.send('/item/' + $(this).item('getId') + '/list', 'PUT', {
         list_type: destination.type,
         list_id: destination.id
     });
 });
 
-$(document).on('delete', '.task', function() {
-    util.sendForm($(this).task('getForm'), '/task/' + $(this).task('getId'), 'DELETE');
+$(document).on('delete', '.item', function() {
+    util.sendForm($(this).item('getForm'), '/item/' + $(this).item('getId'), 'DELETE');
 });
 
-util = {};
+/* New item form */
 
-util.sendForm = function(form, url, method, callback) {
-    form.removeAttr('novalidate');
-    // html5 validation
-    if (!form[0].checkValidity()) {
-        form.find(':submit').click();
-        return;
-    }
-    // set novalidate attr in order to avoid html5 validation after the submit event
-    form.attr('novalidate', 'novalidate');
-    // ajax submit
-    util.send(url, method, form.serializeArray(), callback);
-};
+$(document).on('submit', '#new-item form', function() {
+    util.sendForm($(this), '/item', 'POST', function(item) {
+        $('#new-item').before('<li />');
+        var itemElt = $('#new-item').prev().item($(item));
+        $('#new-item form input[name="name"]').val('');
+    });
+    return false;
+});
 
-util.send = function(url, method, data, callback) {
-    $.ajax({
-        url: url,
-        type: method,
-        data: data
-    })
-    .done(function(result) {
-        if (callback) callback(result);
-    })
-    .fail(util.displayError);
-};
-
-util.displayError = function() {
-    $('#error').show().delay(2000).hide(0);
-};
+$(document).on('click', '#new-item-type-list a', function() {
+    $('#new-item form input[name="type"]').val($(this).attr('data-type'));
+    $('#new-item-type-selected').text($(this).text());
+    $('#new-item-type-list > li').show();
+    $(this).closest('li').hide();
+});
