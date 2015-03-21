@@ -48,7 +48,7 @@
     list-style-type: circle;
 }
 
-.item .item-name:hover,
-.item .item-name:focus {
+.item .item-name[contenteditable="true"]:hover,
+.item .item-name[contenteditable="true"]:focus {
     background-color: #FFFF99;
 }

@@ -10,7 +10,7 @@ form(method="post" data-id="#{item.data.id}")
             checked=("#{item.data.status}" == 'done' ? "checked" : undefined)
             disabled=("#{item.data.status}" != 'active' && "#{item.data.status}" != 'done' ? "disabled" : undefined)
         )
-    span.item-name(contenteditable="true") #{item.data.name}
+    span.item-name(contenteditable=("#{item.data.status}" == 'active' ? 'true' : 'false')) #{item.data.name}
     span.moved-label (déplacée)
     span.action-buttons
         a.glyphicon.glyphicon-remove.cancel-item-button(href="#" title="Annuler")

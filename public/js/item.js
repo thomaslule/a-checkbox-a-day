@@ -9,6 +9,7 @@ $.fn.item = function(method, arg) {
         itemElt.removeClass(statuses.join(' '));
         itemElt.addClass(newStatus);
         itemElt.find(':checkbox').prop('disabled', newStatus != 'active' && newStatus != 'done');
+        itemElt.find('.item-name').attr('contenteditable', newStatus == 'active' ? 'true' : 'false');
     }
 
     methods.getForm = function() {
