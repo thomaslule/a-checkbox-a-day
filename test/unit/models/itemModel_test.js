@@ -18,16 +18,23 @@ describe('Item', function() {
 
     describe('#isValid', function() {
 
-        it('should only accept certain status', function() {
-            assert(simpleItem.isValid());
-            simpleItem.data.status = 'done';
-            assert(simpleItem.isValid());
-            simpleItem.data.status = 'cancelled';
-            assert(simpleItem.isValid());
-            simpleItem.data.status = 'moved';
-            assert(simpleItem.isValid());
-            simpleItem.data.status = 'other';
-            assert.equal(false, simpleItem.isValid());
+        it('should only accept certain type/status combination', function() {
+            var valid = {
+                'task': [ 'todo', 'done', 'cancelled', 'moved' ],
+                'event': [ 'active', 'cancelled', 'moved' ],
+                'note': [ 'active', 'cancelled', 'moved' ],
+                'other': []
+            };
+            var typesToTest = [ 'task', 'event', 'note', 'other' ];
+            var statusToTest = [ 'todo', 'done', 'cancelled', 'moved', 'active', 'other' ];
+            typesToTest.forEach(function(type) {
+                statusToTest.forEach(function(status) {
+                    simpleItem.data.type = type;
+                    simpleItem.data.status = status;
+                    var expected = valid[type].indexOf(status) > -1;
+                    assert.equal(expected, simpleItem.isValid(), '#isValid should return ' + expected + ' for a ' + type + ' in status ' + status);
+                });
+            });
         })
 
         it('should check month validity', function() {

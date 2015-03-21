@@ -72,7 +72,10 @@ storage.getItemsForMonth = function(month, callback) {
 }
 
 storage.storeItem = function(item, callback) {
-    if (!item.isValid()) return callback('item invalid');
+    if (!item.isValid()) {
+        console.log('item invalid: ' + JSON.stringify(item.data));
+        return callback('item invalid');
+    }
     connection.query('insert into items (type, name, status, list_type, list_id) values (?, ?, ?, ?, ?)',
         [ item.data.type, item.data.name, item.data.status, item.data.list_type, item.data.list_id ], function(err, results) {
         if (err) return callback(err);
@@ -82,7 +85,10 @@ storage.storeItem = function(item, callback) {
 }
 
 storage.editItem = function(item, callback) {
-    if (!item.isValid()) return callback('item invalid');
+    if (!item.isValid()) {
+        console.log('item invalid: ' + JSON.stringify(item.data));
+        return callback('item invalid');
+    }
     connection.query('update items set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
         [ item.data.name, item.data.status, item.data.list_type, item.data.list_id, item.data.id ], function(err, results) {
         if (err) return callback(err);

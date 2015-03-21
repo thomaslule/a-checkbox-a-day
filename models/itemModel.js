@@ -5,8 +5,16 @@ var Item = function(item) {
 }
 
 Item.prototype.isValid = function() {
-    if (['todo', 'done', 'cancelled', 'moved'].indexOf(this.data.status) == -1) {
-        return false
+    var validTypeStatus = {
+        'task': [ 'todo', 'done', 'cancelled', 'moved' ],
+        'event': [ 'active', 'cancelled', 'moved' ],
+        'note': [ 'active', 'cancelled', 'moved' ]
+    };
+    if (!validTypeStatus.hasOwnProperty(this.data.type)) {
+        return false;
+    }
+    if (validTypeStatus[this.data.type].indexOf(this.data.status) == -1) {
+        return false;
     }
     if (this.data.list_type == 'month') {
         var month = new Month(this.data.list_id);
