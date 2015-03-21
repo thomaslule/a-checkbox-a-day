@@ -30,6 +30,13 @@ $(document).on('delete', '.item', function() {
     util.sendForm($(this).item('getForm'), '/item/' + $(this).item('getId'), 'DELETE');
 });
 
+$(document).on('click', '#new-item-type-list a', function() {
+    $('#new-item form input[name="type"]').val($(this).attr('data-type'));
+    $('#new-item-type-selected').text($(this).text());
+    $('#new-item-type-list > li').show();
+    $(this).closest('li').hide();
+});
+
 util = {};
 
 util.sendForm = function(form, url, method, callback) {

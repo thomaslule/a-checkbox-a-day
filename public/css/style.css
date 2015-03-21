@@ -35,3 +35,7 @@
 .item[data-status=cancelled] .item-name {
     text-decoration: line-through;
 }
+
+.dropdown-toggle .caret {
+    margin-left: 5px;
+}

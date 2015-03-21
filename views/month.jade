@@ -3,7 +3,7 @@ html
         title A checkbox a day
         link(rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
         link(rel="stylesheet" type="text/css" href="/css/style.css")
-        script(type="text/javascript" src="//code.jquery.com/jquery-2.1.3.min.js")
+        script(type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
         script(type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
         script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js")
         script(type="text/javascript" src="/js/item.js")
@@ -33,9 +33,21 @@ html
                         li#new-item
                             form(method="post")
                                 input(type="hidden" name="status" value="todo")
+                                input(type="hidden" name="type" value="task")
                                 input(type="hidden" name="list_type" value="month")
                                 input(type="hidden" name="list_id" value="#{month}")
                                 .input-group
+                                    span.input-group-btn
+                                        button.btn.btn-default.dropdown-toggle(type="button" data-toggle="dropdown")
+                                            span#new-item-type-selected Tâche
+                                            span.caret
+                                        ul#new-item-type-list.dropdown-menu
+                                            li(style="display:none;")
+                                                a(href="#" data-type="task") Tâche
+                                            li
+                                                a(href="#" data-type="event") Événement
+                                            li
+                                                a(href="#" data-type="note") Note
                                     input.form-control(type="text" name="name" required="required")
                                     span.input-group-btn
                                         button.btn(type="submit") Ajouter
