@@ -17,10 +17,12 @@ Item.prototype.isValid = function() {
 }
 
 Item.prototype.move = function(list_type, list_id) {
+    var oldStatus = this.data.status;
     this.data.status = 'moved';
     return new Item({
+        type: this.data.type,
         name: this.data.name,
-        status: 'todo',
+        status: oldStatus,
         list_type: list_type,
         list_id: list_id
     });

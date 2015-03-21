@@ -18,12 +18,12 @@ describe('item', function() {
     }
 
     beforeEach(function(done) {
-        defaultItem = new Item({ id: 1, name: 'my item', status: 'todo', list_type: 'month', list_id: '201501' });
+        defaultItem = new Item({ id: 1, type: 'task', name: 'my item', status: 'todo', list_type: 'month', list_id: '201501' });
         jsdom.env({
             html: '<div id="root" />',
-            scripts: [ "https://code.jquery.com/jquery-2.1.3.min.js" ],
+            scripts: [ 'http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js' ],
             src: [
-                fs.readFileSync("public/js/item.js").toString()
+                fs.readFileSync('public/js/item.js').toString()
             ],
             done: function (errors, windowBuilt) {
                 window = windowBuilt;

@@ -7,6 +7,8 @@ describe('Item', function() {
 
     beforeEach(function() {
         simpleItem = new Item({
+            id: '42',
+            type: 'task',
             name: 'some item',
             status: 'todo',
             list_type: 'month',
@@ -45,6 +47,7 @@ describe('Item', function() {
 
         it('should return a new item', function() {
             var newItem = simpleItem.move('month', '201502');
+            assert.equal('task', newItem.data.type);
             assert.equal('todo', newItem.data.status);
             assert.equal('some item', newItem.data.name);
             assert.equal('month', newItem.data.list_type);

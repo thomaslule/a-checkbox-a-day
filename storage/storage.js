@@ -73,8 +73,8 @@ storage.getItemsForMonth = function(month, callback) {
 
 storage.storeItem = function(item, callback) {
     if (!item.isValid()) return callback('item invalid');
-    connection.query('insert into items (name, status, list_type, list_id) values (?, ?, ?, ?)',
-        [ item.data.name, item.data.status, item.data.list_type, item.data.list_id ], function(err, results) {
+    connection.query('insert into items (type, name, status, list_type, list_id) values (?, ?, ?, ?, ?)',
+        [ item.data.type, item.data.name, item.data.status, item.data.list_type, item.data.list_id ], function(err, results) {
         if (err) return callback(err);
         item.data.id = results.insertId;
         callback(null);
