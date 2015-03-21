@@ -7,8 +7,8 @@ var Item = function(item) {
 Item.prototype.isValid = function() {
     var validTypeStatus = {
         'task': [ 'active', 'done', 'cancelled', 'moved' ],
-        'event': [ 'active', 'cancelled', 'moved' ],
-        'note': [ 'active', 'cancelled', 'moved' ]
+        'event': [ 'active', 'cancelled' ],
+        'note': [ 'active', 'cancelled' ]
     };
     if (!validTypeStatus.hasOwnProperty(this.data.type)) {
         return false;

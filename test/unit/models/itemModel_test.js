@@ -21,8 +21,8 @@ describe('Item', function() {
         it('should only accept certain type/status combination', function() {
             var valid = {
                 'task': [ 'active', 'done', 'cancelled', 'moved' ],
-                'event': [ 'active', 'cancelled', 'moved' ],
-                'note': [ 'active', 'cancelled', 'moved' ],
+                'event': [ 'active', 'cancelled' ],
+                'note': [ 'active', 'cancelled' ],
                 'other': []
             };
             var typesToTest = [ 'task', 'event', 'note', 'other' ];
