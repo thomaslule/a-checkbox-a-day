@@ -26,7 +26,7 @@ class MonthTest < Test::Unit::TestCase
     def test_cancel_item
         add_item('some item')
         $driver.find_element(:css, '.item .cancel-item-button').click
-        check_persisted { assert_equal('cancelled', $driver.find_element(:css, '.item').attribute('data-status'), 'item not correctly cancelled') }
+        check_persisted { assert_has_class('cancelled', $driver.find_element(:css, '.item'), 'item not correctly cancelled') }
     end
 
     def test_delete_item
@@ -53,7 +53,7 @@ class MonthTest < Test::Unit::TestCase
         add_item('some item')
         $driver.find_element(:css, '.item .move-item-button').click
         $driver.find_element(:css, 'a.move-button[data-destination-id="205002"]').click
-        assert_equal('moved', $driver.find_element(:css, '.item').attribute('data-status'), 'item not moved')
+        assert_has_class('moved', $driver.find_element(:css, '.item'), 'item not moved')
         $driver.find_element(:css, '#next-month').click
         assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'new item not created')
     end
@@ -62,6 +62,10 @@ class MonthTest < Test::Unit::TestCase
         input = $driver.find_element(:css, '#new-item input[name="name"]')
         input.send_keys(name)
         input.submit
+    end
+
+    def assert_has_class(className, element, message)
+        assert(element.attribute('class').split(/\s+/).include?(className), message)
     end
 
     def check_persisted

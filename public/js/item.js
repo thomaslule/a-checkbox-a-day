@@ -2,6 +2,12 @@ $.fn.item = function(method, arg) {
 
     var itemElt = this;
     var methods = {};
+    var statuses = [ 'active', 'done', 'cancelled', 'moved' ];
+
+    function changeStatusClass(newStatus) {
+        itemElt.removeClass(statuses.join(' '));
+        itemElt.addClass(newStatus);
+    }
 
     methods.getForm = function() {
         return itemElt.find('form');
@@ -12,7 +18,9 @@ $.fn.item = function(method, arg) {
     };
 
     methods.getStatus = function() {
-        return itemElt.attr('data-status');
+        return statuses.filter(function(status) {
+            return itemElt.hasClass(status);
+        })[0];
     };
 
     methods.edit = function() {
@@ -36,7 +44,7 @@ $.fn.item = function(method, arg) {
 
     methods.changeStatus = function(status) {
         itemElt.find('input[name="status"]').val(status);
-        itemElt.attr('data-status', status);
+        changeStatusClass(status);
         itemElt.trigger('update');
     };
 
@@ -47,24 +55,24 @@ $.fn.item = function(method, arg) {
 
     methods.move = function(destination) {
         itemElt.find('input[name="status"]').val('moved');
-        itemElt.attr('data-status', 'moved');
+        changeStatusClass('moved');
         itemElt.trigger('move', [ destination ]);
     };
 
     if (method == undefined) {
         // called with no argument: make it a item object without modifying the html inside
         itemElt.addClass('item');
-        itemelt.addClass(itemElt.find('input[name="status"]').val());
-        itemElt.attr('data-status', itemElt.find('input[name="status"]').val());
+        itemElt.addClass(itemElt.find('input[name="type"]').val());
+        itemElt.addClass(itemElt.find('input[name="status"]').val());
         return itemElt;
     }
 
     if (method instanceof jQuery) {
         // it's not a method, it's the initial item
         itemElt.addClass('item');
-        itemElt.addClass(method.find('input[name="type"]').val());
-        itemElt.attr('data-status', method.find('input[name="status"]').val());
         itemElt.append(method);
+        itemElt.addClass(itemElt.find('input[name="type"]').val());
+        itemElt.addClass(itemElt.find('input[name="status"]').val());
         return itemElt;
     }
 

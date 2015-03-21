@@ -4,7 +4,7 @@
 }
 
 .moved-label,
-.item[data-status=done] .item-name {
+.item.done .item-name {
     color:grey;
     margin-left: 5px;
 }
@@ -13,26 +13,26 @@
 .item.editing .checkbox,
 .item.editing .item-name,
 .item.editing .action-buttons,
-.item:not([data-status=cancelled]) .restore-item-button,
-.item:not([data-status=cancelled]):not([data-status=moved]) .delete-item-button,
-.item[data-status=cancelled] .cancel-item-button,
-.item[data-status=cancelled] .edit-item-button,
-.item[data-status=cancelled] .checkbox,
-.item[data-status=cancelled] .move-list,
-.item[data-status=moved] .cancel-item-button,
-.item[data-status=moved] .edit-item-button,
-.item[data-status=moved] .checkbox,
-.item[data-status=moved] .move-list, 
-.item[data-status=moved] .restore-item-button,
-.item:not([data-status=moved]) .moved-label,
-.item[data-status=done] .move-list,
-.item[data-status=done] .cancel-item-button,
-.item[data-status=done] .edit-item-button {
+.item:not(.cancelled) .restore-item-button,
+.item:not(.cancelled):not(.moved) .delete-item-button,
+.item.cancelled .cancel-item-button,
+.item.cancelled .edit-item-button,
+.item.cancelled .checkbox,
+.item.cancelled .move-list,
+.item.moved .cancel-item-button,
+.item.moved .edit-item-button,
+.item.moved .checkbox,
+.item.moved .move-list,
+.item.moved .restore-item-button,
+.item:not(.moved) .moved-label,
+.item.done .move-list,
+.item.done .cancel-item-button,
+.item.done .edit-item-button {
     display:none;
 }
 
-.item[data-status=moved] .item-name,
-.item[data-status=cancelled] .item-name {
+.item.moved .item-name,
+.item.cancelled .item-name {
     text-decoration: line-through;
 }
 

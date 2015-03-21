@@ -39,7 +39,7 @@ describe('item', function() {
             assert($('#root').hasClass('item'));
             assert.equal(1, $('#root').item('getId'));
             assert.equal('active', $('input[name="status"]').val());
-            assert.equal('active', $('#root').attr('data-status'));
+            assert($('#root').hasClass('active'));
             assert($('#root').hasClass('task'));
             assert.equal('my item', $('.item-name').text());
             assert.equal(false, $(':checkbox').is(':checked'));
@@ -82,7 +82,18 @@ describe('item', function() {
         })
 
     })
-    
+
+    describe('#getStatus', function() {
+
+        it('should get the status', function() {
+            $('#root').item(render(defaultItem));
+            assert.equal('active', $('#root').item('getStatus'));
+            $('#root').item('changeStatus', 'done');
+            assert.equal('done', $('#root').item('getStatus'));
+        })
+
+    })
+
     describe('#onChangeCheckbox', function() {
 
         it('should change status when checkbox state changes', function() {
@@ -171,10 +182,10 @@ describe('item', function() {
         it('should change the items status', function() {
             $('#root').item(render(defaultItem));
             assert.equal('active', $('input[name="status"]').val());
-            assert.equal('active', $('#root').attr('data-status'));
+            assert($('#root').hasClass('active'));
             $('#root').item('changeStatus', 'something');
             assert.equal('something', $('input[name="status"]').val());
-            assert.equal('something', $('#root').attr('data-status'));
+            assert($('#root').hasClass('something'));
         })
 
         it('should trigger the "update" event', function(done) {
