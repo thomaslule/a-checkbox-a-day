@@ -92,6 +92,7 @@ storage.editItem = function(item, callback) {
     connection.query('update items set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
         [ item.data.name, item.data.status, item.data.list_type, item.data.list_id, item.data.id ], function(err, results) {
         if (err) return callback(err);
+        if (results.affectedRows == 0) return callback('item not found');
         callback(null);
     });
 }
@@ -99,6 +100,7 @@ storage.editItem = function(item, callback) {
 storage.deleteItem = function(item, callback) {
     connection.query('delete from items where id = ?', [ item.data.id ], function(err, results) {
         if (err) return callback(err);
+        if (results.affectedRows == 0) return callback('item not found');
         callback(null);
     });
 }
