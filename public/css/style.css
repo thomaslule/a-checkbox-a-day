@@ -61,3 +61,14 @@ span[contenteditable="true"] {
 span[contenteditable="true"]:empty:before {
     content: "\a0";
 }
+
+#month-events time {
+    display: inline-block;
+    width: 25%;
+    font-weight: bold;
+}
+
+#month-events span[contenteditable="true"] {
+    display: inline-block;
+    width: 75%;
+}

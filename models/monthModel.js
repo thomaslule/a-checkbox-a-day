@@ -1,4 +1,5 @@
 var moment = require('moment');
+var Day = require('./dayModel.js');
 
 var Month = function(month) {
     this.month = moment.isMoment(month) ? month.startOf('month') : moment(month, 'YYYYMM', true);
@@ -26,6 +27,16 @@ Month.prototype.previous = function() {
 
 Month.prototype.next = function() {
     return new Month(moment(this.month).add(1, 'months'));
+}
+
+Month.prototype.days = function() {
+    var dayRunner = moment(this.month);
+    var days = [];
+    while (dayRunner.month() == this.month.month()) {
+        days.push(new Day(moment(dayRunner)));
+        dayRunner.add(1, 'days');
+    }
+    return days;
 }
 
 module.exports = Month;

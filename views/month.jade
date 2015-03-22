@@ -25,7 +25,13 @@ html
                                 a.glyphicon.glyphicon-arrow-right#next-month(href="/month/#{month.next()}" title="Mois suivant")
         .container
             .row
-                .col-xs-4.col-xs-offset-2
+                .col-xs-offset-1.col-xs-5
+                    ul#month-events.list-unstyled
+                        each day in month.days()
+                            li
+                                time(datetime="#{day.toISOString()}") #{day.toPrettyString()}
+                                span(contenteditable='true') #{day.text}
+                .col-xs-5
                     #error.alert.alert-danger(style={display: 'none'}) Une erreur est survenue
                     ul#items-list.list-unstyled
                         each item in items

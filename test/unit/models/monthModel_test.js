@@ -65,4 +65,14 @@ describe('Month', function() {
         })
     })
 
+    describe('#days', function() {
+
+        it('should return a list of days', function() {
+            var month = new Month('201501');
+            assert.equal(31, month.days().length);
+            var month2 = new Month('201502');
+            assert.equal(28, month2.days().length);
+        })
+    })
+
 })
