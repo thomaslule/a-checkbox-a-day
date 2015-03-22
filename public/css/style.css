@@ -1,7 +1,3 @@
-.item:not(.editing) .edit-item-input,
-.item.editing .checkbox,
-.item.editing .item-name,
-.item.editing .action-buttons,
 .item:not(.cancelled) .restore-item-button,
 .item:not(.cancelled):not(.moved) .delete-item-button,
 .item.cancelled .cancel-item-button,
@@ -9,12 +5,10 @@
 .item.cancelled .move-list,
 .item:not(.moved) .moved-label,
 .item.moved .cancel-item-button,
-.item.moved .edit-item-button,
 .item.moved .move-list,
 .item.moved .restore-item-button,
 .item.done .move-list,
 .item.done .cancel-item-button,
-.item.done .edit-item-button,
 .event .checkbox,
 .event .move-list,
 .note .checkbox,
@@ -54,7 +48,7 @@
     list-style-type: circle;
 }
 
-.note.editing,
-.event.editing {
-    list-style-type: none;
+.item .item-name[contenteditable="true"]:hover,
+.item .item-name[contenteditable="true"]:focus {
+    background-color: #FFFF99;
 }

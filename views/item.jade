@@ -1,6 +1,7 @@
 form(method="post" data-id="#{item.data.id}")
     input(type="hidden" name="type" value="#{item.data.type}")
     input(type="hidden" name="status" value="#{item.data.status}")
+    input(type="hidden" name="name" value="#{item.data.name}")
     input(type="hidden" name="list_type" value="#{item.data.list_type}")
     input(type="hidden" name="list_id" value="#{item.data.list_id}")
     .checkbox
@@ -9,10 +10,9 @@ form(method="post" data-id="#{item.data.id}")
             checked=("#{item.data.status}" == 'done' ? "checked" : undefined)
             disabled=("#{item.data.status}" != 'active' && "#{item.data.status}" != 'done' ? "disabled" : undefined)
         )
-    span.item-name #{item.data.name}
+    span.item-name(contenteditable=("#{item.data.status}" == 'active' ? 'true' : 'false')) #{item.data.name}
     span.moved-label (déplacée)
     span.action-buttons
-        a.glyphicon.glyphicon-pencil.edit-item-button(href="#" title="Éditer")
         a.glyphicon.glyphicon-remove.cancel-item-button(href="#" title="Annuler")
         span.dropdown.move-list
             a.dropdown-toggle.glyphicon.glyphicon-arrow-right.move-item-button(href="#" title="Déplacer" data-toggle="dropdown")
@@ -23,8 +23,3 @@ form(method="post" data-id="#{item.data.id}")
                         a.move-button(tabindex="-1" href="#" data-destination-type="month" data-destination-id="#{month.toString()}") #{month.toPrettyString()}
         a.glyphicon.glyphicon-asterisk.restore-item-button(href="#" title="Rétablir")
         a.glyphicon.glyphicon-trash.delete-item-button(href="#" title="Supprimer")
-    .input-group.edit-item-input
-        input.form-control(type="text" name="name" value="#{item.data.name}" required="required")
-        span.input-group-btn
-            button.btn.btn-primary(type="submit") Modifier
-            button.btn.cancel-edit-button(type="button") Annuler
