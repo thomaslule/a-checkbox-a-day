@@ -48,7 +48,16 @@
     list-style-type: circle;
 }
 
-.item .item-name[contenteditable="true"]:hover,
-.item .item-name[contenteditable="true"]:focus {
+*[contenteditable="true"]:hover,
+*[contenteditable="true"]:focus {
     background-color: #FFFF99;
+}
+
+/* For empty editable spans, set a min-width and insert a &nbsp; character so they are displayed */
+span[contenteditable="true"] {
+    display: inline-block;
+    min-width: 10px;
+}
+span[contenteditable="true"]:empty:before {
+    content: "\a0";
 }
