@@ -1,7 +1,7 @@
 var assert = require('assert');
 var moment = require('moment');
 var Calendar = require('../../../models/calendarModel');
-var Day = require('../../../models/dayModel');
+var CalendarDay = require('../../../models/calendarDayModel');
 
 moment.locale('fr');
 
@@ -57,8 +57,8 @@ describe('Calendar', function() {
         it('should set the given days', function() {
             var calendar = new Calendar('201501');
             calendar.setDays([
-                new Day({ date: '2015-01-08', text: 'something' }),
-                new Day({ date: '2015-01-15', text: 'other' })
+                new CalendarDay({ date: '2015-01-08', text: 'something' }),
+                new CalendarDay({ date: '2015-01-15', text: 'other' })
             ]);
             assert.equal('something', calendar.getDays()[7].text());
             assert.equal('other', calendar.getDays()[14].text());

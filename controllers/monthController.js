@@ -18,7 +18,7 @@ monthController.get = function(req, res, next) {
         },
         function(callback) {
             var calendar = new Calendar(month.toString());
-            storage.getDaysForCalendar(calendar, function(err, days) {
+            storage.getCalendarDays(calendar, function(err, days) {
                 if (err) callback(err);
                 calendar.setDays(days);
                 callback(null, calendar);

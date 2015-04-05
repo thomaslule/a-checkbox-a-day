@@ -1,5 +1,5 @@
 var moment = require('moment');
-var Day = require('./dayModel');
+var CalendarDay = require('./calendarDayModel');
 
 var Calendar = function(start) {
     var start = moment.isMoment(start) ? start.startOf('month') : moment(start, 'YYYYMM', true);
@@ -8,7 +8,7 @@ var Calendar = function(start) {
         var dayRunner = moment(start);
         this.days = [];
         while (dayRunner.month() == start.month()) {
-            this.days.push(new Day({ date: moment(dayRunner), text: '' }));
+            this.days.push(new CalendarDay({ date: moment(dayRunner), text: '' }));
             dayRunner.add(1, 'days');
         }
     }

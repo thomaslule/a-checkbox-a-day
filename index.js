@@ -34,7 +34,7 @@ app.set('view engine', 'jade');
 app.locals.pretty = true;
 
 var monthController = require('./controllers/monthController.js');
-var dayController = require('./controllers/dayController.js');
+var calendarController = require('./controllers/calendarController.js');
 var itemController = require('./controllers/itemController.js');
 var applicationHealth = require('./controllers/healthController.js');
 
@@ -45,7 +45,7 @@ app.get('/', function(req, res) {
     res.sendStatus(301);
 })
 .get('/month/:month', monthController.get)
-.put('/day/:day', dayController.edit)
+.put('/calendar/day/:day', calendarController.editDay)
 .post('/item', itemController.new)
 .put('/item/:id', itemController.edit)
 .put('/item/:id/list', itemController.move)

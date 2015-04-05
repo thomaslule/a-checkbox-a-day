@@ -23,8 +23,10 @@ $(document).on('delete', '.item', function() {
     util.sendForm($(this).item('getForm'), '/item/' + $(this).item('getId'), 'DELETE');
 });
 
+/* Calendar */
+
 $(document).on('change', '.day-text', function(event, newText) {
-    util.send('/day/' + $(this).closest('.day').attr('data-id'), 'PUT', { text: newText });
+    util.send('/calendar/day/' + $(this).closest('.day').attr('data-id'), 'PUT', { text: newText });
 });
 
 /* New item form */

@@ -1,5 +1,4 @@
 var moment = require('moment');
-var Day = require('./dayModel.js');
 
 var Month = function(month) {
     this.month = moment.isMoment(month) ? month.startOf('month') : moment(month, 'YYYYMM', true);
