@@ -6,6 +6,7 @@ html
         script(type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
         script(type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
         script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js")
+        script(type="text/javascript" src="/js/global.js")
         script(type="text/javascript" src="/js/util.js")
         script(type="text/javascript" src="/js/item.js")
         script(type="text/javascript" src="/js/month.js")
@@ -25,7 +26,13 @@ html
                                 a.glyphicon.glyphicon-arrow-right#next-month(href="/month/#{month.next()}" title="Mois suivant")
         .container
             .row
-                .col-xs-4.col-xs-offset-2
+                .col-xs-offset-1.col-xs-5
+                    ul#month-events.list-unstyled
+                        each day in calendar.getDays()
+                            li.day(data-id="#{day.dateString()}")
+                                time(datetime="#{day.dateString()}") #{day.datePrettyString()}
+                                span.day-text(contenteditable='true') #{day.text()}
+                .col-xs-5
                     #error.alert.alert-danger(style={display: 'none'}) Une erreur est survenue
                     ul#items-list.list-unstyled
                         each item in items
