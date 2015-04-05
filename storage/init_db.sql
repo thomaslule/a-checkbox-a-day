@@ -7,3 +7,9 @@ create table if not exists items (
     list_id INT NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE=MyISAM;
+
+create table if not exists days (
+    `date` DATE NOT NULL,
+    `text` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`date`)
+) ENGINE=MyISAM;

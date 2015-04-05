@@ -72,3 +72,7 @@ span[contenteditable="true"]:empty:before {
     display: inline-block;
     width: 75%;
 }
+
+#month-events form {
+    margin-bottom: 0px;
+}

@@ -2,6 +2,7 @@ var nconf = require('nconf');
 var mysql = require('mysql');
 var fs = require('fs-extra');
 var Item = require('../models/itemModel.js');
+var Day = require('../models/dayModel.js');
 
 nconf.argv().env().file('local.json');
 
@@ -102,6 +103,29 @@ storage.deleteItem = function(item, callback) {
         if (err) return callback(err);
         if (results.affectedRows == 0) return callback('item not found');
         callback(null);
+    });
+}
+
+storage.storeDay = function(day, callback) {
+    if (!day.isValid()) {
+        console.log('day invalid: ' + JSON.stringify(day.data));
+        return callback('day invalid');
+    }
+    connection.query('insert into days (date, text) values (?, ?)',
+        [ day.dateString(), day.data.text ], function(err, results) {
+        if (err) return callback(err);
+        callback(null);
+    });
+}
+
+storage.getDaysForCalendar = function(calendar, callback) {
+    connection.query('select DATE_FORMAT(`date`, \'%Y-%m-%d\') as `date`, text from days where date between ? and ?',
+        [ calendar.start().dateString(), calendar.end().dateString() ], function(err, result) {
+        if (err) return callback(err);
+        callback(null, result.map(function(item) {
+            console.log(item);
+            return new Day(item);
+        }));
     });
 }
 

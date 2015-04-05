@@ -71,16 +71,8 @@ $(document).on('change', '.task :checkbox', function() {
     $(this).closest('.task').item('changeStatus', $(this).is(':checked') ? 'done' : 'active');
 });
 
-$(document).on('focusout', '.item .item-name', function() {
-    $(this).closest('.item').item('changeName', $(this).text());
-});
-
-$(document).on('keypress', '.item .item-name', function(e) {
-    if (e.keyCode == 13) {
-        // enter key
-        $(this).blur();
-        return false;
-    }
+$(document).on('change', '.item .item-name', function(e, newName) {
+    $(this).closest('.item').item('changeName', newName);
 });
 
 $(document).on('click', '.item .cancel-item-button', function() {
