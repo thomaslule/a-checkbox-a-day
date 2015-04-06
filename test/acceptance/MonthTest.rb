@@ -79,6 +79,15 @@ class MonthTest < AcadTest
         assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'new item not created')
     end
 
+    def test_migrate
+        add_item('some item')
+        $driver.find_element(:css, '#migrate').click
+        $driver.find_element(:css, '.bootbox-confirm .btn-primary').click
+        check_persisted { assert_has_class('moved', $driver.find_element(:css, '.item'), 'task not migrated') }
+        $driver.find_element(:css, '#next-month').click
+        assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'new item not created')
+    end
+
     def add_item(name)
         input = $driver.find_element(:css, '#new-item input[name="name"]')
         input.send_keys(name)

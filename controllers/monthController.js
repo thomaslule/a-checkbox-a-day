@@ -35,4 +35,35 @@ monthController.get = function(req, res, next) {
 
 }
 
+monthController.migrate = function(req, res, next) {
+    var month = new Month(req.params.month);
+    if (!month.isValid()) return next('month invalid');
+    storage.getActiveTasksForMonth(month, function(err, tasks) {
+        if (err) return next(err);
+        var tasksToSave = [];
+        var tasksToUpdate = [];
+        tasks.forEach(function(task) {
+            newTask = task.move('month', month.next().toString());
+            tasksToSave.push(newTask);
+            tasksToUpdate.push(task);
+        });
+        async.parallel([
+            function(callback) {
+                async.map(tasksToSave, storage.storeItem, function(results) {
+                    callback(null, results);
+                });
+            },
+            function(callback) {
+                async.map(tasksToUpdate, storage.editItem, function(results) {
+                    callback(null, results);
+                });
+            }
+        ], function(err, results) {
+            if (err) return next(err);
+            res.sendStatus(200);
+        })
+
+    });
+}
+
 module.exports = monthController;
