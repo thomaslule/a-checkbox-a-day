@@ -45,6 +45,7 @@ app.get('/', function(req, res) {
     res.sendStatus(301);
 })
 .get('/month/:month', monthController.get)
+.put('/month/:month/tasks/list', monthController.migrate)
 .put('/calendar/day/:day', calendarController.editDay)
 .post('/item', itemController.new)
 .put('/item/:id', itemController.edit)

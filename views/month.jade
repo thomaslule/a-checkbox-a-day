@@ -1,6 +1,7 @@
 html
     head
         title A checkbox a day
+        meta(name="id" content="#{month.toString()}")
         link(rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
         link(rel="stylesheet" type="text/css" href="/css/style.css")
         script(type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
@@ -59,3 +60,4 @@ html
                                     input.form-control(type="text" name="name" required="required" maxlength="100")
                                     span.input-group-btn
                                         button.btn(type="submit") Ajouter
+                    button#migrate.btn.btn-primary(type="button") Migrer au mois suivant

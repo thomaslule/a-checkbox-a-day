@@ -72,6 +72,16 @@ storage.getItemsForMonth = function(month, callback) {
     });
 }
 
+storage.getActiveTasksForMonth = function(month, callback) {
+    connection.query('select * from items where list_type = ? and list_id = ? and type=\'task\' and status=\'active\' order by id',
+        [ 'month', month.toString() ], function(err, result) {
+        if (err) return callback(err);
+        callback(null, result.map(function(task) {
+            return new Item(task);
+        }));
+    });
+}
+
 storage.storeItem = function(item, callback) {
     if (!item.isValid()) {
         console.log('item invalid: ' + JSON.stringify(item.data));

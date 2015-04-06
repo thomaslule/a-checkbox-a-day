@@ -4,7 +4,7 @@ $.fn.item = function(method, arg) {
     var methods = {};
     var statuses = [ 'active', 'done', 'cancelled', 'moved' ];
 
-    function doChangeStatus(newStatus) {
+    methods.doChangeStatus = function(newStatus) {
         itemElt.find('input[name="status"]').val(newStatus);
         itemElt.removeClass(statuses.join(' '));
         itemElt.addClass(newStatus);
@@ -32,7 +32,7 @@ $.fn.item = function(method, arg) {
     };
 
     methods.changeStatus = function(status) {
-        doChangeStatus(status);
+        methods.doChangeStatus(status);
         itemElt.trigger('update');
     };
 
@@ -42,7 +42,7 @@ $.fn.item = function(method, arg) {
     };
 
     methods.move = function(destination) {
-        doChangeStatus('moved');
+        methods.doChangeStatus('moved');
         itemElt.trigger('move', [ destination ]);
     };
 
