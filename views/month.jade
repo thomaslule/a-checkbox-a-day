@@ -3,10 +3,14 @@ html
         title A checkbox a day
         meta(name="id" content="#{month.toString()}")
         link(rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+        link(rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker.min.css")
         link(rel="stylesheet" type="text/css" href="/css/style.css")
         script(type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
         script(type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js")
         script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js")
+        script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js")
+        script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/locales/bootstrap-datepicker.fr.min.js")
+        script(type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js")
         script(type="text/javascript" src="/js/global.js")
         script(type="text/javascript" src="/js/util.js")
         script(type="text/javascript" src="/js/item.js")
@@ -17,17 +21,9 @@ html
                 .row
                     .col-xs-4.col-xs-offset-2
                         span.navbar-brand A checkbox a day
-                    .col-xs-4
-                        ul.nav.navbar-nav.navbar-right
-                            li
-                                a.glyphicon.glyphicon-arrow-left#previous-month(href="/month/#{month.previous()}" title="Mois précédent")
-                            li.navbar-text
-                                time#displayed-month(datetime="#{month.toISOString()}") #{month.toPrettyString()}
-                            li
-                                a.glyphicon.glyphicon-arrow-right#next-month(href="/month/#{month.next()}" title="Mois suivant")
         .container
             .row
-                .col-xs-offset-1.col-xs-5
+                .col-xs-4
                     ul#month-events.list-unstyled
                         each day in calendar.getDays()
                             li.day(data-id="#{day.dateString()}")
@@ -61,3 +57,5 @@ html
                                     span.input-group-btn
                                         button.btn(type="submit") Ajouter
                     button#migrate.btn.btn-primary(type="button") Migrer au mois suivant
+                .col-xs-3
+                    #calendar

@@ -7,6 +7,24 @@ $(function() {
         $('#migrate').trigger('change');
     });
 
+    /* Calendar */
+    var currentMonth = moment($('meta[name="id"]').attr('content'), 'YYYYMM');
+    $('#calendar').datepicker({
+        language: 'fr',
+        calendarWeeks: true,
+        todayHighlight: true,
+        defaultViewDate: {
+            year: currentMonth.year(),
+            month: currentMonth.month()
+        }
+    })
+    .on('changeMonth', function(e) {
+        window.location.href = '/month/' + moment(e.date).format('YYYYMM');
+    })
+    .on('changeDate', function() {
+        $(this).datepicker('update', '');
+    });
+
 });
 
 $(document).on('update', '.item', function() {
