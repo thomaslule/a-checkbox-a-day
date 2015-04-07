@@ -59,23 +59,12 @@ class MonthTest < AcadTest
         check_persisted { give_time { assert_empty($driver.find_elements(:css, '.item'), 'item not correctly deleted') } }
     end
 
-    def test_change_month
-        $driver.get($appli_url + '/month/205504')
-        assert_equal('avril 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
-        add_item('some item')
-        $driver.find_element(:css, '#previous-month').click
-        assert_equal('mars 2055', $driver.find_element(:css, '#displayed-month').text, 'month not rightly displayed')
-        assert_empty($driver.find_elements(:css, '.item'), 'item found in wrong month')
-        $driver.find_element(:css, '#next-month').click
-        assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'item not saved in month')
-    end
-
     def test_move_item
         add_item('some item')
         $driver.find_element(:css, '.item .move-item-button').click
         $driver.find_element(:css, 'a.move-button[data-destination-id="205002"]').click
         assert_has_class('moved', $driver.find_element(:css, '.item'), 'item not moved')
-        $driver.find_element(:css, '#next-month').click
+        $driver.find_element(:css, '#calendar .next').click
         assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'new item not created')
     end
 
@@ -84,7 +73,7 @@ class MonthTest < AcadTest
         $driver.find_element(:css, '#migrate').click
         $driver.find_element(:css, '.bootbox-confirm .btn-primary').click
         check_persisted { assert_has_class('moved', $driver.find_element(:css, '.item'), 'task not migrated') }
-        $driver.find_element(:css, '#next-month').click
+        $driver.find_element(:css, '#calendar .next').click
         assert_equal('some item', $driver.find_element(:css, '.item .item-name').text, 'new item not created')
     end
 
