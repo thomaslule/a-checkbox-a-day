@@ -76,3 +76,7 @@ span[contenteditable="true"]:empty:before {
 #month-events form {
     margin-bottom: 0px;
 }
+
+#calendar {
+    border: 2px solid lightgray;
+}
