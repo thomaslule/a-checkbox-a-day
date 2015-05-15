@@ -121,10 +121,13 @@ storage.storeCalendarDay = function(day, callback) {
         console.log('day invalid: ' + JSON.stringify(day.data));
         return callback('day invalid');
     }
-    connection.query('insert into calendar (date, text) values (?, ?)',
-        [ day.dateString(), day.data.text ], function(err, results) {
+    connection.query('delete from calendar where date = ?', [ day.dateString() ], function(err) {
         if (err) return callback(err);
-        callback(null);
+        connection.query('insert into calendar (date, text) values (?, ?)',
+            [ day.dateString(), day.data.text ], function(err, results) {
+            if (err) return callback(err);
+            callback(null);
+        });
     });
 }
 
