@@ -23,6 +23,8 @@ html
                         span.navbar-brand A checkbox a day
         .container
             .row
+                h1.col-xs-9.text-center #{month.toPrettyString()}
+            .row
                 .col-xs-4
                     ul#month-events.list-unstyled
                         each day in calendar.getDays()
@@ -57,5 +59,6 @@ html
                                     span.input-group-btn
                                         button.btn(type="submit") Ajouter
                     button#migrate.btn.btn-primary(type="button") Migrer au mois suivant
-                .col-xs-3
-                    #calendar
+                .col-xs-3.panel.panel-default
+                    .panel-body
+                        #calendar

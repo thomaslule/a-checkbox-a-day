@@ -9,19 +9,24 @@ $(function() {
 
     /* Calendar */
     var currentMonth = moment($('meta[name="id"]').attr('content'), 'YYYYMM');
-    $('#calendar').datepicker({
+    var datepicker = $('#calendar').datepicker({
         language: 'fr',
         calendarWeeks: true,
         todayHighlight: true,
+        maxViewMode: 0, // not working until datepicker 1.5.0 :(
         defaultViewDate: {
             year: currentMonth.year(),
             month: currentMonth.month()
         }
+    });
+    datepicker.selected_month = currentMonth;
+    datepicker.on('click', '.datepicker-switch', function(e) {
+        window.location.href = '/month/' + datepicker.selected_month.format('YYYYMM');
     })
-    .on('changeMonth', function(e) {
-        window.location.href = '/month/' + moment(e.date).format('YYYYMM');
-    })
-    .on('changeDate', function() {
+    datepicker.on('changeMonth', function(e) {
+        datepicker.selected_month = moment(e.date);
+    });
+    datepicker.on('changeDate', function() {
         $(this).datepicker('update', '');
     });
 
