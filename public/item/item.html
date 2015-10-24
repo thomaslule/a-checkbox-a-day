@@ -1,0 +1,15 @@
+<form>
+	<div ng-if="model.type == 'task'" class="checkbox">
+		<input type="checkbox" ng-model="model.status" ng-true-value="'done'" ng-false-value="'active'" />
+	</div>
+	<span contenteditable="{{model.status == 'active' ? 'true' : 'false'}}" class="item-name">{{model.name}}</span>
+	<span ng-if="model.status == 'moved'" class="moved-label">(déplacée)</span>
+	<span class="action-buttons">
+		<a ng-if="model.status == 'active'" href="#" title="Annuler" class="glyphicon glyphicon-remove cancel-item-button"></a>
+		<span ng-if="model.type == 'task' && model.status == 'active'" class="dropdown move-list">
+			<a href="#" title="Déplacer" data-toggle="dropdown" class="dropdown-toggle glyphicon glyphicon-arrow-right move-item-button"></a>
+		</span>
+		<a ng-if="model.status == 'cancelled'" href="#" title="Rétablir" class="glyphicon glyphicon-asterisk restore-item-button"></a>
+		<a ng-if="model.status == 'cancelled'" href="#" title="Supprimer" class="glyphicon glyphicon-trash delete-item-button"></a>
+	</span>
+</form>

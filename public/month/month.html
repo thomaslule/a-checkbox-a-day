@@ -7,7 +7,7 @@
 	<div class="col-xs-5">
 		<ul class="list-unstyled">
 			<li ng-repeat="item in items">
-				{{item.name}}
+				<item model="item"></item>
 			</li>
 			<li>
 				<form ng-submit="add()">
