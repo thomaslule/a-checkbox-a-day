@@ -21,4 +21,13 @@ itemApi.post = function(req, res, next) {
 	});
 };
 
+itemApi.put = function(req, res, next) {
+	var item = req.body;
+	if (item.id != req.params.id) return next("invalid id");
+	storage.editItem(item, function(err) {
+		if (err) return next(err);
+		res.json(item);
+	});
+};
+
 module.exports = itemApi;

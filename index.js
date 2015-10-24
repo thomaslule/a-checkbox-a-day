@@ -30,7 +30,8 @@ app.use(express.static(__dirname + "/public"));
 var itemApi = require('./api/itemApi.js');
 
 app.get("/api/item/month/:month", itemApi.getForMonth)
-.post("/api/item", itemApi.post);
+.post("/api/item", itemApi.post)
+.put("/api/item/:id", itemApi.put);
 
 // error handling
 app.use(function(err, req, res, next) {

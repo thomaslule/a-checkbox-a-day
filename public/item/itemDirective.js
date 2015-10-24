@@ -3,8 +3,9 @@ angular.module("item")
 	return {
 		restrict: 'AE',
 		scope: {
-			model: '=model'
+			model: '='
 		},
-		templateUrl: '/item/item.html'
+		templateUrl: '/item/item.html',
+		controller: 'itemCtrl'
 	};
 });

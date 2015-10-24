@@ -69,4 +69,13 @@ storage.storeItem = function(item, callback) {
     });
 }
 
+storage.editItem = function(item, callback) {
+    connection.query('update items set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
+        [ item.name, item.status, item.list_type, item.list_id, item.id ], function(err, results) {
+        if (err) return callback(err);
+        if (results.affectedRows == 0) return callback('item not found');
+        callback(null);
+    });
+}
+
 module.exports = storage;

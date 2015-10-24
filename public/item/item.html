@@ -1,8 +1,8 @@
-<form>
+<form class="item {{model.status}}">
 	<div ng-if="model.type == 'task'" class="checkbox">
-		<input type="checkbox" ng-model="model.status" ng-true-value="'done'" ng-false-value="'active'" />
+		<input type="checkbox" ng-model="model.status" ng-true-value="'done'" ng-false-value="'active'" ng-change="change()" />
 	</div>
-	<span contenteditable="{{model.status == 'active' ? 'true' : 'false'}}" class="item-name">{{model.name}}</span>
+	<span contenteditable="{{model.status == 'active' ? 'true' : 'false'}}" ng-model="model.name" ng-blur="change()" class="item-name"></span>
 	<span ng-if="model.status == 'moved'" class="moved-label">(déplacée)</span>
 	<span class="action-buttons">
 		<a ng-if="model.status == 'active'" href="#" title="Annuler" class="glyphicon glyphicon-remove cancel-item-button"></a>
