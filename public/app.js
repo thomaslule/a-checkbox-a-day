@@ -1,12 +1,13 @@
 angular.module('acad', [
-  'ngRoute',
+  'angularMoment',
   'month',
-  'angularMoment'
+  'ngRoute',
+  'ui.bootstrap'
 ])
 .config(['$routeProvider', function($routeProvider) {
   
   $routeProvider.otherwise({
-    redirectTo: '/month/2015-10'
+    redirectTo: '/month/201510'
   });
 
 }])
