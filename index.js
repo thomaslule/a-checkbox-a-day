@@ -31,7 +31,8 @@ var itemApi = require('./api/itemApi.js');
 
 app.get("/api/item/month/:month", itemApi.getForMonth)
 .post("/api/item", itemApi.post)
-.put("/api/item/:id", itemApi.put);
+.put("/api/item/:id", itemApi.put)
+.delete("/api/item/:id", itemApi.delete);
 
 // error handling
 app.use(function(err, req, res, next) {

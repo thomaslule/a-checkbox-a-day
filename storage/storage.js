@@ -78,4 +78,12 @@ storage.editItem = function(item, callback) {
     });
 }
 
+storage.deleteItem = function(id, callback) {
+    connection.query('delete from items where id = ?', [ id ], function(err, results) {
+        if (err) return callback(err);
+        if (results.affectedRows == 0) return callback('item not found');
+        callback(null);
+    });
+}
+
 module.exports = storage;

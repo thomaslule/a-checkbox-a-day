@@ -30,4 +30,11 @@ itemApi.put = function(req, res, next) {
 	});
 };
 
+itemApi.delete = function(req, res, next) {
+	storage.deleteItem(req.params.id, function(err) {
+		if (err) return next(err);
+		res.sendStatus(200);
+	});
+};
+
 module.exports = itemApi;
