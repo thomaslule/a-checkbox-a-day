@@ -1,0 +1,18 @@
+<form ng-submit="save()">
+	<div class="input-group">
+		<span class="input-group-btn" uib-dropdown>
+			<button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
+				Tâche <span class="caret"></span>
+			</button>
+			<ul class="uib-dropdown-menu">
+				<li style="display:none;"><a href="#">Tâche</a></li>
+				<li><a href="#">Événement</a></li>
+				<li><a href="#">Note</a></li>
+			</ul>
+		</span>
+		<input type="text" ng-model="newItem.name" required="required" maxlength="100" class="form-control"/>
+		<span class="input-group-btn">
+			<button type="submit" class="btn">Ajouter</button>
+		</span>
+	</div>
+</form>
