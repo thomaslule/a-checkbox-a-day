@@ -25,6 +25,10 @@ angular.module("item")
 	};
 	$scope.newItem = initNewItem();
 
+	$scope.changeType = function(newType) {
+		$scope.newItem.type = newType;
+	}
+
 	$scope.save = function() {
 		$scope.newItem.$save(function(response) {
 			$scope.onSave({ item: response });

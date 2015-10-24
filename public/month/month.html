@@ -6,12 +6,8 @@
 	</div>
 	<div class="col-xs-5">
 		<ul class="list-unstyled">
-			<li ng-repeat="item in items">
-				<item model="item"></item>
-			</li>
-			<li>
-				<new-item list-type="month" list-id="{{month | amDateFormat:'YYYYMM'}}" on-save="onNewItem(item)"></new-item>
-			</li>
+			<li ng-repeat="item in items" class="item {{item.type}} {{item.status}}" item model="item"></li>
+			<li new-item list-type="month" list-id="{{month | amDateFormat:'YYYYMM'}}" on-save="onNewItem(item)"></li>
 		</ul>
 	</div>
 </div>

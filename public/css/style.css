@@ -4,6 +4,11 @@
     margin-left: 5px;
 }
 
+.item {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .moved-label {
     margin-left: 5px;
 }

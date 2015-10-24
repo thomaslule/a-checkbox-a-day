@@ -1,7 +1,6 @@
 angular.module("item")
 .directive('item', function() {
 	return {
-		restrict: 'E',
 		scope: {
 			model: '='
 		},
@@ -11,7 +10,6 @@ angular.module("item")
 })
 .directive('newItem', function() {
 	return {
-		restrict: 'E',
 		scope: {
 			listType: '@',
 			listId: '@',
