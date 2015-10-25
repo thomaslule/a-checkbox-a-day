@@ -32,7 +32,16 @@ var itemApi = require('./api/itemApi.js');
 app.get("/api/item/month/:month", itemApi.getForMonth)
 .post("/api/item", itemApi.post)
 .put("/api/item/:id", itemApi.put)
-.delete("/api/item/:id", itemApi.delete);
+.delete("/api/item/:id", itemApi.delete)
+.get('/admin/clear', function(req, res, next) {
+    storage.clearDb(function(err) {
+        if (err) {
+            next(err);
+            return;
+        }
+        res.sendStatus(200);
+    })
+});
 
 // error handling
 app.use(function(err, req, res, next) {
