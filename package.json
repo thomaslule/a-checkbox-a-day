@@ -6,7 +6,8 @@
     "url": "https://github.com/thomaslule/a-checkbox-a-day.git"
   },
   "scripts": {
-    "start": "node_modules/.bin/nodemon -e js index.js"
+    "start": "node_modules/.bin/nodemon -e js index.js",
+    "test": "protractor ./test/e2e/protractor_conf.js"
   },
   "dependencies": {
     "async": "^0.9.0",
@@ -19,7 +20,5 @@
     "nodemon": "^1.3.7",
     "retry": "^0.6.1"
   },
-  "devDependencies": {
-    "mocha": "^2.1.0"
-  }
+  "devDependencies": {}
 }

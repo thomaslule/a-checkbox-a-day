@@ -1,4 +1,4 @@
-<form ng-submit="save()">
+<form ng-submit="save()" id="add-item-form">
 	<div class="input-group">
 		<span class="input-group-btn" uib-dropdown>
 			<button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
@@ -10,7 +10,7 @@
 				<li><a href="" ng-click="changeType('note')">{{ 'note' | translateType }}</a></li>
 			</ul>
 		</span>
-		<input type="text" ng-model="newItem.name" required="required" maxlength="100" class="form-control"/>
+		<input type="text" name="name" ng-model="newItem.name" required="required" maxlength="100" class="form-control"/>
 		<span class="input-group-btn">
 			<button type="submit" class="btn">Ajouter</button>
 		</span>
