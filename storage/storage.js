@@ -52,38 +52,8 @@ storage.execute = function(script, callback) {
     });
 }
 
-storage.getItemsForMonth = function(month, callback) {
-    connection.query('select * from items where list_type = ? and list_id = ? order by id',
-        [ 'month', month.format('YYYYMM') ], function(err, result) {
-        if (err) return callback(err);
-        callback(null, result);
-    });
-}
-
-storage.storeItem = function(item, callback) {
-    connection.query('insert into items (type, name, status, list_type, list_id) values (?, ?, ?, ?, ?)',
-        [ item.type, item.name, item.status, item.list_type, item.list_id ], function(err, results) {
-        if (err) return callback(err);
-        item.id = results.insertId;
-        callback(null);
-    });
-}
-
-storage.editItem = function(item, callback) {
-    connection.query('update items set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
-        [ item.name, item.status, item.list_type, item.list_id, item.id ], function(err, results) {
-        if (err) return callback(err);
-        if (results.affectedRows == 0) return callback('item not found');
-        callback(null);
-    });
-}
-
-storage.deleteItem = function(id, callback) {
-    connection.query('delete from items where id = ?', [ id ], function(err, results) {
-        if (err) return callback(err);
-        if (results.affectedRows == 0) return callback('item not found');
-        callback(null);
-    });
+storage.query = function(query, params, callback) {
+    connection.query(query, params, callback);
 }
 
 module.exports = storage;
