@@ -39,6 +39,14 @@ describe("month page", function() {
 		});
 	});
 
+	it("can edit task", function() {
+		createTask("test");
+		element(by.css(".item .item-name")).sendKeys("re");
+		persisted(function() {
+			expect(element(by.css(".item .item-name")).getText()).toEqual("retest");
+		});
+	});
+
 	it("can cancel, restore and delete task", function() {
 		createTask("test");
 		element(by.css(".item .cancel-item-button")).click();
