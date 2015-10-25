@@ -7,10 +7,9 @@ describe("month page", function() {
 	});
 
 	it("can create task", function() {
-		// browser.wait(until.elementLocated(By.css("#add-item-form [name='name']")), 10000);
-		browser.findElement(By.css("#add-item-form [name='name']")).sendKeys("test");
-		browser.findElement(By.css("#add-item-form [type='submit']")).click();
-		browser.findElement(By.css(".item .item-name")).getText().then(function(itemName) {
+		element(by.css("#add-item-form [name='name']")).sendKeys("test");
+		element(by.css("#add-item-form [type='submit']")).click();
+		element(by.css(".item .item-name")).getText().then(function(itemName) {
 			assert.equal("test", itemName);
 		});
 	});
