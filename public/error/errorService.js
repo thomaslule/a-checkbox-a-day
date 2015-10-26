@@ -9,6 +9,7 @@ angular.module("error")
 
 		ajaxError: function(error) {
 			console.log(error);
+			return "bluh";
 		}
 	};
 }]);
