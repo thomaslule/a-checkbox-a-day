@@ -3,8 +3,8 @@ angular.module("error")
 	$scope.errorText = "";
 	$scope.displayed = false;
 
-	$error._setShowErrorCallback(function(text) {
-		$scope.errorText = text;
+	$scope.$on("error", function (event, data) {
+		$scope.errorText = data.text;
 		$scope.displayed = true;
 	});
 
