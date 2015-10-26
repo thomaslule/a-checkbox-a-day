@@ -20,6 +20,10 @@
 	<script src="app.js"></script>
 	<script src="contenteditable/contenteditableApp.js"></script>
 	<script src="contenteditable/contenteditableDirective.js"></script>
+	<script src="error/errorApp.js"></script>
+	<script src="error/errorCtrl.js"></script>
+	<script src="error/errorDirective.js"></script>
+	<script src="error/errorService.js"></script>
 	<script src="item/itemApp.js"></script>
 	<script src="item/itemCtrl.js"></script>
 	<script src="item/itemDirective.js"></script>
@@ -36,6 +40,11 @@
 			</div>
 		</div>
 	</nav>
-	<div ng-view class="container"></div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-8 col-xs-offset-2" error></div>
+		</div>
+		<div ng-view></div>
+	</div>
 </body>
 </html>

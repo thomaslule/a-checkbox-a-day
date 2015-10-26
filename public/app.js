@@ -1,17 +1,18 @@
-angular.module('acad', [
-	'angularMoment',
+angular.module("acad", [
+	"angularMoment",
 	"contenteditable",
-	'month',
-	'ngRoute',
-	'ui.bootstrap'
+	"error",
+	"month",
+	"ngRoute",
+	"ui.bootstrap"
 	])
-.config(['$routeProvider', function($routeProvider) {
+.config(["$routeProvider", function($routeProvider) {
 
 	$routeProvider.otherwise({
-		redirectTo: '/month/201510'
+		redirectTo: "/month/201510"
 	});
 
 }])
-.run(['amMoment', function(amMoment) {
-	amMoment.changeLocale('fr');
+.run(["amMoment", function(amMoment) {
+	amMoment.changeLocale("fr");
 }]);

@@ -1,5 +1,5 @@
 angular.module("item")
-.controller("itemCtrl", ["$scope", "Item", function($scope, Item) {
+.controller("itemCtrl", ["$scope", "Item", "error", function($scope, Item, error) {
 	$scope.change = function() {
 		$scope.model.$update({ id: $scope.model.id });
 	}
