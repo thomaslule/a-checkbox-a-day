@@ -1,10 +1,10 @@
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 var express = require("express");
-var nconf = require('nconf');
-var retry = require('retry');
-var storage = require('./storage/storage');
+var nconf = require("nconf");
+var retry = require("retry");
+var storage = require("./storage/storage");
 
-nconf.argv().env().file('local.json');
+nconf.argv().env().file("local.json");
 
 // We try to initialize the database 5 times
 var operation = retry.operation();
@@ -14,7 +14,7 @@ operation.attempt(function () {
             console.log(err.message);
             return;
         }
-        console.log('Database initialized');
+        console.log("Database initialized");
     });
 });
 
@@ -27,13 +27,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // make public folder visible
 app.use(express.static(__dirname + "/public"));
 
-var itemApi = require('./api/itemApi.js');
+var itemApi = require("./api/itemApi.js");
 
 app.get("/api/item/month/:month", itemApi.getForMonth)
 .post("/api/item", itemApi.post)
 .put("/api/item/:id", itemApi.put)
 .delete("/api/item/:id", itemApi.delete)
-.get('/admin/clear', function(req, res, next) {
+.get("/admin/clear", function(req, res, next) {
     storage.clearDb(function(err) {
         if (err) {
             next(err);
@@ -45,15 +45,21 @@ app.get("/api/item/month/:month", itemApi.getForMonth)
 
 // error handling
 app.use(function(err, req, res, next) {
-    console.error(err.stack ? err.stack : err);
-    res.status(500);
-    if (req.xhr) {
-        res.json({ 'error': (err.message ? err.message : err) });
+    if (err.statusCode) {
+        console.error("Error " + err.statusCode + ": " + err.text);
+        res.status(err.statusCode);
+        res.json({ "error": err.text });
     } else {
-        res.send('Internal error: ' + (err.message ? err.message : err));
+        console.error(err.stack ? err.stack : err);
+        res.status(500);
+        if (req.xhr) {
+            res.json({ "error": (err.message ? err.message : err) });
+        } else {
+            res.send("Internal error: " + (err.message ? err.message : err));
+        }
     }
 });
 
-app.listen(nconf.get('port'), function() {
-    console.log("Launched a-checkbox-a-day on port %s", nconf.get('port'));
+app.listen(nconf.get("port"), function() {
+    console.log("Launched a-checkbox-a-day on port %s", nconf.get("port"));
 });

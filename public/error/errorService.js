@@ -5,6 +5,10 @@ angular.module("error")
 	return {
 		showError: function(text) {
 			$rootScope.$broadcast("error", { text: text });
+		},
+
+		ajaxError: function(error) {
+			console.log(error);
 		}
 	};
 }]);

@@ -5,7 +5,7 @@ var itemApi = {};
 
 itemApi.getForMonth = function(req, res, next) {
     var month = moment(req.params.month, 'YYYYMM', true);
-    if (!month.isValid()) return next('month invalid');
+    if (!month.isValid()) return next({ statusCode: 400, text: "invalid_month" });
     itemRepository.getItemsForMonth(month, function(err, result) {
     	if (err) return next(err);
     	res.json(result);
