@@ -13,6 +13,9 @@ angular.module("acad", [
 	});
 
 }])
+.config([ "$httpProvider", function($httpProvider) {
+    $httpProvider.interceptors.push("errorHttpInterceptor");
+}])
 .run(["amMoment", function(amMoment) {
 	amMoment.changeLocale("fr");
 }]);

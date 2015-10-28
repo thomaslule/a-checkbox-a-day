@@ -1,5 +1,5 @@
 <form>
-	<div ng-if="model.type == 'task'" class="checkbox">
+	<div ng-if="model.type == 'task' && (model.status == 'active' || model.status == 'done')" class="checkbox">
 		<input type="checkbox" ng-model="model.status" ng-true-value="'done'" ng-false-value="'active'" ng-change="change()" />
 	</div>
 	<span contenteditable="{{model.status == 'active' ? 'true' : 'false'}}" ng-model="model.name" ng-blur="change()" class="item-name"></span>
