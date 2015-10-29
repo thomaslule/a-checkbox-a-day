@@ -22,21 +22,26 @@ npm start
 
 ### Test the application
 
-Install the test tools:
-
-```` bash
-npm install -g protractor
-webdriver-manager update
-````
-
 Launch the selenium server:
 
 ```` bash
-webdriver-manager start
+npm selenium
 ````
 
 Launch the tests:
 
 ```` bash
 npm test
+````
+
+Only unit tests:
+
+```` bash
+npm unit
+````
+
+Only end-to-end tests:
+
+```` bash
+npm e2e
 ````
