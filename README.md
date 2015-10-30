@@ -25,7 +25,7 @@ npm start
 Launch the selenium server:
 
 ```` bash
-npm selenium
+npm run selenium
 ````
 
 Launch the tests:
@@ -37,11 +37,11 @@ npm test
 Only unit tests:
 
 ```` bash
-npm unit
+npm run unit
 ````
 
 Only end-to-end tests:
 
 ```` bash
-npm e2e
+npm run e2e
 ````
