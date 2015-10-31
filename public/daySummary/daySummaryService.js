@@ -7,7 +7,7 @@ angular.module("daySummary")
 		delete: { method: "DELETE", params: { by: null, id: "@id" }}
 	});
 }])
-.factory("daySummary", function() {
+.factory("daySummary", [ "DaySummary", function(DaySummary) {
 	return {
 		allMonthDays: function(month, daySummaries) {
 			var start = moment(month, "YYYYMM", true);
@@ -15,17 +15,23 @@ angular.module("daySummary")
 			var days = [];
 			// add every day of month
 			while (dayRunner.month() == start.month()) {
-				var dayToSet = { date: dayRunner.format(), text: "" };
+				var dayToSet = null;
 				// check if this day is in the provided array
 				daySummaries.forEach(function(daySummary) {
 					if (moment(daySummary.date).isSame(dayRunner)) {
 						dayToSet = daySummary;
 					}
 				});
+				// if it hasnt been found, create a default one
+				if (!dayToSet) {
+					dayToSet = new DaySummary();
+					dayToSet.date = dayRunner.format();
+					dayToSet.text = "";
+				}
 				days.push(dayToSet);
 				dayRunner.add(1, "days");
 			}
 			return days;
 		}
 	};
-});
+}]);

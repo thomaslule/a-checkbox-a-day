@@ -27,9 +27,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // make public folder visible
 app.use(express.static(__dirname + "/public"));
 
-var itemApi = require("./api/itemApi.js");
+var itemApi = require("./api/itemApi");
+var daySummaryApi = require("./api/daySummaryApi");
 
-app.get("/api/item/month/:month", itemApi.getForMonth)
+app
+.get("/api/daySummary/month/:month", daySummaryApi.getForMonth)
+.post("/api/daySummary", daySummaryApi.post)
+.get("/api/item/month/:month", itemApi.getForMonth)
 .post("/api/item", itemApi.post)
 .put("/api/item/:id", itemApi.put)
 .delete("/api/item/:id", itemApi.delete)

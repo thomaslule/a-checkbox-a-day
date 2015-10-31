@@ -9,7 +9,8 @@ create table if not exists items (
 ) ENGINE=MyISAM;
 
 create table if not exists day_summary (
+    id INT NOT NULL AUTO_INCREMENT,
     `date` DATE NOT NULL,
     `text` VARCHAR(100) NOT NULL,
-    PRIMARY KEY (`date`)
+    PRIMARY KEY (id)
 ) ENGINE=MyISAM;

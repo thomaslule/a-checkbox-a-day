@@ -1,7 +1,6 @@
 angular.module("daySummary")
-.controller("daySummaryCtrl", ["$scope", "DaySummary", function($scope, DaySummary) {
+.controller("daySummaryCtrl", ["$scope", function($scope) {
 	$scope.change = function() {
-		// TODO
-		console.log($scope.model);
+		$scope.model.$save();
 	}
 }]);
