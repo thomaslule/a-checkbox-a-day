@@ -1,6 +1,6 @@
-angular.module("daySummary")
-.factory("DaySummary", ["$resource", function($resource) {
-	return $resource("api/daySummary/:by/:id", {}, {
+angular.module("journalEntry")
+.factory("JournalEntry", ["$resource", function($resource) {
+	return $resource("api/journalEntry/:by/:id", {}, {
 		byMonth: {
 			method:"GET",
 			params: { by: "month", id: "@id" },
@@ -9,11 +9,11 @@ angular.module("daySummary")
 		save: { method: "POST", params: { by: null, id: null } }
 	});
 }])
-.factory("daySummary", [ "DaySummary", function(DaySummary) {
+.factory("journalEntry", [ "JournalEntry", function(JournalEntry) {
 	return {
-		// Return all the days of a month, with provided daySummaries inserted inside
+		// Return all the days of a month, with provided journalEntries inserted inside
 		// month is YYYYMMDD
-		allMonthDays: function(month, daySummaries) {
+		allMonthDays: function(month, journalEntries) {
 			var start = moment(month, "YYYYMM", true);
 			var dayRunner = moment(start);
 			var days = [];
@@ -21,14 +21,14 @@ angular.module("daySummary")
 			while (dayRunner.month() == start.month()) {
 				var dayToSet = null;
 				// check if this day is in the provided array
-				daySummaries.forEach(function(daySummary) {
-					if (daySummary.date == dayRunner.format("YYYYMMDD")) {
-						dayToSet = daySummary;
+				journalEntries.forEach(function(journalEntry) {
+					if (journalEntry.date == dayRunner.format("YYYYMMDD")) {
+						dayToSet = journalEntry;
 					}
 				});
 				// if it hasnt been found, create a default one
 				if (!dayToSet) {
-					dayToSet = new DaySummary();
+					dayToSet = new JournalEntry();
 					dayToSet.date = dayRunner.format("YYYYMMDD");
 					dayToSet.text = "";
 				}

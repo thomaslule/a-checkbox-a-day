@@ -1,1 +1,0 @@
-angular.module("daySummary", [ "ngResource" ]);

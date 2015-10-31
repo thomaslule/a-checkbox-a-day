@@ -50,13 +50,14 @@ span[contenteditable="true"]:empty:before {
     content: "\a0";
 }
 
-.day-summary time {
+.journal-entry time {
     display: inline-block;
     width: 25%;
     font-weight: bold;
+    text-align: right;
 }
 
-.day-summary span[contenteditable="true"] {
+.journal-entry span[contenteditable="true"] {
     display: inline-block;
     width: 70%;
 }

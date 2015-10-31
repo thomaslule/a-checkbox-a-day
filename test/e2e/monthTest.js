@@ -83,13 +83,13 @@ describe("month page", function() {
 		});
 	});
 
-	it("can create day summaries", function() {
-		var day = element(by.css(".day-summary [contenteditable]"));
-		day.click();
-		day.sendKeys("test");
-		day.sendKeys(protractor.Key.ENTER);
+	it("can create journal entries", function() {
+		var entry = element(by.css(".journal-entry [contenteditable]"));
+		entry.click();
+		entry.sendKeys("test");
+		entry.sendKeys(protractor.Key.ENTER);
 		persisted(function() {
-			expect(element(by.css(".day-summary [contenteditable]")).getText()).toEqual("test");
+			expect(element(by.css(".journal-entry [contenteditable]")).getText()).toEqual("test");
 		});
 	});
 

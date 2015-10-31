@@ -28,11 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 var itemApi = require("./api/itemApi");
-var daySummaryApi = require("./api/daySummaryApi");
+var journalEntryApi = require("./api/journalEntryApi");
 
 app
-.get("/api/daySummary/month/:month", daySummaryApi.getForMonth)
-.post("/api/daySummary", daySummaryApi.post)
+.get("/api/journalEntry/month/:month", journalEntryApi.getForMonth)
+.post("/api/journalEntry", journalEntryApi.post)
 .get("/api/item/month/:month", itemApi.getForMonth)
 .post("/api/item", itemApi.post)
 .put("/api/item/:id", itemApi.put)

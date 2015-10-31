@@ -1,7 +1,7 @@
 angular.module("acad", [
 	"angularMoment",
 	"contenteditable",
-	"daySummary",
+	"journalEntry",
 	"error",
 	"month",
 	"ngRoute",

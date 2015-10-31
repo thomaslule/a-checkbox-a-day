@@ -1,17 +1,17 @@
-describe("daySummaryService", function() {
+describe("journalEntryService", function() {
 
-	beforeEach(module("daySummary"));
+	beforeEach(module("journalEntry"));
 
-	var daySummary;
+	var journalEntry;
 
-	beforeEach(inject(function (_daySummary_) {
-		daySummary = _daySummary_;
+	beforeEach(inject(function (_journalEntry_) {
+		journalEntry = _journalEntry_;
 	}));
 
 	describe("allMonthDays", function() {
 
 		it("should return all month days", function() {
-			var days = daySummary.allMonthDays("201510", []);
+			var days = journalEntry.allMonthDays("201510", []);
 			expect(days.length).toEqual(31);
 			expectDateIs(days[0].date, "10-1");
 			expect(days[0].text).toEqual("");
@@ -19,11 +19,11 @@ describe("daySummaryService", function() {
 			expect(days[30].text).toEqual("");
 		});
 
-		it("should insert provided daySummaries into returned month", function() {
-			var days = daySummary.allMonthDays("201510",
-				[ getDaySummary("20151001", "1er jour"),
-				getDaySummary("20151015", "milieu"),
-				getDaySummary("20151031", "dernier jour")]);
+		it("should insert provided journalEntries into returned month", function() {
+			var days = journalEntry.allMonthDays("201510",
+				[ getJournalEntry("20151001", "1er jour"),
+				getJournalEntry("20151015", "milieu"),
+				getJournalEntry("20151031", "dernier jour")]);
 			expect(days.length).toEqual(31);
 			expectDateIs(days[0].date, "10-1");
 			expect(days[0].text).toEqual("1er jour");
@@ -39,7 +39,7 @@ describe("daySummaryService", function() {
 			expect(moment(date, "YYYYMMDD").format("M-D")).toEqual(expected);
 		}
 
-		function getDaySummary(date, text) {
+		function getJournalEntry(date, text) {
 			return {
 				date: date,
 				text: text

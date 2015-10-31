@@ -8,7 +8,7 @@ create table if not exists items (
     PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 
-create table if not exists day_summary (
+create table if not exists journal_entry (
     id INT NOT NULL AUTO_INCREMENT,
     `date` DATE NOT NULL,
     `text` VARCHAR(100) NOT NULL,
