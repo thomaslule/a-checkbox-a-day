@@ -21,9 +21,9 @@ describe("daySummaryService", function() {
 
 		it("should insert provided daySummaries into returned month", function() {
 			var days = daySummary.allMonthDays("201510",
-				[ getDaySummary("10-1", "1er jour"),
-				getDaySummary("10-15", "milieu"),
-				getDaySummary("10-31", "dernier jour")]);
+				[ getDaySummary("20151001", "1er jour"),
+				getDaySummary("20151015", "milieu"),
+				getDaySummary("20151031", "dernier jour")]);
 			expect(days.length).toEqual(31);
 			expectDateIs(days[0].date, "10-1");
 			expect(days[0].text).toEqual("1er jour");
@@ -36,12 +36,12 @@ describe("daySummaryService", function() {
 		});
 
 		function expectDateIs(date, expected) {
-			expect(moment(date).format("M-D")).toEqual(expected);
+			expect(moment(date, "YYYYMMDD").format("M-D")).toEqual(expected);
 		}
 
-		function getDaySummary(day, text) {
+		function getDaySummary(date, text) {
 			return {
-				date: moment(day, "M-D").format(),
+				date: date,
 				text: text
 			};
 		}
