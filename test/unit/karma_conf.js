@@ -21,8 +21,7 @@ module.exports = function(config) {
       'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-mocks.js',
       'http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js',
       'http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/fr.js',
-      'http://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js',
-      'http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap.js',
+      'http://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js'
       'public/**/*.js',
       'test/unit/**/*Test.js'
     ],
