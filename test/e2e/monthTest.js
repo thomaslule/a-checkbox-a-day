@@ -24,6 +24,10 @@ describe("month page", function() {
 		element(by.css("#add-item-form [type='submit']")).click();
 	}
 
+	var getTitle = function() {
+		return element(by.css("h1 span")).getText();
+	}
+
 	it("can create task", function() {
 		createTask("test");
 		persisted(function() {
@@ -91,6 +95,14 @@ describe("month page", function() {
 		persisted(function() {
 			expect(element(by.css(".journal-entry [contenteditable]")).getText()).toEqual("test");
 		});
+	});
+
+	it("can change month", function() {
+		expect(getTitle()).toEqual("septembre 2045");
+		element(by.css("h1 .previous")).click();
+		expect(getTitle()).toEqual("août 2045");
+		element(by.css("h1 .next")).click();
+		expect(getTitle()).toEqual("septembre 2045");
 	});
 
 });

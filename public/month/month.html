@@ -1,5 +1,9 @@
 <div class="row">
-	<h1 class="col-xs-9 text-center">{{month | amDateFormat:'MMMM YYYY'}}</h1>
+	<h1 class="col-xs-9 text-center">
+		<a href="#/month/{{prevMonth}}" class="previous">&larr;</a>
+		<span>{{month | amDateFormat:'MMMM YYYY'}}</span>
+		<a href="#/month/{{nextMonth}}" class="next">&rarr;</a>
+	</h1>
 </div>
 <div class="row">
 	<div class="col-xs-4">
