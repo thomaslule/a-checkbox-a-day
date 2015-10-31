@@ -1,9 +1,9 @@
-angular.module('month', [ 'item', 'ngRoute' ])
-.config(['$routeProvider', function($routeProvider) {
+angular.module("month", [ "daySummary", "item", "ngRoute" ])
+.config(["$routeProvider", function($routeProvider) {
   
-  $routeProvider.when('/month/:month', {
-    templateUrl: 'month/month.html',
-    controller: 'monthCtrl'
+  $routeProvider.when("/month/:month", {
+    templateUrl: "month/month.html",
+    controller: "monthCtrl"
   });
 
 }]);

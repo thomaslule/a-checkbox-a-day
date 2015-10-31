@@ -1,9 +1,9 @@
 angular.module("month")
-.controller("monthCtrl", ["$scope", "$routeParams", "Item", "error", function($scope, $routeParams, Item, error) {
+.controller("monthCtrl", ["$scope", "$routeParams", "daySummary", "Item", function($scope, $routeParams, daySummary, Item) {
 	$scope.month = moment($routeParams.month, "YYYYMM", true);
 	$scope.items = Item.byMonth({ id: $routeParams.month });
 	// TODO
-	$scope.daySummaries = [ { date: "2015-10-31T00:00:00+01:00", text: "test" } ];
+	$scope.daySummaries = daySummary.allMonthDays($routeParams.month, []);
 
 	$scope.onNewItem = function(item) {
 		$scope.items.push(item);

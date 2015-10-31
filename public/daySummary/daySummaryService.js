@@ -13,8 +13,16 @@ angular.module("daySummary")
 			var start = moment(month, "YYYYMM", true);
 			var dayRunner = moment(start);
 			var days = [];
+			// add every day of month
 			while (dayRunner.month() == start.month()) {
-				days.push({ date: dayRunner.format(), text: "" });
+				var dayToSet = { date: dayRunner.format(), text: "" };
+				// check if this day is in the provided array
+				daySummaries.forEach(function(daySummary) {
+					if (moment(daySummary.date).isSame(dayRunner)) {
+						dayToSet = daySummary;
+					}
+				});
+				days.push(dayToSet);
 				dayRunner.add(1, "days");
 			}
 			return days;
