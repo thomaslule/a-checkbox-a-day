@@ -50,17 +50,13 @@ span[contenteditable="true"]:empty:before {
     content: "\a0";
 }
 
-#month-events time {
+.day-summary time {
     display: inline-block;
     width: 25%;
     font-weight: bold;
 }
 
-#month-events span[contenteditable="true"] {
+.day-summary span[contenteditable="true"] {
     display: inline-block;
-    width: 75%;
-}
-
-#month-events form {
-    margin-bottom: 0px;
+    width: 70%;
 }

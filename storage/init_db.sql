@@ -8,7 +8,7 @@ create table if not exists items (
     PRIMARY KEY (id)
 ) ENGINE=MyISAM;
 
-create table if not exists calendar (
+create table if not exists day_summary (
     `date` DATE NOT NULL,
     `text` VARCHAR(100) NOT NULL,
     PRIMARY KEY (`date`)
