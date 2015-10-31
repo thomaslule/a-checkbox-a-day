@@ -28,6 +28,7 @@
   "devDependencies": {
     "angular": "^1.4.7",
     "angular-mocks": "^1.4.7",
+    "angular-resource": "^1.4.7",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.14",
     "karma-firefox-launcher": "^0.1.6",
