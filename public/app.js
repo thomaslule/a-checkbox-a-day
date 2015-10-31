@@ -6,7 +6,7 @@ angular.module("acad", [
 	"month",
 	"ngRoute",
 	"ui.bootstrap"
-	])
+])
 .config(["$routeProvider", function($routeProvider) {
 
 	$routeProvider.otherwise({

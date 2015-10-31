@@ -3,7 +3,7 @@ angular.module("month")
 	$scope.month = moment($routeParams.month, "YYYYMM", true);
 	$scope.items = Item.byMonth({ id: $routeParams.month });
 	// TODO
-	$scope.daySummaries = [ { date: moment(), text: "test" } ];
+	$scope.daySummaries = [ { date: "2015-10-31T00:00:00+01:00", text: "test" } ];
 
 	$scope.onNewItem = function(item) {
 		$scope.items.push(item);

@@ -6,4 +6,11 @@ angular.module("daySummary")
 		update: { method: "PUT", params: { by: null, id: "@id" }},
 		delete: { method: "DELETE", params: { by: null, id: "@id" }}
 	});
-}]);
+}])
+.factory("daySummary", function() {
+	return {
+		allMonthDays: function(month, daySummaries) {
+			return [];
+		}
+	};
+});
