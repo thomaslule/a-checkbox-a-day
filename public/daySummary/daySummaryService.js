@@ -10,7 +10,14 @@ angular.module("daySummary")
 .factory("daySummary", function() {
 	return {
 		allMonthDays: function(month, daySummaries) {
-			return [];
+			var start = moment(month, "YYYYMM", true);
+			var dayRunner = moment(start);
+			var days = [];
+			while (dayRunner.month() == start.month()) {
+				days.push({ date: dayRunner.format(), text: "" });
+				dayRunner.add(1, "days");
+			}
+			return days;
 		}
 	};
 });

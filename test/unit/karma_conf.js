@@ -15,9 +15,14 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/angular/angular.js',
-      'node_modules/angular-resource/angular-resource.js',
-      'node_modules/angular-mocks/angular-mocks.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-resource.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-mocks.js',
+      'http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js',
+      'http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/fr.js',
+      'http://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js',
+      'http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap.js',
       'public/**/*.js',
       'test/unit/**/*Test.js'
     ],

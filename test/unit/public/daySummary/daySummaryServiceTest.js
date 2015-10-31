@@ -11,15 +11,12 @@ describe("daySummaryService", function() {
 	describe("allMonthDays", function() {
 
 		it("should return all month days", function() {
-			expect(daySummary).toBeDefined();
-			/*
 			var days = daySummary.allMonthDays("201510", []);
 			expect(days.length).toEqual(31);
-			expect(moment(day[0].date).format("M-D")).toEqual("10-01");
-			expect(day[0].text).toEqual("");
-			expect(moment(day[30].date).format("M-D")).toEqual("10-31");
-			expect(day[30].text).toEqual("");
-			*/
+			expect(moment(days[0].date).format("M-D")).toEqual("10-1");
+			expect(days[0].text).toEqual("");
+			expect(moment(days[30].date).format("M-D")).toEqual("10-31");
+			expect(days[30].text).toEqual("");
 		});
 
 	});
