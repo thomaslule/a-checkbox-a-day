@@ -1,9 +1,14 @@
 angular.module("item")
 .factory("Item", ["$resource", function($resource) {
-	return $resource("api/item/:by/:id", {}, {
-		byMonth: { method:"GET", params: { by: "month", id: "@id" }, isArray:true },
-		save: { method: "POST", params: { by: null, id: null }},
-		update: { method: "PUT", params: { by: null, id: "@id" }},
-		delete: { method: "DELETE", params: { by: null, id: "@id" }}
+	return $resource("api/item/:id", {}, {
+		byMonth: {
+			method:"GET",
+			url: "api/item/month/:month",
+			params: { month: "@month" },
+			isArray:true
+		},
+		save: { method: "POST", params: { id: null }},
+		update: { method: "PUT", params: {id: "@id" }},
+		delete: { method: "DELETE", params: { id: "@id" }}
 	});
 }]);

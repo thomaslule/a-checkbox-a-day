@@ -4,7 +4,7 @@ angular.module("month")
 	$scope.prevMonth = moment($scope.month).subtract(1, "months").format("YYYYMM");
 	$scope.nextMonth = moment($scope.month).add(1, "months").format("YYYYMM");
 	// load items
-	$scope.items = Item.byMonth({ id: $routeParams.month });
+	$scope.items = Item.byMonth({ month: $routeParams.month });
 	// load day entries
 	JournalEntry.byMonth({ id: $routeParams.month }).$promise.then(function(response) {
 		$scope.journalEntries = journalEntry.allMonthDays($routeParams.month, response);
