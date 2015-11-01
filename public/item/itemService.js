@@ -9,6 +9,11 @@ angular.module("item")
 		},
 		save: { method: "POST", params: { id: null }},
 		update: { method: "PUT", params: {id: "@id" }},
-		delete: { method: "DELETE", params: { id: "@id" }}
+		delete: { method: "DELETE", params: { id: "@id" }},
+		move: {
+			method: "PUT",
+			url: "api/item/:id/month/:month",
+			params: { id: "@id", month: "@month" }
+		}
 	});
 }]);

@@ -1,5 +1,10 @@
 angular.module("item")
-.controller("itemCtrl", ["$scope", "Item", "error", function($scope, Item, error) {
+.controller("itemCtrl", ["$scope", function($scope) {
+	$scope.moveToList = [
+		moment($scope.model.month).add(1, "month"),
+		moment($scope.model.month).add(2, "month"),
+		moment($scope.model.month).add(3, "month")
+	];
 	$scope.change = function() {
 		$scope.model.$update({ id: $scope.model.id });
 	}
@@ -13,6 +18,9 @@ angular.module("item")
 	}
 	$scope.delete = function() {
 		$scope.model.$delete({ id: $scope.model.id });
+	}
+	$scope.moveTo = function(month) {
+		$scope.model.$move({ id: $scope.model.id, month: month.format("YYYYMM") });
 	}
 }])
 .controller("newItemCtrl", ["$scope", "Item", function($scope, Item) {

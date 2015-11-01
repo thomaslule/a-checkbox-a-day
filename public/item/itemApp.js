@@ -1,1 +1,1 @@
-angular.module('item', ['ngResource']);
+angular.module("item", ["ngResource"]);

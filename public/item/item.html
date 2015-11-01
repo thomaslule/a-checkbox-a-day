@@ -6,6 +6,13 @@
 	<span ng-if="model.status == 'moved'" class="moved-label">(déplacée)</span>
 	<span class="action-buttons">
 		<a ng-if="model.status == 'active'" ng-click="cancel()" href="" title="Annuler" class="glyphicon glyphicon-remove cancel-item-button"></a>
+		<span ng-if="model.status == 'active'" class="dropdown">
+			<a ng-if="model.status == 'active'" href="" title="Déplacer" class="glyphicon glyphicon-arrow-right move-item-button dropdown-toggle" data-toggle="dropdown"></a>
+			<ul class="dropdown-menu">
+				<li class="dropdown-header">Déplacer vers...</li>
+				<li ng-repeat="month in moveToList"><a href="" ng-click="moveTo(month)">{{month | amDateFormat:'MMMM YYYY'}}</a></li>
+			</ul>
+		</span>
 		<a ng-if="model.status == 'cancelled'" ng-click="restore()" href="" title="Rétablir" class="glyphicon glyphicon-asterisk restore-item-button"></a>
 		<a ng-if="model.status == 'cancelled'" ng-click="delete()" href="" title="Supprimer" class="glyphicon glyphicon-trash delete-item-button"></a>
 	</span>
