@@ -22,11 +22,10 @@ journalEntryRepository.getForMonth = function(month, callback) {
 
 // Save an entry
 journalEntryRepository.store = function(journalEntry, callback) {
-	storage.query('insert into journal_entry (`date`, `text`) values (?, ?)',
+	storage.query('insert into journal_entry (`date`, `text`) values (?, ?) on duplicate key update `date` = VALUES(`date`), `text` = VALUES(`text`)',
 		[ moment(journalEntry.date, "YYYYMMDD").format("YYYY-MM-DD"), journalEntry.text ],
 		function(err, results) {
 	        if (err) return callback(err);
-	        journalEntry.id = results.insertId;
 	        callback(null, journalEntry);
 	    });
 }

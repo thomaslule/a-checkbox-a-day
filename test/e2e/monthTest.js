@@ -36,6 +36,17 @@ describe("month page", function() {
 		element(by.css("h1 .next")).click();
 	}
 
+	var getJournalEntry = function() {
+		return element(by.css(".journal-entry:first-child [contenteditable]"));
+	}
+
+	var editJournal = function(text) {
+		var entry = getJournalEntry();
+		entry.click();
+		entry.sendKeys(text);
+		entry.sendKeys(protractor.Key.ENTER);
+	}
+
 	it("can create task", function() {
 		createTask("test");
 		persisted(function() {
@@ -95,13 +106,14 @@ describe("month page", function() {
 		});
 	});
 
-	it("can create journal entries", function() {
-		var entry = element(by.css(".journal-entry:first-child [contenteditable]"));
-		entry.click();
-		entry.sendKeys("test");
-		entry.sendKeys(protractor.Key.ENTER);
+	it("can create and edit journal entries", function() {
+		editJournal("test");
 		persisted(function() {
-			expect(element(by.css(".journal-entry:first-child [contenteditable]")).getText()).toEqual("test");
+			expect(getJournalEntry().getText()).toEqual("test");
+		});
+		editJournal("re");
+		persisted(function() {
+			expect(getJournalEntry().getText()).toEqual("retest");
 		});
 	});
 
