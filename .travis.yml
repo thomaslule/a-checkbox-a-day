@@ -9,8 +9,8 @@ before_script:
  - npm start &
  - sleep 5
 env:
-  - database.user: root
-  - database.password: 
+  - database__user: root
+  - database__password: 
   global:
     # SauceLabs credentials
     - secure: LIYB2NAtft2PtYgRtBvti6HA24whoOz2NjFntMtpChaJj4+LUyUFjcTtBGcDYh2I2DzG2cY/Q3OqsqMEiTd8qKHRiCKaMW/YNT3bMOTzK6VpoMVj9XFrARUKSQ5rOywn7oY+CCCjcT59FCf6V4LE3OcLX3ABbqGoD4MQTLJoL0A=

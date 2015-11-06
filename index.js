@@ -4,7 +4,7 @@ var nconf = require("nconf");
 var retry = require("retry");
 var storage = require("./storage/storage");
 
-nconf.argv().env().file("local.json");
+nconf.argv().env("__").file("local.json");
 
 // We try to initialize the database 5 times
 var operation = retry.operation();
