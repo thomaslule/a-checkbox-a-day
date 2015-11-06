@@ -6,7 +6,7 @@ angular.module("month")
 	// load items
 	$scope.items = Item.byMonth({ month: $routeParams.month });
 	// load day entries
-	JournalEntry.byMonth({ id: $routeParams.month }).$promise.then(function(response) {
+	JournalEntry.byMonth({ month: $routeParams.month }).$promise.then(function(response) {
 		$scope.journalEntries = journalEntry.allMonthDays($routeParams.month, response);
 	});
 

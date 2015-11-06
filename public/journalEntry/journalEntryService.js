@@ -1,12 +1,13 @@
 angular.module("journalEntry")
 .factory("JournalEntry", ["$resource", function($resource) {
-	return $resource("api/journalEntry/:by/:id", {}, {
+	return $resource("api/journalEntry/:id", {}, {
 		byMonth: {
 			method:"GET",
-			params: { by: "month", id: "@id" },
+			url: "api/journalEntry/month/:month",
+			params: { id: "@month" },
 			isArray:true
 		},
-		save: { method: "POST", params: { by: null, id: null } }
+		save: { method: "POST", params: { id: null } }
 	});
 }])
 .factory("journalEntry", [ "JournalEntry", function(JournalEntry) {
