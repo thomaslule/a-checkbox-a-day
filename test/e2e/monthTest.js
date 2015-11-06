@@ -28,6 +28,14 @@ describe("month page", function() {
 		return element(by.css("h1 span")).getText();
 	}
 
+	var previousMonth = function() {
+		element(by.css("h1 .previous")).click();
+	}
+
+	var nextMonth = function() {
+		element(by.css("h1 .next")).click();
+	}
+
 	it("can create task", function() {
 		createTask("test");
 		persisted(function() {
@@ -99,10 +107,21 @@ describe("month page", function() {
 
 	it("can change month", function() {
 		expect(getTitle()).toEqual("septembre 2045");
-		element(by.css("h1 .previous")).click();
+		previousMonth();
 		expect(getTitle()).toEqual("août 2045");
-		element(by.css("h1 .next")).click();
+		nextMonth();
 		expect(getTitle()).toEqual("septembre 2045");
+	});
+
+	it("can move a task", function() {
+		createTask("test");
+		element(by.css(".item .move-item-button")).click();
+		element(by.linkText("octobre 2045")).click();
+		persisted(function() {
+			expect(element(by.css(".item")).getAttribute("class")).toContain("moved");
+		});
+		nextMonth();
+		expect(element(by.css(".item .item-name")).getText()).toEqual("test");
 	});
 
 });
