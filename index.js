@@ -35,6 +35,7 @@ app
 .post("/api/journalEntry", journalEntryApi.post)
 .get("/api/item/month/:month", itemApi.getForMonth)
 .post("/api/item", itemApi.post)
+.put("/api/item/:id/month/:month", itemApi.move)
 .put("/api/item/:id", itemApi.put)
 .delete("/api/item/:id", itemApi.delete)
 .get("/admin/clear", function(req, res, next) {

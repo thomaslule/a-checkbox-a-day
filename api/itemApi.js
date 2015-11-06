@@ -1,4 +1,5 @@
 var itemRepository = require('../repository/itemRepository');
+var itemService = require('../service/itemService');
 var moment = require('moment');
 
 var itemApi = {};
@@ -25,6 +26,15 @@ itemApi.put = function(req, res, next) {
 	var item = req.body;
 	if (item.id != req.params.id) return next("invalid id");
 	itemRepository.editItem(item, function(err) {
+		if (err) return next(err);
+		res.json(item);
+	});
+};
+
+itemApi.move = function(req, res, next) {
+	var item = req.body;
+	if (item.id != req.params.id) return next("invalid id");
+	itemService.moveItem(item, req.params.month, function(err) {
 		if (err) return next(err);
 		res.json(item);
 	});
