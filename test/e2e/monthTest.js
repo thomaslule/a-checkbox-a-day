@@ -96,12 +96,12 @@ describe("month page", function() {
 	});
 
 	it("can create journal entries", function() {
-		var entry = element(by.css(".journal-entry [contenteditable]"));
+		var entry = element(by.css(".journal-entry:first-child [contenteditable]"));
 		entry.click();
 		entry.sendKeys("test");
 		entry.sendKeys(protractor.Key.ENTER);
 		persisted(function() {
-			expect(element(by.css(".journal-entry [contenteditable]")).getText()).toEqual("test");
+			expect(element(by.css(".journal-entry:first-child [contenteditable]")).getText()).toEqual("test");
 		});
 	});
 
