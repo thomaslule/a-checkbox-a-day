@@ -1,9 +1,10 @@
 angular.module("item")
 .controller("itemCtrl", ["$scope", function($scope) {
+	var month = moment($scope.model.list_id, "YYYYMM", true);
 	$scope.moveToList = [
-		moment($scope.model.month).add(1, "month"),
-		moment($scope.model.month).add(2, "month"),
-		moment($scope.model.month).add(3, "month")
+		moment(month).add(1, "month"),
+		moment(month).add(2, "month"),
+		moment(month).add(3, "month")
 	];
 	$scope.change = function() {
 		$scope.model.$update({ id: $scope.model.id });
