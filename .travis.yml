@@ -3,15 +3,14 @@ node_js:
   - "4.1.0"
 addons:
   sauce_connect: true
+services: mysql
 before_script:
   - mysql -e 'create database acad_db;'
-  - cp local-dist.json local.json
+  - cp local-travis.json local.json
   - npm start &
   - sleep 5
 env:
   global:
-    - database__user="root"
-    - database__password=""
     # SauceLabs credentials
     - secure: LIYB2NAtft2PtYgRtBvti6HA24whoOz2NjFntMtpChaJj4+LUyUFjcTtBGcDYh2I2DzG2cY/Q3OqsqMEiTd8qKHRiCKaMW/YNT3bMOTzK6VpoMVj9XFrARUKSQ5rOywn7oY+CCCjcT59FCf6V4LE3OcLX3ABbqGoD4MQTLJoL0A=
     - secure: Vg/Bm+Rh14K9iUhuRvl1hHJNh5uv3pxLS7dPq02pR/8SWzVBrlE55bOV09X3gRa/9JWMv0I4U9sSg9rbclsdaklxO05DVf3yV0EBEEUSlK6kzp1K5jX/rSNpH2+kJnIcBwXVLuKVqnZPumalKNInHJLyTjf5J0/mq6iQIolHaAs=
