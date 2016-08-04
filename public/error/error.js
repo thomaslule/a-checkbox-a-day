@@ -1,4 +1,24 @@
-angular.module("error")
+angular.module("error", [])
+.directive("error", function() {
+	return {
+		scope: {},
+		templateUrl: "/error/error.html",
+		controller: "errorCtrl"
+	};
+})
+.controller("errorCtrl", [ "$scope", "error", function($scope, $error) {
+	$scope.errorText = "";
+	$scope.displayed = false;
+
+	$scope.$on("error", function (event, data) {
+		$scope.errorText = data.text;
+		$scope.displayed = true;
+	});
+
+	$scope.close = function() {
+		$scope.displayed = false;
+	}
+}])
 .factory("error", [ "$rootScope", function($rootScope) {
 
 	var codeToError = {

@@ -1,4 +1,24 @@
-angular.module("item")
+angular.module("item", ["ngResource"])
+.directive('item', function() {
+	return {
+		scope: {
+			model: '='
+		},
+		templateUrl: '/item/item.html',
+		controller: 'itemCtrl'
+	};
+})
+.directive('newItem', function() {
+	return {
+		scope: {
+			listType: '@',
+			listId: '@',
+			onSave: '&'
+		},
+		templateUrl: '/item/newItem.html',
+		controller: 'newItemCtrl'
+	};
+})
 .controller("itemCtrl", ["$scope", function($scope) {
 	var month = moment($scope.model.list_id, "YYYYMM", true);
 	$scope.moveToList = [
@@ -44,4 +64,28 @@ angular.module("item")
 		});
 		$scope.newItem = initNewItem();
 	}
+}])
+.filter('translateType', function() {
+	return function(input) {
+		var translation = { task: "Tâche", event: "Événement", note: "Note" };
+		return translation[input];
+	};
+})
+.factory("Item", ["$resource", function($resource) {
+	return $resource("api/item/:id", {}, {
+		byMonth: {
+			method:"GET",
+			url: "api/item/month/:month",
+			params: { month: "@month" },
+			isArray:true
+		},
+		save: { method: "POST", params: { id: null }},
+		update: { method: "PUT", params: {id: "@id" }},
+		delete: { method: "DELETE", params: { id: "@id" }},
+		move: {
+			method: "PUT",
+			url: "api/item/:id/month/:month",
+			params: { id: "@id", month: "@month" }
+		}
+	});
 }]);

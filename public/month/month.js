@@ -1,4 +1,12 @@
-angular.module("month")
+angular.module("month", [ "journalEntry", "item", "ngRoute" ])
+.config(["$routeProvider", function($routeProvider) {
+  
+  $routeProvider.when("/month/:month", {
+    templateUrl: "month/month.html",
+    controller: "monthCtrl"
+  });
+
+}])
 .controller("monthCtrl", ["$scope", "$routeParams", "journalEntry", "JournalEntry", "Item", function($scope, $routeParams, journalEntry, JournalEntry, Item) {
 	$scope.month = moment($routeParams.month, "YYYYMM", true);
 	$scope.prevMonth = moment($scope.month).subtract(1, "months").format("YYYYMM");

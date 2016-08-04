@@ -1,4 +1,18 @@
-angular.module("journalEntry")
+angular.module("journalEntry", [ "ngResource" ])
+.directive("journalEntry", function() {
+	return {
+		scope: {
+			model: "="
+		},
+		templateUrl: "/journalEntry/journalEntry.html",
+		controller: "journalEntryCtrl"
+	};
+})
+.controller("journalEntryCtrl", ["$scope", function($scope) {
+	$scope.change = function() {
+		$scope.model.$save();
+	}
+}])
 .factory("JournalEntry", ["$resource", function($resource) {
 	return $resource("api/journalEntry", {}, {
 		byMonth: {

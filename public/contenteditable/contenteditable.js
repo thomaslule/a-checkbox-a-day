@@ -1,4 +1,4 @@
-angular.module('contenteditable')
+angular.module('contenteditable', [])
 .directive("contenteditable", function() {
 	return {
 		restrict: "A",
