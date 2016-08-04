@@ -1,0 +1,18 @@
+<form ng-submit="save()" id="add-item-form">
+	<div class="input-group">
+		<span class="input-group-btn" uib-dropdown>
+			<button type="button" class="btn btn-default" uib-dropdown-toggle id="choose-type-button">
+				{{ newItem.type | translateType }} <span class="caret"></span>
+			</button>
+			<ul class="uib-dropdown-menu">
+				<li><a href="" ng-click="changeType('task')" id="choose-task-button">{{ 'task' | translateType }}</a></li>
+				<li><a href="" ng-click="changeType('event')" id="choose-event-button">{{ 'event' | translateType }}</a></li>
+				<li><a href="" ng-click="changeType('note')" id="choose-note-button">{{ 'note' | translateType }}</a></li>
+			</ul>
+		</span>
+		<input type="text" name="name" ng-model="newItem.name" required="required" maxlength="100" class="form-control"/>
+		<span class="input-group-btn">
+			<button type="submit" class="btn">Ajouter</button>
+		</span>
+	</div>
+</form>

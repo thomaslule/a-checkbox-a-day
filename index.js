@@ -1,11 +1,10 @@
-var express = require('express');
-var retry = require('retry');
-var nconf = require('nconf');
-var bodyParser = require('body-parser');
-var storage = require('./storage/storage');
-var moment = require('moment');
+var bodyParser = require("body-parser");
+var express = require("express");
+var nconf = require("nconf");
+var retry = require("retry");
+var storage = require("./storage/storage");
 
-nconf.argv().env().file('local.json');
+nconf.argv().env().file("local.json");
 
 // We try to initialize the database 5 times
 var operation = retry.operation();
@@ -15,7 +14,7 @@ operation.attempt(function () {
             console.log(err.message);
             return;
         }
-        console.log('Database initialized');
+        console.log("Database initialized");
     });
 });
 
@@ -26,33 +25,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // make public folder visible
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
-app.set('views', './views');
-app.set('view engine', 'jade');
-// output indented html
-app.locals.pretty = true;
+var itemApi = require("./api/itemApi");
+var journalEntryApi = require("./api/journalEntryApi");
 
-var monthController = require('./controllers/monthController.js');
-var calendarController = require('./controllers/calendarController.js');
-var itemController = require('./controllers/itemController.js');
-var applicationHealth = require('./controllers/healthController.js');
-
-moment.locale('fr');
-
-app.get('/', function(req, res) {
-    res.location('/month/' + moment().format('YYYYMM'));
-    res.sendStatus(301);
-})
-.get('/month/:month', monthController.get)
-.put('/month/:month/tasks/list', monthController.migrate)
-.put('/calendar/day/:day', calendarController.editDay)
-.post('/item', itemController.new)
-.put('/item/:id', itemController.edit)
-.put('/item/:id/list', itemController.move)
-.delete('/item/:id', itemController.delete)
-.get('/health', applicationHealth.get)
-.get('/clear', function(req, res, next) {
+app
+.get("/api/journalEntry/month/:month", journalEntryApi.getForMonth)
+.post("/api/journalEntry", journalEntryApi.post)
+.get("/api/item/month/:month", itemApi.getForMonth)
+.post("/api/item", itemApi.post)
+.put("/api/item/:id/month/:month", itemApi.move)
+.put("/api/item/:id", itemApi.put)
+.delete("/api/item/:id", itemApi.delete)
+.get("/admin/clear", function(req, res, next) {
     storage.clearDb(function(err) {
         if (err) {
             next(err);
@@ -64,15 +50,21 @@ app.get('/', function(req, res) {
 
 // error handling
 app.use(function(err, req, res, next) {
-    console.error(err.stack ? err.stack : err);
-    res.status(500);
-    if (req.xhr) {
-        res.json({ 'error': (err.message ? err.message : err) });
+    if (err.statusCode) {
+        console.error("Error " + err.statusCode + ": " + err.text);
+        res.status(err.statusCode);
+        res.json({ "error": err.text });
     } else {
-        res.send('Internal error: ' + (err.message ? err.message : err));
+        console.error(err.stack ? err.stack : err);
+        res.status(500);
+        if (req.xhr) {
+            res.json({ "error": (err.message ? err.message : err) });
+        } else {
+            res.send("Internal error: " + (err.message ? err.message : err));
+        }
     }
 });
 
-app.listen(nconf.get('port'), function() {
-    console.log("Launched a-checkbox-a-day on port %s", nconf.get('port'));
+app.listen(nconf.get("port"), function() {
+    console.log("Launched a-checkbox-a-day on port %s", nconf.get("port"));
 });

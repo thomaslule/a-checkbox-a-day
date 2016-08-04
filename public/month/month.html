@@ -1,0 +1,20 @@
+<div class="row">
+	<h1 class="col-xs-9 text-center">
+		<a href="#/month/{{prevMonth}}" class="previous">&larr;</a>
+		<span>{{month | amDateFormat:'MMMM YYYY'}}</span>
+		<a href="#/month/{{nextMonth}}" class="next">&rarr;</a>
+	</h1>
+</div>
+<div class="row">
+	<div class="col-xs-4">
+		<ul class="list-unstyled">
+			<li ng-repeat="journalEntry in journalEntries" journal-entry model="journalEntry" class="journal-entry"></li>
+		</ul>
+	</div>
+	<div class="col-xs-5">
+		<ul class="list-unstyled">
+			<li ng-repeat="item in items" class="item {{item.type}} {{item.status}}" item model="item"></li>
+			<li new-item list-type="month" list-id="{{month | amDateFormat:'YYYYMM'}}" on-save="onNewItem(item)"></li>
+		</ul>
+	</div>
+</div>

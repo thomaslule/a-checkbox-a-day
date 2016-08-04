@@ -1,24 +1,17 @@
-.item:not(.cancelled) .restore-item-button,
-.item:not(.cancelled):not(.moved) .delete-item-button,
-.item.cancelled .cancel-item-button,
-.item.cancelled .edit-item-button,
-.item.cancelled .move-list,
-.item:not(.moved) .moved-label,
-.item.moved .cancel-item-button,
-.item.moved .move-list,
-.item.moved .restore-item-button,
-.item.done .move-list,
-.item.done .cancel-item-button,
-.event .checkbox,
-.event .move-list,
-.note .checkbox,
-.note .move-list {
-    display:none;
+h1 a:hover,
+h1 a:active,
+h1 a:focus {
+    text-decoration: none;
 }
 
 .action-buttons a {
     text-decoration: none;
     margin-left: 5px;
+}
+
+.item {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .moved-label {
@@ -62,17 +55,14 @@ span[contenteditable="true"]:empty:before {
     content: "\a0";
 }
 
-#month-events time {
+.journal-entry time {
     display: inline-block;
     width: 25%;
     font-weight: bold;
+    text-align: right;
 }
 
-#month-events span[contenteditable="true"] {
+.journal-entry span[contenteditable="true"] {
     display: inline-block;
-    width: 75%;
-}
-
-#month-events form {
-    margin-bottom: 0px;
+    width: 70%;
 }

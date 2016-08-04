@@ -1,8 +1,5 @@
-node_modules
 local.json
-*.swp
-.vagrant
-bin/selenium-server-standalone-2.45.0.jar
+node_modules
 npm-debug.log
 *.sublime-project
 *.sublime-workspace

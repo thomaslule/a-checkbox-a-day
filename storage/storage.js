@@ -1,8 +1,6 @@
 var nconf = require('nconf');
 var mysql = require('mysql');
 var fs = require('fs-extra');
-var Item = require('../models/itemModel.js');
-var CalendarDay = require('../models/calendarDayModel.js');
 
 nconf.argv().env().file('local.json');
 
@@ -54,91 +52,8 @@ storage.execute = function(script, callback) {
     });
 }
 
-storage.getItem = function(id, callback) {
-    connection.query('select * from items where id = ?', [ id ], function(err, result) {
-        if (err) return callback(err);
-        if (result.length == 0) return callback('item not found');
-        callback(null, new Item(result[0]));
-    });
-}
-
-storage.getItemsForMonth = function(month, callback) {
-    connection.query('select * from items where list_type = ? and list_id = ? order by id',
-        [ 'month', month.toString() ], function(err, result) {
-        if (err) return callback(err);
-        callback(null, result.map(function(item) {
-            return new Item(item);
-        }));
-    });
-}
-
-storage.getActiveTasksForMonth = function(month, callback) {
-    connection.query('select * from items where list_type = ? and list_id = ? and type=\'task\' and status=\'active\' order by id',
-        [ 'month', month.toString() ], function(err, result) {
-        if (err) return callback(err);
-        callback(null, result.map(function(task) {
-            return new Item(task);
-        }));
-    });
-}
-
-storage.storeItem = function(item, callback) {
-    if (!item.isValid()) {
-        console.log('item invalid: ' + JSON.stringify(item.data));
-        return callback('item invalid');
-    }
-    connection.query('insert into items (type, name, status, list_type, list_id) values (?, ?, ?, ?, ?)',
-        [ item.data.type, item.data.name, item.data.status, item.data.list_type, item.data.list_id ], function(err, results) {
-        if (err) return callback(err);
-        item.data.id = results.insertId;
-        callback(null);
-    });
-}
-
-storage.editItem = function(item, callback) {
-    if (!item.isValid()) {
-        console.log('item invalid: ' + JSON.stringify(item.data));
-        return callback('item invalid');
-    }
-    connection.query('update items set name = ?, status = ?, list_type = ?, list_id = ? where id = ?',
-        [ item.data.name, item.data.status, item.data.list_type, item.data.list_id, item.data.id ], function(err, results) {
-        if (err) return callback(err);
-        if (results.affectedRows == 0) return callback('item not found');
-        callback(null);
-    });
-}
-
-storage.deleteItem = function(item, callback) {
-    connection.query('delete from items where id = ?', [ item.data.id ], function(err, results) {
-        if (err) return callback(err);
-        if (results.affectedRows == 0) return callback('item not found');
-        callback(null);
-    });
-}
-
-storage.storeCalendarDay = function(day, callback) {
-    if (!day.isValid()) {
-        console.log('day invalid: ' + JSON.stringify(day.data));
-        return callback('day invalid');
-    }
-    connection.query('delete from calendar where date = ?', [ day.dateString() ], function(err) {
-        if (err) return callback(err);
-        connection.query('insert into calendar (date, text) values (?, ?)',
-            [ day.dateString(), day.data.text ], function(err, results) {
-            if (err) return callback(err);
-            callback(null);
-        });
-    });
-}
-
-storage.getCalendarDays = function(calendar, callback) {
-    connection.query('select DATE_FORMAT(`date`, \'%Y-%m-%d\') as `date`, text from calendar where `date` between ? and ?',
-        [ calendar.start().dateString(), calendar.end().dateString() ], function(err, result) {
-        if (err) return callback(err);
-        callback(null, result.map(function(item) {
-            return new CalendarDay(item);
-        }));
-    });
+storage.query = function(query, params, callback) {
+    connection.query(query, params, callback);
 }
 
 module.exports = storage;

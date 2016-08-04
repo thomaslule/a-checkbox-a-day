@@ -2,52 +2,46 @@
 
 # A checkbox a day
 
-Learning javascript and node.js by implementing a todolist inspired by the "bullet journal".
+Learning javascript, angular and node.js by implementing a todolist inspired by the "bullet journal".
 
 ## Install the application
 
-#### Prerequisites
+### Prerequisites
 
 - Node.js
 - A mysql database
+- Java (only for tests)
 
-#### Install
+### Launch the application
 
 ```` bash
 cp local.json-dist local.json # put your database credentials here
 npm install
-node bin/init_storage.js
 npm start
 ````
 
-## Setup a development environment
+### Test the application
 
-### Linux environment
-
-If docker is available on your platform, it's pretty straight forward.
+Launch the selenium server:
 
 ```` bash
-./bin/build.sh # builds the images
-./bin/dev-run.sh # runs the application with mysql and shows the application output
-./bin/run.sh # runs the application in the background
-./test/deploy_test.sh # test the deployment of the application
-./test/functional_test.sh # test the application with selenium tests (everything still in docker, you have nothing to do)
+npm run selenium
 ````
 
-### Windows environment
+Launch the tests:
 
-#### Prerequisites
+```` bash
+npm test
+````
 
-- Node.js
-- Boot2docker
-- Ruby
+Only unit tests:
 
-#### Install
+```` bash
+npm run unit
+````
 
-```` powershell
-.\bin\build_env.ps1        # setup the environment (you need to launch this only once)
-.\bin\start_env.ps1        # starts the application
-.\bin\stop_env.ps1         # stops the application
-node .\bin\init_storage.js # empty the database
-npm test                   # launch the tests
+Only end-to-end tests:
+
+```` bash
+npm run e2e
 ````
