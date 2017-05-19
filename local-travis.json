@@ -1,9 +1,0 @@
-{
-    "port": "8080",
-    "database": {
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "acad_db"
-    }
-}
