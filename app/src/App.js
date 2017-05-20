@@ -13,8 +13,20 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+        <button onClick={() => this.handleClick()}>Create task</button>
       </div>
     );
+  }
+  
+  handleClick() {
+	  var xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+	    if (this.readyState == 4 && this.status == 200) {
+	      alert(this.responseText);
+	    }
+	  };
+	  xhttp.open("GET", "api/TasksForMonth/3", true);
+	  xhttp.send();
   }
 }
 

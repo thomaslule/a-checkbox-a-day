@@ -6,7 +6,7 @@ import java.util.List;
 import net.codestory.http.annotations.Get;
 import net.codestory.http.annotations.Prefix;
 
-@Prefix("/api/TasksOfMonth")
+@Prefix("/api/TasksForMonth")
 public class GetTasksForMonth {
 
 	@Get("/:id")
