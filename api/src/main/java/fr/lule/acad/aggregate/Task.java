@@ -6,6 +6,7 @@ import java.util.UUID;
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
+import fr.lule.acad.stream.IEventPublisher;
 
 public class Task {
 	
@@ -21,13 +22,13 @@ public class Task {
 		projection = new DecisionProjection(history);
 	}
 
-	public void complete(List<IEvent> history) {
+	public void complete(IEventPublisher publisher) {
 		if (projection.done) {
 			return;
 		}
 		TaskCompleted event = new TaskCompleted(projection.id);
 		projection.apply(event);
-		history.add(event);
+		publisher.publish(event);
 	}
 	
 	private class DecisionProjection {

@@ -6,13 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
+import fr.lule.acad.stream.EventsBus;
+import fr.lule.acad.stream.MemoryEventStream;
 
 public class TaskShould {
+	
+	MemoryEventStream stream;
+	EventsBus bus;
+	
+	@Before
+	public void before() {
+		stream = new MemoryEventStream();
+		bus = new EventsBus(stream);
+	}
 	
 	@Test
 	public void raiseTaskAddedWhenAddTask() {
@@ -26,39 +38,36 @@ public class TaskShould {
 	@Test
 	public void raiseTaskCompletedWhenCompleteTask() {
 		UUID id = UUID.randomUUID();
-		List<IEvent> history = new ArrayList<IEvent>();
-		history.add(new TaskAdded(id, "buy baguette"));
-		Task task = new Task(history);
+		stream.add(new TaskAdded(id, "buy baguette"));
+		Task task = new Task(stream.getHistory());
 		
-		task.complete(history);
+		task.complete(bus);
 		
-		assertThat(history).contains(new TaskCompleted(id));
+		assertThat(stream.getHistory()).contains(new TaskCompleted(id));
 	}
 	
 	@Test
 	public void dontRaiseTaskCompletedWhenCompleteTaskAlreadyCompleted() {
 		UUID id = UUID.randomUUID();
-		List<IEvent> history = new ArrayList<IEvent>();
-		history.add(new TaskAdded(id, "buy baguette"));
-		history.add(new TaskCompleted(id));
-		Task task = new Task(history);
+		stream.add(new TaskAdded(id, "buy baguette"));
+		stream.add(new TaskCompleted(id));
+		Task task = new Task(stream.getHistory());
 		
-		task.complete(history);
+		task.complete(bus);
 		
-		assertThat(history).containsOnlyOnce(new TaskCompleted(id));
+		assertThat(stream.getHistory()).containsOnlyOnce(new TaskCompleted(id));
 	}
 	
 	@Test
 	public void raiseTaskCompletedOnlyOnceWhenCompleteTaskTwice() {
 		UUID id = UUID.randomUUID();
-		List<IEvent> history = new ArrayList<IEvent>();
-		history.add(new TaskAdded(id, "buy baguette"));
-		Task task = new Task(history);
+		stream.add(new TaskAdded(id, "buy baguette"));
+		Task task = new Task(stream.getHistory());
 		
-		task.complete(history);
-		task.complete(history);
+		task.complete(bus);
+		task.complete(bus);
 
-		assertThat(history).containsOnlyOnce(new TaskCompleted(id));
+		assertThat(stream.getHistory()).containsOnlyOnce(new TaskCompleted(id));
 	}
 	
 }
