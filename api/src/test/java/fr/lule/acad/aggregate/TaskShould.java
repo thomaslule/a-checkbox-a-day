@@ -28,11 +28,9 @@ public class TaskShould {
 	
 	@Test
 	public void raiseTaskAddedWhenAddTask() {
-		List<IEvent> history = new ArrayList<IEvent>();
+		UUID id = Task.add(bus, "buy baguette");
 		
-		UUID id = Task.add(history, "buy baguette");
-		
-		assertThat(history).contains(new TaskAdded(id, "buy baguette"));
+		assertThat(stream.getHistory()).contains(new TaskAdded(id, "buy baguette"));
 	}
 	
 	@Test
