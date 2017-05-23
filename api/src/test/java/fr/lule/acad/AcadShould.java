@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import fr.lule.acad.aggregate.Task;
@@ -17,17 +16,17 @@ import fr.lule.acad.stream.MemoryEventStream;
 
 public class AcadShould {
 	
-	/*
+	
 	@Test
 	public void displayTaskInTaskListWhenAddTask() {
 		TaskList list = new TaskList(new ArrayList<IEvent>());
 		EventsBus bus = new EventsBus(new MemoryEventStream());
 		bus.subscribe(list);
 		
-		UUID id = Task.add(new MemoryEventStream(), "buy bread");
+		UUID id = Task.add(bus, "buy bread");
 		
 		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread"));
 	}
-	*/
+	
 
 }

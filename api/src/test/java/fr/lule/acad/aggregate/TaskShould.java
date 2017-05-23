@@ -2,14 +2,11 @@ package fr.lule.acad.aggregate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.stream.EventsBus;

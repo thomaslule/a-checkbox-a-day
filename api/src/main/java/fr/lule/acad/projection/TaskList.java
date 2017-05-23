@@ -5,26 +5,26 @@ import java.util.List;
 
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.TaskAdded;
+import fr.lule.acad.stream.IEventSubscriber;
 
-public class TaskList {
+public class TaskList implements IEventSubscriber {
 	
-	private List<TaskDisplayed> list;
+	private List<TaskDisplayed> list = new ArrayList<TaskDisplayed>();
 
 	public TaskList(List<IEvent> history) {
-		list = new ArrayList<TaskDisplayed>();
-		history.forEach(event -> {
-			if (event instanceof TaskAdded) {
-				handle((TaskAdded) event);
-			}
-		});
-	}
-
-	public void handle(TaskAdded taskAdded) {
-		list.add(new TaskDisplayed(taskAdded.getId(), taskAdded.getTodo()));
+		history.forEach(this::handle);
 	}
 
 	public List<TaskDisplayed> getList() {
 		return list;
+	}
+
+	@Override
+	public void handle(IEvent event) {
+		if (event instanceof TaskAdded) {
+			TaskAdded taskAdded = (TaskAdded) event;
+			list.add(new TaskDisplayed(taskAdded.getId(), taskAdded.getTodo()));
+		}
 	}
 
 }
