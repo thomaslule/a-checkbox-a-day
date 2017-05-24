@@ -1,6 +1,7 @@
 package fr.lule.acad.web;
 
 import java.util.List;
+import java.util.UUID;
 
 import fr.lule.acad.aggregate.Task;
 import fr.lule.acad.projection.TaskDisplayed;
@@ -33,8 +34,18 @@ public class TasksController {
 		return Payload.created();
 	}
 	
+	@Post("/CompleteTask")
+	public Payload completeTask(CompleteTaskCommand command) {
+		
+		return Payload.ok();
+	}
+	
 	private static class AddTaskCommand {
 		public String todo;
+	}
+	
+	private static class CompleteTaskCommand {
+		public UUID id;
 	}
 	
 

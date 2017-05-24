@@ -42,7 +42,7 @@ public class Task {
 		
 		public void apply(IEvent event) {
 			if (event instanceof TaskAdded) {
-				id = ((TaskAdded) event).getId();
+				id = ((TaskAdded) event).getAggregateId();
 				done = false;
 			} else if (event instanceof TaskCompleted) {
 				done = true;

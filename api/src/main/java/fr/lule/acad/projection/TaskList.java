@@ -25,10 +25,10 @@ public class TaskList implements IEventSubscriber {
 	public void handle(IEvent event) {
 		if (event instanceof TaskAdded) {
 			TaskAdded taskAdded = (TaskAdded) event;
-			list.add(new TaskDisplayed(taskAdded.getId(), taskAdded.getTodo(), false));
+			list.add(new TaskDisplayed(taskAdded.getAggregateId(), taskAdded.getTodo(), false));
 		}
 		if (event instanceof TaskCompleted) {
-			UUID id = ((TaskCompleted) event).getId();
+			UUID id = ((TaskCompleted) event).getAggregateId();
 			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCompleted(true));
 		}
 	}
