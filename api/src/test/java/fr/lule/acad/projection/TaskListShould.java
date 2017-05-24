@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.TaskAdded;
+import fr.lule.acad.event.TaskCompleted;
 
 public class TaskListShould {
 	
@@ -20,7 +21,7 @@ public class TaskListShould {
 		
 		list.handle(new TaskAdded(id, "buy bread"));
 		
-		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread"));
+		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread", false));
 	}
 	
 	@Test
@@ -31,7 +32,21 @@ public class TaskListShould {
 		
 		TaskList list = new TaskList(history);
 
-		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread"));
+		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread", false));
+	}
+	
+	@Test
+	public void setTaskCompletedWhenTaskCompleted() {
+		List<IEvent> history = new ArrayList<IEvent>();
+		UUID id1 = UUID.randomUUID();
+		history.add(new TaskAdded(id1, "buy bread"));
+		UUID id2 = UUID.randomUUID();
+		history.add(new TaskAdded(id2, "pet cat"));
+		TaskList list = new TaskList(history);
+		
+		list.handle(new TaskCompleted(id1));
+		
+		assertThat(list.getList().stream().filter(t -> t.getId().equals(id1)).findFirst().get().isCompleted()).isTrue();
 	}
 
 }

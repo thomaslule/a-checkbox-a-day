@@ -25,7 +25,7 @@ public class AcadShould {
 		
 		UUID id = Task.add(bus, "buy bread");
 		
-		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread"));
+		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread", false));
 	}
 	
 

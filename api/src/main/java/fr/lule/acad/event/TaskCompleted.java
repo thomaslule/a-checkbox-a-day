@@ -10,6 +10,13 @@ public class TaskCompleted implements IEvent {
 		this.id = id;
 	}
 
+	/**
+	 * @return the id
+	 */
+	public UUID getId() {
+		return id;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
