@@ -27,9 +27,9 @@ public class MemoryEventStoreShould {
 		TaskAdded task2 = new TaskAdded(id2, "task 2");
 		TaskCompleted task3 = new TaskCompleted(id1);
 		
-		store.add(id1, task1);
-		store.add(id2, task2);
-		store.add(id1, task3);
+		store.add(task1);
+		store.add(task2);
+		store.add(task3);
 	}
 	
 	@Test

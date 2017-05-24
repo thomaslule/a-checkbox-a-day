@@ -12,7 +12,7 @@ public class MemoryEventStore implements IEventStore {
 	private List<IEvent> events = new ArrayList<IEvent>();
 
 	@Override
-	public void add(UUID aggregateId, IEvent event) {
+	public void add(IEvent event) {
 		events.add(event);
 	}
 

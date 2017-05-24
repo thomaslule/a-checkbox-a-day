@@ -7,7 +7,7 @@ import fr.lule.acad.event.IEvent;
 
 public interface IEventStore {
 
-	void add(UUID aggregateId, IEvent event);
+	void add(IEvent event);
 
 	List<IEvent> getAllEvents();
 

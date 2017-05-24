@@ -9,16 +9,17 @@ import org.junit.Test;
 
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.TaskAdded;
+import fr.lule.acad.store.MemoryEventStore;
 
 public class EventsBusShould {
 
-	MemoryEventStream stream;
+	MemoryEventStore store;
 	EventsBus bus;
 	
 	@Before
 	public void before() {
-		stream = new MemoryEventStream();
-		bus = new EventsBus(stream);
+		store = new MemoryEventStore();
+		bus = new EventsBus(store);
 	}
 	
 	@Test
@@ -27,7 +28,7 @@ public class EventsBusShould {
 		
 		bus.publish(new TaskAdded(id, "buy bread"));
 		
-		assertThat(stream.getHistory()).contains(new TaskAdded(id, "buy bread"));
+		assertThat(store.getAllEvents()).contains(new TaskAdded(id, "buy bread"));
 	}
 	
 	@Test
