@@ -1,5 +1,6 @@
 package fr.lule.acad.web;
 
+import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.projection.TaskList;
 import fr.lule.acad.store.MemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
@@ -9,9 +10,9 @@ public class AcadServer {
 
 	public static void main(String[] args) {
 		
-		MemoryEventStore store = new MemoryEventStore();
-		TaskList list = new TaskList(store.getAllEvents());
-		EventsBus bus = new EventsBus(store);
+		MemoryEventStore<ITaskEvent> taskEventStore = new MemoryEventStore<ITaskEvent>();
+		TaskList list = new TaskList(taskEventStore.getAllEvents());
+		EventsBus bus = new EventsBus(taskEventStore);
 		bus.subscribe(list);
 		
 		new WebServer()

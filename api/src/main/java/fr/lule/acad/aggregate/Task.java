@@ -3,7 +3,7 @@ package fr.lule.acad.aggregate;
 import java.util.List;
 import java.util.UUID;
 
-import fr.lule.acad.event.IEvent;
+import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.stream.IEventPublisher;
@@ -18,7 +18,7 @@ public class Task {
 		return id;
 	}
 	
-	public Task(List<IEvent> history) {
+	public Task(List<ITaskEvent> history) {
 		projection = new DecisionProjection(history);
 	}
 
@@ -36,11 +36,11 @@ public class Task {
 		private UUID id;
 		private boolean done;
 		
-		public DecisionProjection(List<IEvent> history) {
+		public DecisionProjection(List<ITaskEvent> history) {
 			history.forEach(this::apply);
 		}
 		
-		public void apply(IEvent event) {
+		public void apply(ITaskEvent event) {
 			if (event instanceof TaskAdded) {
 				id = ((TaskAdded) event).getAggregateId();
 				done = false;

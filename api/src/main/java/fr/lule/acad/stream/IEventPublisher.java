@@ -1,9 +1,9 @@
 package fr.lule.acad.stream;
 
-import fr.lule.acad.event.IEvent;
+import fr.lule.acad.event.ITaskEvent;
 
 public interface IEventPublisher {
 	
-	public void publish(IEvent event);
+	public void publish(ITaskEvent event);
 
 }

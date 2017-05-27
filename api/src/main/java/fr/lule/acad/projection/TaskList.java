@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import fr.lule.acad.event.IEvent;
+import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.stream.IEventSubscriber;
@@ -13,7 +14,7 @@ public class TaskList implements IEventSubscriber {
 	
 	private List<TaskDisplayed> list = new ArrayList<TaskDisplayed>();
 
-	public TaskList(List<IEvent> history) {
+	public TaskList(List<ITaskEvent> history) {
 		history.forEach(this::handle);
 	}
 

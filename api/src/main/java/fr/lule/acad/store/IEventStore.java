@@ -5,12 +5,12 @@ import java.util.UUID;
 
 import fr.lule.acad.event.IEvent;
 
-public interface IEventStore {
+public interface IEventStore<TAggregateEvent extends IEvent> {
 
-	void add(IEvent event);
+	void add(TAggregateEvent event);
 
-	List<IEvent> getAllEvents();
+	List<TAggregateEvent> getAllEvents();
 
-	List<IEvent> getEventsFor(UUID aggregateId);
+	List<TAggregateEvent> getEventsFor(UUID aggregateId);
 
 }

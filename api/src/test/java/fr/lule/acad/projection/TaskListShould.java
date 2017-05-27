@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import fr.lule.acad.event.IEvent;
+import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
 
@@ -16,7 +16,7 @@ public class TaskListShould {
 	
 	@Test
 	public void addTaskInListWhenTaskAdded() {
-		TaskList list = new TaskList(new ArrayList<IEvent>());
+		TaskList list = new TaskList(new ArrayList<ITaskEvent>());
 		UUID id = UUID.randomUUID();
 		
 		list.handle(new TaskAdded(id, "buy bread"));
@@ -26,7 +26,7 @@ public class TaskListShould {
 	
 	@Test
 	public void haveTaskInListWhenHistoryContainsTaskAdded() {
-		List<IEvent> history = new ArrayList<IEvent>();
+		List<ITaskEvent> history = new ArrayList<ITaskEvent>();
 		UUID id = UUID.randomUUID();
 		history.add(new TaskAdded(id, "buy bread"));
 		
@@ -37,7 +37,7 @@ public class TaskListShould {
 	
 	@Test
 	public void setTaskCompletedWhenTaskCompleted() {
-		List<IEvent> history = new ArrayList<IEvent>();
+		List<ITaskEvent> history = new ArrayList<ITaskEvent>();
 		UUID id1 = UUID.randomUUID();
 		history.add(new TaskAdded(id1, "buy bread"));
 		UUID id2 = UUID.randomUUID();

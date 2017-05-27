@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.junit.Test;
 
 import fr.lule.acad.aggregate.Task;
-import fr.lule.acad.event.IEvent;
+import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.projection.TaskDisplayed;
 import fr.lule.acad.projection.TaskList;
 import fr.lule.acad.store.MemoryEventStore;
@@ -19,8 +19,8 @@ public class AcadShould {
 	
 	@Test
 	public void displayTaskInTaskListWhenAddTask() {
-		TaskList list = new TaskList(new ArrayList<IEvent>());
-		EventsBus bus = new EventsBus(new MemoryEventStore());
+		TaskList list = new TaskList(new ArrayList<ITaskEvent>());
+		EventsBus bus = new EventsBus(new MemoryEventStore<ITaskEvent>());
 		bus.subscribe(list);
 		
 		UUID id = Task.add(bus, "buy bread");

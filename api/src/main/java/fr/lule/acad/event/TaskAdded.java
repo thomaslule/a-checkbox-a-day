@@ -2,7 +2,7 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
-public class TaskAdded implements IEvent {
+public class TaskAdded implements ITaskEvent {
 	
 	private final UUID aggregateId;
 	private String todo;
