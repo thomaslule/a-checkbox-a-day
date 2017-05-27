@@ -12,7 +12,7 @@ import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.event.TaskAdded;
 import fr.lule.acad.event.TaskCompleted;
 
-public class MemoryEventStoreShould {
+public class InMemoryEventStoreShould {
 	
 	private IEventStore<ITaskEvent> store;
 	private UUID id1;
@@ -20,7 +20,7 @@ public class MemoryEventStoreShould {
 	
 	@Before
 	public void before() {
-		store = new MemoryEventStore<ITaskEvent>();
+		store = new InMemoryEventStore<ITaskEvent>();
 		id1 = UUID.randomUUID();
 		TaskAdded task1 = new TaskAdded(id1, "task 1");
 		id2 = UUID.randomUUID();

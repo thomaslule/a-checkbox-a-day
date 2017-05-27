@@ -11,7 +11,7 @@ import fr.lule.acad.aggregate.Task;
 import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.projection.TaskDisplayed;
 import fr.lule.acad.projection.TaskList;
-import fr.lule.acad.store.MemoryEventStore;
+import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
 
 public class AcadShould {
@@ -20,7 +20,7 @@ public class AcadShould {
 	@Test
 	public void displayTaskInTaskListWhenAddTask() {
 		TaskList list = new TaskList(new ArrayList<ITaskEvent>());
-		EventsBus bus = new EventsBus(new MemoryEventStore<ITaskEvent>());
+		EventsBus bus = new EventsBus(new InMemoryEventStore<ITaskEvent>());
 		bus.subscribe(list);
 		
 		UUID id = Task.add(bus, "buy bread");

@@ -10,16 +10,16 @@ import org.junit.Test;
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.ITaskEvent;
 import fr.lule.acad.event.TaskAdded;
-import fr.lule.acad.store.MemoryEventStore;
+import fr.lule.acad.store.InMemoryEventStore;
 
 public class EventsBusShould {
 
-	MemoryEventStore<ITaskEvent> store;
+	InMemoryEventStore<ITaskEvent> store;
 	EventsBus bus;
 	
 	@Before
 	public void before() {
-		store = new MemoryEventStore<ITaskEvent>();
+		store = new InMemoryEventStore<ITaskEvent>();
 		bus = new EventsBus(store);
 	}
 	
