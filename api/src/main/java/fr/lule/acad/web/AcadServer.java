@@ -17,7 +17,7 @@ public class AcadServer {
 		
 		new WebServer()
 		.configure(routes -> {
-			routes.add(new TasksController(list, bus));
+			routes.add(new TasksController(list, bus, taskEventStore));
 		})
 		.start();
 	}
