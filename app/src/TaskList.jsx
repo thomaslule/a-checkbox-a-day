@@ -21,8 +21,8 @@ class TaskList extends React.Component {
             );
         } );
         return (
-            <div className="container">
-                <div className="col-xs-offset-4 col-xs-5">
+            <div className="row">
+                <div className="col-xs-offset-4 col-xs-4">
                     <ul className="list-unstyled">
                         {taskList}
                         <NewTask
@@ -43,7 +43,7 @@ class TaskList extends React.Component {
     }
 
     updateTaskList() {
-        fetch( "api/Tasks" )
+        fetch( "api/Tasks/2017-05" )
             .then( this.toJson )
             .then( tasks => {
                 this.setState( { tasks } );

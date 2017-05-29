@@ -1,5 +1,6 @@
 import React from "react";
 import TaskList from "./TaskList";
+import MonthPicker from "./MonthPicker";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -8,14 +9,15 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-default">
+                <nav className="navbar navbar-default navbar-static-top">
                     <div className="container">
-                        <div className="row">
-                            <div className="col-xs-offset-4 col-xs-5"><span className="navbar-brand">A checkbox a day</span></div>
-                        </div>
+                        <span className="navbar-brand">A checkbox a day</span>
                     </div>
                 </nav>
-                <TaskList />
+                <div className="container">
+                    <MonthPicker />
+                    <TaskList />
+                </div>
             </div>
         );
     }

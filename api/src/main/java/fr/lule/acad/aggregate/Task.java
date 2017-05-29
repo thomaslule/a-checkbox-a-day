@@ -12,9 +12,9 @@ public class Task {
 	
 	private DecisionProjection projection;
 	
-	public static UUID add(IEventPublisher publisher, String todo) {
+	public static UUID add(IEventPublisher publisher, String todo, String month) {
 		UUID id = UUID.randomUUID();
-		publisher.publish(new TaskAdded(id, todo));
+		publisher.publish(new TaskAdded(id, todo, month));
 		return id;
 	}
 	

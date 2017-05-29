@@ -16,16 +16,15 @@ import fr.lule.acad.stream.EventsBus;
 
 public class AcadShould {
 	
-	
 	@Test
 	public void displayTaskInTaskListWhenAddTask() {
 		TaskList list = new TaskList(new ArrayList<ITaskEvent>());
 		EventsBus bus = new EventsBus(new InMemoryEventStore<ITaskEvent>());
 		bus.subscribe(list);
 		
-		UUID id = Task.add(bus, "buy bread");
+		UUID id = Task.add(bus, "buy bread", "2017-05");
 		
-		assertThat(list.getList()).contains(new TaskDisplayed(id, "buy bread", false));
+		assertThat(list.getList("2017-05")).contains(new TaskDisplayed(id, "buy bread", "2017-05", false));
 	}
 	
 

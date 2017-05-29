@@ -3,6 +3,7 @@ package fr.lule.acad.projection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.ITaskEvent;
@@ -18,15 +19,15 @@ public class TaskList implements IEventSubscriber {
 		history.forEach(this::handle);
 	}
 
-	public List<TaskDisplayed> getList() {
-		return list;
+	public List<TaskDisplayed> getList(String month) {
+		return list.stream().filter(t -> t.getMonth().equals(month)).collect(Collectors.toList());
 	}
 
 	@Override
 	public void handle(IEvent event) {
 		if (event instanceof TaskAdded) {
 			TaskAdded taskAdded = (TaskAdded) event;
-			list.add(new TaskDisplayed(taskAdded.getAggregateId(), taskAdded.getTodo(), false));
+			list.add(new TaskDisplayed(taskAdded.getAggregateId(), taskAdded.getTodo(), taskAdded.getMonth(), false));
 		}
 		if (event instanceof TaskCompleted) {
 			UUID id = ((TaskCompleted) event).getAggregateId();

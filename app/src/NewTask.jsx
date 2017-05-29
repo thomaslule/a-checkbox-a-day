@@ -36,7 +36,7 @@ class NewTask extends React.Component {
         fetch( "api/AddTask",
             {
                 method: "POST",
-                body: JSON.stringify( { todo: this.state.todo } )
+                body: JSON.stringify( { todo: this.state.todo, month: "2017-05" } )
             } )
             .then(() => {
                 this.setState( { todo: "" } );

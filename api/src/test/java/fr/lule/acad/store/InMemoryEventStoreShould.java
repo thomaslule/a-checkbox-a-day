@@ -22,9 +22,9 @@ public class InMemoryEventStoreShould {
 	public void before() {
 		store = new InMemoryEventStore<ITaskEvent>();
 		id1 = UUID.randomUUID();
-		TaskAdded task1 = new TaskAdded(id1, "task 1");
+		TaskAdded task1 = new TaskAdded(id1, "task 1", "2017-05");
 		id2 = UUID.randomUUID();
-		TaskAdded task2 = new TaskAdded(id2, "task 2");
+		TaskAdded task2 = new TaskAdded(id2, "task 2", "2017-05");
 		TaskCompleted task3 = new TaskCompleted(id1);
 		
 		store.add(task1);
@@ -36,8 +36,8 @@ public class InMemoryEventStoreShould {
 	public void getAllEventsRestituteEventsInSameOrder() {
 		List<ITaskEvent> events = store.getAllEvents();
 
-		assertThat(events.get(0)).isEqualTo(new TaskAdded(id1, "task 1"));
-		assertThat(events.get(1)).isEqualTo(new TaskAdded(id2, "task 2"));
+		assertThat(events.get(0)).isEqualTo(new TaskAdded(id1, "task 1", "2017-05"));
+		assertThat(events.get(1)).isEqualTo(new TaskAdded(id2, "task 2", "2017-05"));
 		assertThat(events.get(2)).isEqualTo(new TaskCompleted(id1));
 	}
 	
@@ -45,7 +45,7 @@ public class InMemoryEventStoreShould {
 	public void getEventsForRestituteEventsForAggregate() {
 		List<ITaskEvent> events = store.getEventsFor(id1);
 
-		assertThat(events.get(0)).isEqualTo(new TaskAdded(id1, "task 1"));
+		assertThat(events.get(0)).isEqualTo(new TaskAdded(id1, "task 1", "2017-05"));
 		assertThat(events.get(1)).isEqualTo(new TaskCompleted(id1));
 	}
 	

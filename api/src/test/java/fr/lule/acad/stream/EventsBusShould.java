@@ -27,9 +27,9 @@ public class EventsBusShould {
 	public void storeEventWhenPublishEvent() {
 		UUID id = UUID.randomUUID();
 		
-		bus.publish(new TaskAdded(id, "buy bread"));
+		bus.publish(new TaskAdded(id, "buy bread", "2017-05"));
 		
-		assertThat(store.getAllEvents()).contains(new TaskAdded(id, "buy bread"));
+		assertThat(store.getAllEvents()).contains(new TaskAdded(id, "buy bread", "2017-05"));
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class EventsBusShould {
 		SpySubscriber spy = new SpySubscriber();
 		bus.subscribe(spy);
 		
-		bus.publish(new TaskAdded(UUID.randomUUID(), "buy bread"));
+		bus.publish(new TaskAdded(UUID.randomUUID(), "buy bread", "2017-05"));
 
 		assertThat(spy.called).isTrue();
 	}

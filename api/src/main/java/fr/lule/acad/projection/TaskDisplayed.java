@@ -6,11 +6,13 @@ public class TaskDisplayed {
 	
 	private UUID id;
 	private String todo;
+	private String month;
 	private boolean completed;
 
-	public TaskDisplayed(UUID id, String todo, boolean completed) {
+	public TaskDisplayed(UUID id, String todo, String month, boolean completed) {
 		this.id = id;
 		this.todo = todo;
+		this.setMonth(month);
 		this.completed = completed;
 	}
 
@@ -42,6 +44,14 @@ public class TaskDisplayed {
 		this.todo = todo;
 	}
 
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
 	public boolean isCompleted() {
 		return completed;
 	}
@@ -59,6 +69,7 @@ public class TaskDisplayed {
 		int result = 1;
 		result = prime * result + (completed ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((month == null) ? 0 : month.hashCode());
 		result = prime * result + ((todo == null) ? 0 : todo.hashCode());
 		return result;
 	}
@@ -81,6 +92,11 @@ public class TaskDisplayed {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (month == null) {
+			if (other.month != null)
+				return false;
+		} else if (!month.equals(other.month))
 			return false;
 		if (todo == null) {
 			if (other.todo != null)

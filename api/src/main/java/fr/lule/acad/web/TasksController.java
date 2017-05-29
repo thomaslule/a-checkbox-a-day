@@ -27,14 +27,14 @@ public class TasksController {
 		this.taskEventStore = taskEventStore;
 	}
 
-	@Get("/Tasks")
-	public List<TaskDisplayed> getTasks() {
-		return list.getList();
+	@Get("/Tasks/:month")
+	public List<TaskDisplayed> getTasks(String month) {
+		return list.getList(month);
 	}
 	
 	@Post("/AddTask")
 	public Payload addTask(AddTaskCommand command) {
-		Task.add(publisher, command.todo);
+		Task.add(publisher, command.todo, command.month);
 		return Payload.created();
 	}
 	
@@ -47,6 +47,7 @@ public class TasksController {
 	
 	private static class AddTaskCommand {
 		public String todo;
+		public String month;
 	}
 	
 	private static class CompleteTaskCommand {

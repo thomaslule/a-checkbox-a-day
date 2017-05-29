@@ -26,15 +26,15 @@ public class TaskShould {
 	
 	@Test
 	public void raiseTaskAddedWhenAddTask() {
-		UUID id = Task.add(bus, "buy baguette");
+		UUID id = Task.add(bus, "buy baguette", "2017-05");
 		
-		assertThat(store.getAllEvents()).contains(new TaskAdded(id, "buy baguette"));
+		assertThat(store.getAllEvents()).contains(new TaskAdded(id, "buy baguette", "2017-05"));
 	}
 	
 	@Test
 	public void raiseTaskCompletedWhenCompleteTask() {
 		UUID id = UUID.randomUUID();
-		store.add(new TaskAdded(id, "buy baguette"));
+		store.add(new TaskAdded(id, "buy baguette", "2017-05"));
 		Task task = new Task(store.getEventsFor(id));
 		
 		task.complete(bus);
@@ -45,7 +45,7 @@ public class TaskShould {
 	@Test
 	public void dontRaiseTaskCompletedWhenCompleteTaskAlreadyCompleted() {
 		UUID id = UUID.randomUUID();
-		store.add(new TaskAdded(id, "buy baguette"));
+		store.add(new TaskAdded(id, "buy baguette", "2017-05"));
 		store.add(new TaskCompleted(id));
 		Task task = new Task(store.getEventsFor(id));
 		
@@ -57,7 +57,7 @@ public class TaskShould {
 	@Test
 	public void raiseTaskCompletedOnlyOnceWhenCompleteTaskTwice() {
 		UUID id = UUID.randomUUID();
-		store.add(new TaskAdded(id, "buy baguette"));
+		store.add(new TaskAdded(id, "buy baguette", "2017-05"));
 		Task task = new Task(store.getEventsFor(id));
 		
 		task.complete(bus);
