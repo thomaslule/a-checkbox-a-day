@@ -15,6 +15,7 @@ class TaskList extends React.Component {
         let taskList = this.state.tasks.map(( task ) => {
             return (
                 <Task
+                    key={task.id}
                     task={task}
                     onCompleteTask={() => this.updateTaskList()}
                 />
@@ -27,6 +28,7 @@ class TaskList extends React.Component {
                         {taskList}
                         <NewTask
                             onAddTask={() => this.updateTaskList()}
+                            month={this.props.match.params.month}
                         />
                     </ul>
                 </div>
@@ -41,9 +43,14 @@ class TaskList extends React.Component {
     componentDidMount() {
         this.updateTaskList();
     }
+    
+    componentWillReceiveProps(nextProps) {
+        this.updateTaskList(nextProps.match.params.month);
+    }
 
-    updateTaskList() {
-        fetch( "api/Tasks/2017-05" )
+    updateTaskList(month) {
+        month = month || this.props.match.params.month;
+        fetch( "api/Tasks/" + month)
             .then( this.toJson )
             .then( tasks => {
                 this.setState( { tasks } );

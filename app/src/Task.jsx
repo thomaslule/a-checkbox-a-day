@@ -5,7 +5,7 @@ class Task extends React.Component {
     render() {
         let task = this.props.task;
         return (
-            <li key={task.id}>
+            <li>
                 <div className="checkbox">
                     <input
                         type="checkbox"
