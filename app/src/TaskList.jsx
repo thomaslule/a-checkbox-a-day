@@ -28,7 +28,7 @@ class TaskList extends React.Component {
                         {taskList}
                         <NewTask
                             onAddTask={() => this.updateTaskList()}
-                            month={this.props.match.params.month}
+                            month={this.props.month}
                         />
                     </ul>
                 </div>
@@ -45,11 +45,11 @@ class TaskList extends React.Component {
     }
     
     componentWillReceiveProps(nextProps) {
-        this.updateTaskList(nextProps.match.params.month);
+        this.updateTaskList(nextProps.month);
     }
 
     updateTaskList(month) {
-        month = month || this.props.match.params.month;
+        month = month || this.props.month;
         fetch( "/api/Tasks/" + month)
             .then( this.toJson )
             .then( tasks => {

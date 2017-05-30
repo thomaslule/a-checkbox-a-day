@@ -17,18 +17,18 @@ class MonthPicker extends React.Component {
     }
     
     getCurrentMonthDisplay() {
-        let currentMonth = moment(this.props.match.params.month);
+        let currentMonth = moment(this.props.month);
         return currentMonth.format("MMMM YYYY");
     }
     
     getPreviousMonthLink() {
-        let month = moment(this.props.match.params.month);
+        let month = moment(this.props.month);
         month.subtract(1, "month");
         return "/month/" + month.format("YYYY-MM");
     }
     
     getNextMonthLink() {
-        let month = moment(this.props.match.params.month);
+        let month = moment(this.props.month);
         month.add(1, "month");
         return "/month/" + month.format("YYYY-MM");
     }
