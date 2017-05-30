@@ -7,6 +7,6 @@ it( "display month correctly", () => {
 
 it( "links previous and next month correctly", () => {
     let monthPicker = new MonthPicker( { match: { params: { month: "2017-05" } } } );
-    expect(monthPicker.getPreviousMonthCode()).toEqual("2017-04");
-    expect(monthPicker.getNextMonthCode()).toEqual("2017-06");
+    expect(monthPicker.getPreviousMonthLink()).toEqual("/month/2017-04");
+    expect(monthPicker.getNextMonthLink()).toEqual("/month/2017-06");
 } );

@@ -50,7 +50,7 @@ class TaskList extends React.Component {
 
     updateTaskList(month) {
         month = month || this.props.match.params.month;
-        fetch( "api/Tasks/" + month)
+        fetch( "/api/Tasks/" + month)
             .then( this.toJson )
             .then( tasks => {
                 this.setState( { tasks } );

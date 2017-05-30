@@ -1,7 +1,8 @@
 import React from "react";
 import {
     BrowserRouter as Router,
-    Route
+    Route,
+    Redirect
 } from "react-router-dom"
 import TaskList from "./TaskList";
 import MonthPicker from "./MonthPicker";
@@ -20,8 +21,8 @@ class App extends React.Component {
                         </div>
                     </nav>
                     <div className="container">
-                        <Route path="/:month" component={MonthPicker} />
-                        <Route path="/:month" component={TaskList} />
+                        <Route path="/month/:month" component={MonthPicker} />
+                        <Route path="/month/:month" component={TaskList} />
                     </div>
                 </div>
             </Router>

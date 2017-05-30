@@ -8,9 +8,9 @@ class MonthPicker extends React.Component {
         return (
             <div className="row">
                 <h1 className="col-xs-12 text-center">
-                    <Link to={"/" + this.getPreviousMonthCode()}>&larr;</Link>
+                    <Link to={this.getPreviousMonthLink()}>&larr;</Link>
                     <span>{this.getCurrentMonthDisplay()}</span>
-                    <Link to={"/" + this.getNextMonthCode()}>&rarr;</Link>
+                    <Link to={this.getNextMonthLink()}>&rarr;</Link>
                 </h1>
             </div>
         );
@@ -21,16 +21,16 @@ class MonthPicker extends React.Component {
         return currentMonth.format("MMMM YYYY");
     }
     
-    getPreviousMonthCode() {
+    getPreviousMonthLink() {
         let month = moment(this.props.match.params.month);
         month.subtract(1, "month");
-        return month.format("YYYY-MM");
+        return "/month/" + month.format("YYYY-MM");
     }
     
-    getNextMonthCode() {
+    getNextMonthLink() {
         let month = moment(this.props.match.params.month);
         month.add(1, "month");
-        return month.format("YYYY-MM");
+        return "/month/" + month.format("YYYY-MM");
     }
 
 }

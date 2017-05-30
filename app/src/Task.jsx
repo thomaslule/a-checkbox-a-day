@@ -20,7 +20,7 @@ class Task extends React.Component {
     }
 
     handleTaskComplete( task ) {
-        fetch( "api/CompleteTask",
+        fetch( "/api/CompleteTask",
             {
                 method: "POST",
                 body: JSON.stringify( { id: task.id } )
