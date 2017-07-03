@@ -4,7 +4,7 @@ import {
     Route,
     Redirect,
     Switch
-} from "react-router-dom"
+} from "react-router-dom";
 import moment from "moment";
 import MonthPage from "./MonthPage";
 
@@ -26,13 +26,7 @@ class App extends React.Component {
                         <Switch>
                             <Route
                                 exact path="/month/:month"
-                                render={(props) => {
-                                    if (this.isMonthValid(props.match.params.month)) {
-                                        return (<MonthPage month={props.match.params.month} />);
-                                    } else {
-                                        return (<Redirect to={this.defaultPage()} />);
-                                    }
-                                }}
+                                component={MonthPage}
                             />
                             <Redirect from="*" to={this.defaultPage()} />
                         </Switch>
@@ -40,10 +34,6 @@ class App extends React.Component {
                 </div>
             </div>
         );
-    }
-
-    isMonthValid(month) {
-        return moment(month, "YYYY-MM", true).isValid();
     }
 
     defaultPage() {

@@ -8,7 +8,7 @@ class NewTask extends React.Component {
             todo: ""
         };
     }
-    
+
     render() {
         return (
             <li>
@@ -18,31 +18,22 @@ class NewTask extends React.Component {
                         required="required"
                         className="form-control"
                         value={this.state.todo}
-                        onChange={(e) => this.handleTodoChange(e) }
+                        onChange={( e ) => this.handleChange( e )}
                     />
                     <span className="input-group-btn">
-                        <button onClick={() => this.handleAddTask()} className="btn">Add task</button>
+                        <button onClick={() => this.handleClickAdd()} className="btn">Add task</button>
                     </span>
                 </div>
-            </li>
-        );
+            </li> );
     }
 
-    handleTodoChange( event ) {
+    handleChange( event ) {
         this.setState( { todo: event.target.value } );
     }
 
-    handleAddTask() {
-        fetch( "/api/AddTask",
-            {
-                method: "POST",
-                body: JSON.stringify( { todo: this.state.todo, month: this.props.month } )
-            } )
-            .then(() => {
-                this.setState( { todo: "" } );
-                this.props.onAddTask();
-            } )
-            .catch( error => console.warn( error ) );
+    handleClickAdd() {
+        this.props.onAddTask( this.state.todo );
+        this.setState( { todo: "" } );
     }
 
 }
