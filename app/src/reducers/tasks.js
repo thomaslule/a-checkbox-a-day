@@ -1,6 +1,8 @@
 const tasks = ( state = [], action ) => {
     console.log( "action", action );
     switch ( action.type ) {
+        case "RECEIVE_TASKS":
+            return action.tasks;
         case "ADD_TASK":
             return [
                 ...state,
