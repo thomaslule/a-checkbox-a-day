@@ -1,6 +1,20 @@
-import React from "react";
-import TaskList from "./TaskList";
+import { connect } from "react-redux";
+import TaskList from "../components/TaskList";
+import { addTask, completeTask } from "../actions";
 
+const mapStateToProps = ( state ) => ( {
+    tasks: state.tasks,
+    month: state.month
+} );
+
+const mapDispatchToProps = {
+    onAddTask: addTask,
+    onCompleteTask: completeTask
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( TaskList );
+
+/*
 class TaskListContainer extends React.Component {
 
     constructor( props ) {
@@ -44,3 +58,4 @@ class TaskListContainer extends React.Component {
 }
 
 export default TaskListContainer;
+*/

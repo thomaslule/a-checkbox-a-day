@@ -1,13 +1,14 @@
 import React from "react";
 import Task from "./Task";
-import NewTask from "./NewTaskContainer";
+import NewTask from "./NewTask";
 
 export default ( props ) => {
+
     let taskList = props.tasks.map(( task ) =>
         <Task
             key={task.id}
             task={task}
-            onCompleteTask={() => props.onCompleteTask()}
+            onCompleteTask={( id ) => props.onCompleteTask( id )}
         /> );
     return (
         <div className="row">
@@ -15,7 +16,7 @@ export default ( props ) => {
                 <ul className="list-unstyled">
                     {taskList}
                     <NewTask
-                        onAddTask={() => props.onAddTask()}
+                        onAddTask={( todo ) => props.onAddTask( todo )}
                         month={props.month}
                     />
                 </ul>

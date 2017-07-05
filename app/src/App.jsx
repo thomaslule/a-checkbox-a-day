@@ -6,13 +6,13 @@ import {
     Switch
 } from "react-router-dom";
 import moment from "moment";
-import MonthPage from "./MonthPage";
+import MonthPage from "./components/MonthPage";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 
 class App extends React.Component {
-
+    
     render() {
         return (
             <div>
@@ -39,7 +39,7 @@ class App extends React.Component {
     defaultPage() {
         return "/month/" + moment().format( "YYYY-MM" );
     }
-
+    
 }
 
 export default App;

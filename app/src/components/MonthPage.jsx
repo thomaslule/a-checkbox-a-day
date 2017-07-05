@@ -3,7 +3,7 @@ import moment from "moment";
 import {
     Redirect
 } from "react-router-dom";
-import TaskListContainer from "./TaskListContainer";
+import TaskListContainer from "../containers/TaskListContainer";
 import MonthPicker from "./MonthPicker";
 
 class MonthPage extends React.Component {
@@ -19,7 +19,7 @@ class MonthPage extends React.Component {
             return ( <Redirect to="/" /> );
         }
     }
-
+    
     isMonthValid( month ) {
         return moment( month, "YYYY-MM", true ).isValid();
     }
