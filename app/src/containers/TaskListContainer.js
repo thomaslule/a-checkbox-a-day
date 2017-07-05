@@ -7,10 +7,12 @@ const mapStateToProps = ( state ) => ( {
     month: state.month
 } );
 
-const mapDispatchToProps = {
-    onInit: fetchTasks,
-    onAddTask: addTask,
-    onCompleteTask: completeTask
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        onInit: (month) => dispatch(fetchTasks(month)),
+        onAddTask: (todo) => dispatch(addTask({todo, month: props.month})),
+        onCompleteTask: (id) => dispatch(completeTask(id))
+    }
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( TaskList );

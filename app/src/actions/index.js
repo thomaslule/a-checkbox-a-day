@@ -3,16 +3,16 @@ export const fetchTasks = ( month ) => ( {
     month
 } );
 
-export const receiveTasks = ( tasks ) => ({
+export const receiveTasks = ( tasks ) => ( {
     type: "RECEIVE_TASKS",
     tasks
-});
+} );
 
 let nextTodoId = 0
-export const addTask = ( todo ) => ( {
+export const addTask = ( task ) => ( {
     type: "ADD_TASK",
     id: nextTodoId++,
-    todo
+    task
 } );
 
 export const completeTask = ( id ) => ( {
