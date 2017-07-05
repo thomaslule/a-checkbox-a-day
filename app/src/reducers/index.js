@@ -1,10 +1,8 @@
-import { combineReducers } from "redux"
-import tasks from "./tasks"
-import month from "./month"
+import { combineReducers } from "redux";
+import tasks from "./tasks";
 
 const todoApp = combineReducers( {
-    tasks,
-    month
-} )
+    tasks
+} );
 
-export default todoApp
+export default todoApp;

@@ -2,14 +2,14 @@ import { connect } from "react-redux";
 import TaskList from "../components/TaskList";
 import actions from "../actions";
 
-const mapStateToProps = ( state ) => ( {
+const mapStateToProps = ( state, ownProps ) => ( {
     tasks: state.tasks,
-    month: state.month
+    month: ownProps.month
 } );
 
 const mapDispatchToProps = ( dispatch, props ) => {
     return {
-        onInit: ( month ) => dispatch( actions.fetchTasks( month ) ),
+        onNewMonth: ( month ) => dispatch( actions.fetchTasks( month ) ),
         onAddTask: ( todo ) => dispatch( actions.addTask( { todo, month: props.month } ) ),
         onCompleteTask: ( id ) => dispatch( actions.completeTask( id ) )
     }

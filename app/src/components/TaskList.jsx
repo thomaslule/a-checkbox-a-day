@@ -5,7 +5,13 @@ import NewTask from "./NewTask";
 class TaskList extends React.Component {
 
     componentDidMount() {
-        this.props.onInit( this.props.month );
+        this.props.onNewMonth( this.props.month );
+    }
+
+    componentWillReceiveProps( nextProps ) {
+        if ( nextProps.month != this.props.month ) {
+            this.props.onNewMonth( nextProps.month );
+        }
     }
 
     render() {
