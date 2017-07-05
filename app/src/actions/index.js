@@ -8,10 +8,13 @@ export const receiveTasks = ( tasks ) => ( {
     tasks
 } );
 
-let nextTodoId = 0
 export const addTask = ( task ) => ( {
     type: "ADD_TASK",
-    id: nextTodoId++,
+    task
+} );
+
+export const taskAdded = ( task ) => ( {
+    type: "TASK_ADDED",
     task
 } );
 

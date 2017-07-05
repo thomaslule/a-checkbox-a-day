@@ -3,21 +3,17 @@ const tasks = ( state = [], action ) => {
     switch ( action.type ) {
         case "RECEIVE_TASKS":
             return action.tasks;
-        /*case "ADD_TASK":
+        case "TASK_ADDED":
             return [
                 ...state,
-                {
-                    id: action.id,
-                    todo: action.todo,
-                    completed: false
-                }
+                action.task
             ]
         case "COMPLETE_TASK":
             return state.map( task =>
                 ( task.id === action.id )
                     ? { ...task, completed: true }
                     : task
-            )*/
+            )
         default:
             return state
     }

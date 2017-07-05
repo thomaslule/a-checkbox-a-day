@@ -1,20 +1,19 @@
 import { call, put, takeEvery, takeLatest, fork } from 'redux-saga/effects'
-import { receiveTasks, fetchTasks } from './actions'
+import { receiveTasks, taskAdded } from './actions'
 import Api from "./api";
 
 function* callFetchTasks( action ) {
     const tasks = yield call( Api.fetchTasks, action.month );
-    yield put( receiveTasks(tasks) );
+    yield put( receiveTasks( tasks ) );
 }
 
-function* callAddTask(action) {
-    yield call( Api.addTask, action.task );
-    yield put (fetchTasks("2017-07"));
+function* callAddTask( action ) {
+    const task = yield call( Api.addTask, action.task );
+    yield put( taskAdded( task ) );
 }
 
-function* callCompleteTask(action) {
+function* callCompleteTask( action ) {
     yield call( Api.completeTask, action.id );
-    yield put (fetchTasks("2017-07"));
 }
 
 function* mySaga() {
@@ -30,9 +29,9 @@ function* mySaga3() {
 }
 
 function* root() {
-    yield fork(mySaga);
-    yield fork(mySaga2);
-    yield fork(mySaga3);
+    yield fork( mySaga );
+    yield fork( mySaga2 );
+    yield fork( mySaga3 );
 }
 
 export default root;

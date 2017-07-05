@@ -12,6 +12,7 @@ import fr.lule.acad.stream.IEventPublisher;
 import net.codestory.http.annotations.Get;
 import net.codestory.http.annotations.Post;
 import net.codestory.http.annotations.Prefix;
+import net.codestory.http.constants.HttpStatus;
 import net.codestory.http.payload.Payload;
 
 @Prefix("/api")
@@ -34,8 +35,9 @@ public class TasksController {
 	
 	@Post("/AddTask")
 	public Payload addTask(AddTaskCommand command) {
-		Task.add(publisher, command.todo, command.month);
-		return Payload.created();
+		UUID id = Task.add(publisher, command.todo, command.month);
+		// TODO use a repository instead of getting the task from the list
+		return new Payload(null, list.getTask(id), HttpStatus.CREATED);
 	}
 	
 	@Post("/CompleteTask")
@@ -49,10 +51,17 @@ public class TasksController {
 		public String todo;
 		public String month;
 	}
-	
+
+	private static class AddTaskResponse {
+		public String id;
+		
+		public AddTaskResponse(String id) {
+			this.id = id;
+		}
+	}
+
 	private static class CompleteTaskCommand {
 		public UUID id;
 	}
 	
-
 }

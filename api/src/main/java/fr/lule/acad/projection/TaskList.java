@@ -22,6 +22,10 @@ public class TaskList implements IEventSubscriber {
 	public List<TaskDisplayed> getList(String month) {
 		return list.stream().filter(t -> t.getMonth().equals(month)).collect(Collectors.toList());
 	}
+	
+	public TaskDisplayed getTask(UUID id) {
+		return list.stream().filter(t -> t.getId().equals(id)).findFirst().get();
+	}
 
 	@Override
 	public void handle(IEvent event) {
