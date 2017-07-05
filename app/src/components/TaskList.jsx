@@ -9,7 +9,7 @@ class TaskList extends React.Component {
     }
 
     componentWillReceiveProps( nextProps ) {
-        if ( nextProps.month != this.props.month ) {
+        if ( nextProps.month !== this.props.month ) {
             this.props.onNewMonth( nextProps.month );
         }
     }
