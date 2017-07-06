@@ -41,7 +41,7 @@ public class TaskShould {
 		
 		assertThat(store.getEventsFor(id)).contains(new TaskCompleted(id));
 	}
-	
+
 	@Test
 	public void dontRaiseTaskCompletedWhenCompleteTaskAlreadyCompleted() {
 		UUID id = UUID.randomUUID();
@@ -52,6 +52,16 @@ public class TaskShould {
 		task.complete(bus);
 		
 		assertThat(store.getAllEvents()).containsOnlyOnce(new TaskCompleted(id));
+	}
+
+	@Test
+	public void dontRaiseTaskCompletedWhenTaskDoesntExist() {
+		UUID id = UUID.randomUUID();
+		Task task = new Task(store.getEventsFor(id));
+		
+		task.complete(bus);
+		
+		assertThat(store.getAllEvents()).isEmpty();
 	}
 	
 	@Test
