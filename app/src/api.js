@@ -7,17 +7,17 @@ function handleErrors(response) {
     return response;
 }
 
-api.fetchTasks = function( month ) {
-    return fetch( "/api/Tasks/" + month )
+api.fetchItems = function( month ) {
+    return fetch( "/api/Items/" + month )
         .then( handleErrors )
         .then( response => response.json() );
 }
 
-api.addTask = function( task ) {
-    return fetch( "/api/AddTask",
+api.addItem = function( item ) {
+    return fetch( "/api/AddItem",
         {
             method: "POST",
-            body: JSON.stringify( task )
+            body: JSON.stringify( item )
         } )
         .then( handleErrors )
         .then( response => response.json() );

@@ -1,23 +1,23 @@
 let actions = {};
 
-actions.fetchTasks = ( month ) => ( {
-    type: "FETCH_TASKS",
+actions.fetchItems = ( month ) => ( {
+    type: "FETCH_ITEMS",
     month
 } );
 
-actions.fetchTasksSuccess = ( tasks ) => ( {
-    type: "FETCH_TASKS_SUCCESS",
-    tasks
+actions.fetchItemsSuccess = ( items ) => ( {
+    type: "FETCH_ITEMS_SUCCESS",
+    items
 } );
 
-actions.addTask = ( task ) => ( {
-    type: "ADD_TASK",
-    task
+actions.addItem = ( item ) => ( {
+    type: "ADD_ITEM",
+    item
 } );
 
-actions.addTaskSuccess = ( task ) => ( {
-    type: "ADD_TASK_SUCCESS",
-    task
+actions.addItemSuccess = ( item ) => ( {
+    type: "ADD_ITEM_SUCCESS",
+    item
 } );
 
 actions.completeTask = ( id ) => ( {

@@ -1,8 +1,8 @@
 import React from "react";
-import Task from "./Task";
-import NewTask from "./NewTask";
+import Item from "./Item";
+import NewItem from "./NewItem";
 
-class TaskList extends React.Component {
+class ItemList extends React.Component {
 
     componentDidMount() {
         this.props.onNewMonth( this.props.month );
@@ -15,19 +15,19 @@ class TaskList extends React.Component {
     }
 
     render() {
-        let taskList = this.props.tasks.map(( task ) =>
-            <Task
-                key={task.id}
-                task={task}
+        let itemList = this.props.items.map(( item ) =>
+            <Item
+                key={item.id}
+                item={item}
                 onCompleteTask={( id ) => this.props.onCompleteTask( id )}
             /> );
         return (
             <div className="row">
                 <div className="col-xs-offset-4 col-xs-4">
                     <ul className="list-unstyled">
-                        {taskList}
-                        <NewTask
-                            onAddTask={( todo ) => this.props.onAddTask( todo )}
+                        {itemList}
+                        <NewItem
+                            onAddItem={( text ) => this.props.onAddItem( text )}
                             month={this.props.month}
                         />
                     </ul>
@@ -38,4 +38,4 @@ class TaskList extends React.Component {
     }
 }
 
-export default TaskList;
+export default ItemList;

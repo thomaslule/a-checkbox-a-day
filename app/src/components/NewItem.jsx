@@ -1,11 +1,11 @@
 import React from "react";
 
-class NewTask extends React.Component {
+class NewItem extends React.Component {
 
     constructor( props ) {
         super( props );
         this.state = {
-            todo: ""
+            text: ""
         };
     }
 
@@ -17,25 +17,25 @@ class NewTask extends React.Component {
                         type="text"
                         required="required"
                         className="form-control"
-                        value={this.state.todo}
+                        value={this.state.text}
                         onChange={( e ) => this.handleChange( e )}
                     />
                     <span className="input-group-btn">
-                        <button onClick={() => this.handleClickAdd()} className="btn">Add task</button>
+                        <button onClick={() => this.handleClickAdd()} className="btn">Add Item</button>
                     </span>
                 </div>
             </li> );
     }
 
     handleChange( event ) {
-        this.setState( { todo: event.target.value } );
+        this.setState( { text: event.target.value } );
     }
 
     handleClickAdd() {
-        this.props.onAddTask( this.state.todo );
-        this.setState( { todo: "" } );
+        this.props.onAddItem( this.state.text );
+        this.setState( { text: "" } );
     }
 
 }
 
-export default NewTask;
+export default NewItem;

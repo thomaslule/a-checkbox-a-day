@@ -1,13 +1,13 @@
 import { combineReducers } from "redux";
-import tasks from "./tasks";
+import items from "./items";
 import error from "./error";
 
 const log = ( state = {}, action ) => { console.log( "action", action ); return state; };
 
-const todoApp = combineReducers( {
+const root = combineReducers( {
     log,
-    tasks,
+    items,
     error
 } );
 
-export default todoApp;
+export default root;

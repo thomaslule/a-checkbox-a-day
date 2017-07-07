@@ -3,7 +3,7 @@ import moment from "moment";
 import {
     Redirect
 } from "react-router-dom";
-import TaskListContainer from "../containers/TaskListContainer";
+import ItemListContainer from "../containers/ItemListContainer";
 import MonthPicker from "./MonthPicker";
 
 class MonthPage extends React.Component {
@@ -13,7 +13,7 @@ class MonthPage extends React.Component {
             return (
                 <div>
                     <MonthPicker month={this.props.match.params.month} />
-                    <TaskListContainer month={this.props.match.params.month} />
+                    <ItemListContainer month={this.props.match.params.month} />
                 </div> );
         } else {
             return ( <Redirect to="/" /> );

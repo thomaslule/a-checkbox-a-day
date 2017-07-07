@@ -5,10 +5,10 @@ export default props => (
         <div className="checkbox">
             <input
                 type="checkbox"
-                checked={props.task.completed}
-                disabled={props.task.completed}
-                onChange={() => props.onCompleteTask( props.task.id )}
+                checked={props.item.completed}
+                disabled={props.item.completed}
+                onChange={() => props.onCompleteTask( props.item.id )}
             />
         </div>
-        {props.task.todo}
+        {props.item.text}
     </li> );

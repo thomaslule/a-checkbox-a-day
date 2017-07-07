@@ -2,24 +2,24 @@ import { call, put, takeEvery, takeLatest, fork } from "redux-saga/effects"
 import actions from "./actions"
 import api from "./api";
 
-function* watchFetchTasks() {
-    yield takeLatest( "FETCH_TASKS",
+function* watchFetchItems() {
+    yield takeLatest( "FETCH_ITEMS",
         function* ( action ) {
             try {
-                const tasks = yield call( api.fetchTasks, action.month );
-                yield put( actions.fetchTasksSuccess( tasks ) );
+                const items = yield call( api.fetchItems, action.month );
+                yield put( actions.fetchItemsSuccess( items ) );
             } catch ( e ) {
                 yield put( actions.error( e ) );
             }
         } );
 }
 
-function* watchAddTask() {
-    yield takeEvery( "ADD_TASK",
+function* watchAddItem() {
+    yield takeEvery( "ADD_ITEM",
         function* ( action ) {
             try {
-                const task = yield call( api.addTask, action.task );
-                yield put( actions.addTaskSuccess( task ) );
+                const item = yield call( api.addItem, action.item );
+                yield put( actions.addItemSuccess( item ) );
             } catch ( e ) {
                 yield put( actions.error( e ) );
             }
@@ -38,7 +38,7 @@ function* watchCompleteTask() {
 }
 
 export default function* () {
-    yield fork( watchFetchTasks );
-    yield fork( watchAddTask );
+    yield fork( watchFetchItems );
+    yield fork( watchAddItem );
     yield fork( watchCompleteTask );
 };
