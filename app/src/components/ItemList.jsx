@@ -1,16 +1,16 @@
 import React from "react";
 import Item from "./Item";
-import NewItem from "./NewItem";
+import NewItemContainer from "../containers/NewItemContainer";
 
 class ItemList extends React.Component {
 
     componentDidMount() {
-        this.props.onNewMonth( this.props.month );
+        this.props.onChangeMonth( this.props.month );
     }
 
     componentWillReceiveProps( nextProps ) {
         if ( nextProps.month !== this.props.month ) {
-            this.props.onNewMonth( nextProps.month );
+            this.props.onChangeMonth( nextProps.month );
         }
     }
 
@@ -26,8 +26,7 @@ class ItemList extends React.Component {
                 <div className="col-xs-offset-4 col-xs-4">
                     <ul className="list-unstyled">
                         {itemList}
-                        <NewItem
-                            onAddItem={( itemType, text ) => this.props.onAddItem( itemType, text )}
+                        <NewItemContainer
                             month={this.props.month}
                         />
                     </ul>
