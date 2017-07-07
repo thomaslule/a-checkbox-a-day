@@ -7,6 +7,12 @@ const items = ( state = [], action ) => {
                 ...state,
                 action.item
             ]
+        case "CANCEL_ITEM":
+            return state.map( item =>
+                ( item.id === action.id )
+                    ? { ...item, cancelled: true }
+                    : item
+            )
         case "COMPLETE_TASK":
             return state.map( item =>
                 ( item.id === action.id )

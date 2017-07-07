@@ -8,8 +8,9 @@ const mapStateToProps = ( state, ownProps ) => ( {
 
 const mapDispatchToProps = ( dispatch, props ) => {
     return {
+        onCancel: () => dispatch( actions.cancelItem( props.item.id ) ),
         onChangeCompleteTask: ( newVal, id ) => {
-            if (newVal) {
+            if ( newVal ) {
                 dispatch( actions.completeTask( id ) );
             } else {
                 dispatch( actions.uncompleteTask( id ) );

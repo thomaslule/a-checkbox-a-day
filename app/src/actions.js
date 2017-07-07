@@ -20,6 +20,11 @@ actions.addItemSuccess = ( item ) => ( {
     item
 } );
 
+actions.cancelItem = ( id ) => ( {
+    type: "CANCEL_ITEM",
+    id
+} );
+
 actions.completeTask = ( id ) => ( {
     type: "COMPLETE_TASK",
     id

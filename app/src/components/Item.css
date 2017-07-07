@@ -4,10 +4,24 @@
     margin-bottom: 10px;
 }
 
+.item.completed,
+.item.cancelled {
+    color:grey;
+}
+
+.item.cancelled .item-name {
+    text-decoration: line-through;
+}
+
 .note {
     list-style-type: disc;
 }
 
 .event {
     list-style-type: circle;
+}
+
+.action-buttons a {
+    text-decoration: none;
+    margin-left: 5px;
 }

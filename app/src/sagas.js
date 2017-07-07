@@ -26,6 +26,17 @@ function* watchAddItem() {
         } );
 }
 
+function* watchCancelItem() {
+    yield takeEvery( "CANCEL_ITEM",
+        function* ( action ) {
+            try {
+                yield call( api.cancelItem, action.id );
+            } catch ( e ) {
+                yield put( actions.error( e ) );
+            }
+        } );
+}
+
 function* watchCompleteTask() {
     yield takeEvery( "COMPLETE_TASK",
         function* ( action ) {
@@ -51,6 +62,7 @@ function* watchUncompleteTask() {
 export default function* () {
     yield fork( watchFetchItems );
     yield fork( watchAddItem );
+    yield fork( watchCancelItem );
     yield fork( watchCompleteTask );
     yield fork( watchUncompleteTask );
 };

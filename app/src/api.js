@@ -23,6 +23,15 @@ api.addItem = function( item ) {
         .then( response => response.json() );
 }
 
+api.cancelItem = function( id ) {
+    return fetch( "/api/CancelItem",
+        {
+            method: "POST",
+            body: JSON.stringify( { id } )
+        } )
+        .then( handleErrors );
+}
+
 api.completeTask = function( id ) {
     return fetch( "/api/CompleteTask",
         {
