@@ -37,8 +37,20 @@ function* watchCompleteTask() {
         } );
 }
 
+function* watchUncompleteTask() {
+    yield takeEvery( "UNCOMPLETE_TASK",
+        function* ( action ) {
+            try {
+                yield call( api.uncompleteTask, action.id );
+            } catch ( e ) {
+                yield put( actions.error( e ) );
+            }
+        } );
+}
+
 export default function* () {
     yield fork( watchFetchItems );
     yield fork( watchAddItem );
     yield fork( watchCompleteTask );
+    yield fork( watchUncompleteTask );
 };

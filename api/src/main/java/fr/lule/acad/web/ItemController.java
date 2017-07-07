@@ -64,6 +64,18 @@ public class ItemController {
 		});
 	}
 
+	@Post("/UncompleteTask")
+	public Payload uncompleteTask(UncompleteTaskCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item task = new Item(itemEventStore.getEventsFor(command.id));
+			if (task.uncompleteTask(publisher)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
 	public static class GetMonthItemsCommand {
 		@NotNull
 		@Month
@@ -89,6 +101,11 @@ public class ItemController {
 	}
 
 	public static class CompleteTaskCommand {
+		@NotNull
+		public UUID id;
+	}
+
+	public static class UncompleteTaskCommand {
 		@NotNull
 		public UUID id;
 	}

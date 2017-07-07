@@ -9,6 +9,7 @@ import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
+import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.IEventSubscriber;
 
 public class ItemList implements IEventSubscriber {
@@ -36,6 +37,10 @@ public class ItemList implements IEventSubscriber {
 		if (event instanceof TaskCompleted) {
 			UUID id = ((TaskCompleted) event).getAggregateId();
 			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCompleted(true));
+		}
+		if (event instanceof TaskUncompleted) {
+			UUID id = ((TaskUncompleted) event).getAggregateId();
+			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCompleted(false));
 		}
 	}
 

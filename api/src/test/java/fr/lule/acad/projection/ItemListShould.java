@@ -12,6 +12,7 @@ import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
+import fr.lule.acad.event.TaskUncompleted;
 
 public class ItemListShould {
 	
@@ -37,7 +38,7 @@ public class ItemListShould {
 		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false));
 		assertThat(list.getList("2017-06")).isEmpty();
 	}
-	
+
 	@Test
 	public void setTaskCompletedWhenTaskCompleted() {
 		List<IItemEvent> history = new ArrayList<IItemEvent>();
@@ -50,6 +51,19 @@ public class ItemListShould {
 		list.handle(new TaskCompleted(id1));
 		
 		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id1)).findFirst().get().isCompleted()).isTrue();
+	}
+
+	@Test
+	public void setTaskUncompletedWhenTaskUncompleted() {
+		List<IItemEvent> history = new ArrayList<IItemEvent>();
+		UUID id = UUID.randomUUID();
+		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		history.add(new TaskCompleted(id));
+		ItemList list = new ItemList(history);
+		
+		list.handle(new TaskUncompleted(id));
+		
+		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCompleted()).isFalse();
 	}
 
 }

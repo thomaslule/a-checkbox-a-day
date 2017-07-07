@@ -32,4 +32,13 @@ api.completeTask = function( id ) {
         .then( handleErrors );
 }
 
+api.uncompleteTask = function( id ) {
+    return fetch( "/api/UncompleteTask",
+        {
+            method: "POST",
+            body: JSON.stringify( { id } )
+        } )
+        .then( handleErrors );
+}
+
 export default api;

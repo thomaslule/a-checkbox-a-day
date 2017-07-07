@@ -19,7 +19,7 @@ class ItemList extends React.Component {
             <Item
                 key={item.id}
                 item={item}
-                onCompleteTask={( id ) => this.props.onCompleteTask( id )}
+                onChangeCompleteTask={( newVal, id ) => this.props.onChangeCompleteTask( newVal, id )}
             /> );
         return (
             <div className="row">

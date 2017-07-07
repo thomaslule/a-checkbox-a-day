@@ -7,8 +7,7 @@ export default props => {
             <input
                 type="checkbox"
                 checked={props.item.completed}
-                disabled={props.item.completed}
-                onChange={() => props.onCompleteTask( props.item.id )}
+                onChange={() => props.onChangeCompleteTask( !props.item.completed, props.item.id )}
             />
         </div> ) : null;
     return (

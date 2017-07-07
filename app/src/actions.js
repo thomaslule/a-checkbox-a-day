@@ -25,6 +25,11 @@ actions.completeTask = ( id ) => ( {
     id
 } );
 
+actions.uncompleteTask = ( id ) => ( {
+    type: "UNCOMPLETE_TASK",
+    id
+} );
+
 actions.error = (error) => ({
     type: "ERROR",
     error

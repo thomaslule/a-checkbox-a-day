@@ -13,6 +13,12 @@ const items = ( state = [], action ) => {
                     ? { ...item, completed: true }
                     : item
             )
+        case "UNCOMPLETE_TASK":
+            return state.map( item =>
+                ( item.id === action.id )
+                    ? { ...item, completed: false }
+                    : item
+            )
         default:
             return state
     }

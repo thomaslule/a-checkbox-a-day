@@ -6,6 +6,7 @@ import java.util.UUID;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
+import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.IEventPublisher;
 
 public class Item {
@@ -31,6 +32,16 @@ public class Item {
 		publisher.publish(event);
 		return true;
 	}
+	
+	public boolean uncompleteTask(IEventPublisher publisher) {
+		if (!projection.exists || projection.type != ItemType.TASK || !projection.done) {
+			return false;
+		}
+		TaskUncompleted event = new TaskUncompleted(projection.id);
+		projection.apply(event);
+		publisher.publish(event);
+		return true;
+	}
 
 	private class DecisionProjection {
 
@@ -51,6 +62,8 @@ public class Item {
 				done = false;
 			} else if (event instanceof TaskCompleted) {
 				done = true;
+			} else if (event instanceof TaskUncompleted) {
+				done = false;
 			}
 		}
 
