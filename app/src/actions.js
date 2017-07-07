@@ -5,7 +5,7 @@ actions.fetchTasks = ( month ) => ( {
     month
 } );
 
-actions.receiveTasks = ( tasks ) => ( {
+actions.fetchTasksSuccess = ( tasks ) => ( {
     type: "FETCH_TASKS_SUCCESS",
     tasks
 } );
@@ -15,8 +15,8 @@ actions.addTask = ( task ) => ( {
     task
 } );
 
-actions.taskAdded = ( task ) => ( {
-    type: "TASK_ADDED",
+actions.addTaskSuccess = ( task ) => ( {
+    type: "ADD_TASK_SUCCESS",
     task
 } );
 

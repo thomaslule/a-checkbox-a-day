@@ -2,7 +2,7 @@ const tasks = ( state = [], action ) => {
     switch ( action.type ) {
         case "FETCH_TASKS_SUCCESS":
             return action.tasks;
-        case "TASK_ADDED":
+        case "ADD_TASK_SUCCESS":
             return [
                 ...state,
                 action.task

@@ -7,7 +7,7 @@ function* watchFetchTasks() {
         function* ( action ) {
             try {
                 const tasks = yield call( api.fetchTasks, action.month );
-                yield put( actions.receiveTasks( tasks ) );
+                yield put( actions.fetchTasksSuccess( tasks ) );
             } catch ( e ) {
                 yield put( actions.error( e ) );
             }
@@ -19,7 +19,7 @@ function* watchAddTask() {
         function* ( action ) {
             try {
                 const task = yield call( api.addTask, action.task );
-                yield put( actions.taskAdded( task ) );
+                yield put( actions.addTaskSuccess( task ) );
             } catch ( e ) {
                 yield put( actions.error( e ) );
             }
