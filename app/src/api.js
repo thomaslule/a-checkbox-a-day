@@ -41,6 +41,15 @@ api.restoreItem = function( id ) {
         .then( handleErrors );
 }
 
+api.deleteItem = function( id ) {
+    return fetch( "/api/DeleteItem",
+        {
+            method: "POST",
+            body: JSON.stringify( { id } )
+        } )
+        .then( handleErrors );
+}
+
 api.completeTask = function( id ) {
     return fetch( "/api/CompleteTask",
         {

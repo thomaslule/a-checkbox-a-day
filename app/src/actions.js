@@ -30,6 +30,11 @@ actions.restoreItem = ( id ) => ( {
     id
 } );
 
+actions.deleteItem = ( id ) => ( {
+    type: "DELETE_ITEM",
+    id
+} );
+
 actions.completeTask = ( id ) => ( {
     type: "COMPLETE_TASK",
     id

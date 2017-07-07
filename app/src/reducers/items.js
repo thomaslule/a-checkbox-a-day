@@ -19,6 +19,8 @@ const items = ( state = [], action ) => {
                     ? { ...item, cancelled: false }
                     : item
             )
+        case "DELETE_ITEM":
+            return state.filter( item => item.id !== action.id )
         case "COMPLETE_TASK":
             return state.map( item =>
                 ( item.id === action.id )
