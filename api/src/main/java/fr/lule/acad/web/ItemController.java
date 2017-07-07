@@ -46,7 +46,7 @@ public class ItemController {
 	@Post("/AddItem")
 	public Payload addItem(AddItemCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			UUID id = Item.add(publisher, c.text, c.month, c.type);
+			UUID id = Item.add(publisher, c.text, c.month, c.itemType);
 			// TODO use a repository instead of getting the item from the list
 			return new Payload(null, list.getItem(id), HttpStatus.CREATED);
 		});
@@ -85,7 +85,7 @@ public class ItemController {
 		public String month;
 		
 		@NotNull
-		public ItemType type;
+		public ItemType itemType;
 	}
 
 	public static class CompleteTaskCommand {

@@ -58,7 +58,7 @@ public class ItemControllerShould {
 		AddItemCommand command = new AddItemCommand();
 		command.month = "2017-01";
 		command.text = "todo";
-		command.type = ItemType.TASK;
+		command.itemType = ItemType.TASK;
 		Payload res = controller.addItem(command);
 		assertThat(res.isSuccess()).isTrue();
 		assertThat(list.getList("2017-01").size()).isEqualTo(2);

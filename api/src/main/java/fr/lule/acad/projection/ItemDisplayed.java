@@ -7,14 +7,14 @@ import fr.lule.acad.aggregate.ItemType;
 public class ItemDisplayed {
 	
 	private UUID id;
-	private ItemType type;
+	private ItemType itemType;
 	private String text;
 	private String month;
 	private boolean completed;
 
 	public ItemDisplayed(UUID id, ItemType type, String text, String month, boolean completed) {
 		this.id = id;
-		this.setType(type);
+		this.setItemType(type);
 		this.text = text;
 		this.setMonth(month);
 		this.completed = completed;
@@ -35,17 +35,17 @@ public class ItemDisplayed {
 	}
 
 	/**
-	 * @return the type
+	 * @return the itemType
 	 */
-	public ItemType getType() {
-		return type;
+	public ItemType getItemType() {
+		return itemType;
 	}
 
 	/**
-	 * @param type the type to set
+	 * @param itemType the type to set
 	 */
-	public void setType(ItemType type) {
-		this.type = type;
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class ItemDisplayed {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		result = prime * result + ((itemType == null) ? 0 : itemType.hashCode());
 		return result;
 	}
 
@@ -122,7 +122,7 @@ public class ItemDisplayed {
 				return false;
 		} else if (!text.equals(other.text))
 			return false;
-		if (type != other.type)
+		if (itemType != other.itemType)
 			return false;
 		return true;
 	}

@@ -27,7 +27,7 @@ class ItemList extends React.Component {
                     <ul className="list-unstyled">
                         {itemList}
                         <NewItem
-                            onAddItem={( text ) => this.props.onAddItem( text )}
+                            onAddItem={( itemType, text ) => this.props.onAddItem( itemType, text )}
                             month={this.props.month}
                         />
                     </ul>
