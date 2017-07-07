@@ -20,24 +20,25 @@ public class ItemShould {
 	
 	InMemoryEventStore<IItemEvent> store;
 	EventsBus bus;
+	UUID id;
 	
 	@Before
 	public void before() {
 		store = new InMemoryEventStore<IItemEvent>();
 		bus = new EventsBus(store);
+		id = UUID.randomUUID();
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 	}
 
 	@Test
 	public void raiseItemAddedWhenAddItem() {
-		UUID id = Item.add(bus, "buy baguette", "2017-05", ItemType.TASK);
+		UUID id = Item.add(bus, "something", "2017-05", ItemType.EVENT);
 		
-		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
+		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "something", "2017-05", ItemType.EVENT));
 	}
 
 	@Test
 	public void raiseItemCancelledWhenCancelItem() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item item = new Item(store.getEventsFor(id));
 
 		boolean res = item.cancel(bus);
@@ -48,8 +49,6 @@ public class ItemShould {
 
 	@Test
 	public void dontRaiseItemCancelledWhenItemAlreadyCancelled() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		store.add(new ItemCancelled(id));
 		Item item = new Item(store.getEventsFor(id));
 
@@ -61,8 +60,6 @@ public class ItemShould {
 
 	@Test
 	public void raiseItemRestoredWhenRestoreItem() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		store.add(new ItemCancelled(id));
 		Item item = new Item(store.getEventsFor(id));
 
@@ -74,8 +71,6 @@ public class ItemShould {
 
 	@Test
 	public void dontRaiseItemRestoredWhenItemNotCancelled() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item item = new Item(store.getEventsFor(id));
 
 		boolean res = item.restore(bus);
@@ -86,8 +81,6 @@ public class ItemShould {
 	
 	@Test
 	public void raiseTaskCompletedWhenCompleteTask() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item task = new Item(store.getEventsFor(id));
 		
 		boolean res = task.completeTask(bus);
@@ -98,8 +91,6 @@ public class ItemShould {
 
 	@Test
 	public void dontRaiseTaskCompletedWhenCompleteTaskAlreadyCompleted() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		store.add(new TaskCompleted(id));
 		Item task = new Item(store.getEventsFor(id));
 		
@@ -117,12 +108,12 @@ public class ItemShould {
 		boolean res = task.completeTask(bus);
 
 		assertThat(res).isFalse();
-		assertThat(store.getAllEvents()).isEmpty();
+		assertThat(store.getAllEvents()).doesNotContain(new TaskCompleted(id));
 	}
 	
 	@Test
 	public void dontRaiseTaskCompletedWhenItemNotTask() {
-		UUID id = UUID.randomUUID();
+		id = UUID.randomUUID();
 		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.EVENT));
 		Item task = new Item(store.getEventsFor(id));
 		
@@ -134,8 +125,6 @@ public class ItemShould {
 	
 	@Test
 	public void raiseTaskCompletedOnlyOnceWhenCompleteTaskTwice() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item task = new Item(store.getEventsFor(id));
 		
 		boolean res1 = task.completeTask(bus);
@@ -148,8 +137,6 @@ public class ItemShould {
 
 	@Test
 	public void raiseTaskUncompletedWhenUncompleteTask() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		store.add(new TaskCompleted(id));
 		Item task = new Item(store.getEventsFor(id));
 		
@@ -161,8 +148,6 @@ public class ItemShould {
 
 	@Test
 	public void dontRaiseTaskUncompletedWhenTaskNotComplete() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item task = new Item(store.getEventsFor(id));
 		
 		boolean res = task.uncompleteTask(bus);
@@ -173,8 +158,6 @@ public class ItemShould {
 
 	@Test
 	public void dontRaiseTaskUncompletedWhenTaskAlreadyUncompleted() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		store.add(new TaskCompleted(id));
 		store.add(new TaskUncompleted(id));
 		Item task = new Item(store.getEventsFor(id));
@@ -187,8 +170,6 @@ public class ItemShould {
 	
 	@Test
 	public void dontRaiseTaskUncompletedWhenNotATask() {
-		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.EVENT));
 		Item task = new Item(store.getEventsFor(id));
 		
 		boolean res = task.uncompleteTask(bus);
