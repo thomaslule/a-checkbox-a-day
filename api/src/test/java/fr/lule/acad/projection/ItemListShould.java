@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import fr.lule.acad.aggregate.ItemType;
@@ -18,79 +19,79 @@ import fr.lule.acad.event.TaskUncompleted;
 
 public class ItemListShould {
 	
-	@Test
-	public void addItemInListWhenItemAdded() {
-		ItemList list = new ItemList(new ArrayList<IItemEvent>());
-		UUID id = UUID.randomUUID();
-		
-		list.handle(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
-		
-		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
-		assertThat(list.getList("2017-06")).isEmpty();
+	private List<IItemEvent> history;
+	private UUID id;
+
+	@Before
+	public void before() {
+		history = new ArrayList<IItemEvent>();
+		id = UUID.randomUUID();
+		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 	}
 	
+	private ItemDisplayed getItem(ItemList list) {
+		return list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get();
+	}
+
+	@Test
+	public void addItemInListWhenItemAdded() {
+		ItemList list = new ItemList(history);
+		UUID id = UUID.randomUUID();
+
+		list.handle(new ItemAdded(id, "something", "2017-05", ItemType.TASK));
+
+		assertThat(list.getList("2017-05"))
+				.contains(new ItemDisplayed(id, ItemType.TASK, "something", "2017-05", false, false));
+		assertThat(list.getList("2017-06")).isEmpty();
+	}
+
 	@Test
 	public void haveItemInListWhenHistoryContainsItemAdded() {
-		List<IItemEvent> history = new ArrayList<IItemEvent>();
-		UUID id = UUID.randomUUID();
-		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
-		
 		ItemList list = new ItemList(history);
-
-		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
+		assertThat(list.getList("2017-05"))
+				.contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
 		assertThat(list.getList("2017-06")).isEmpty();
 	}
 
 	@Test
 	public void setItemCancelledWhenItemCancelled() {
-		List<IItemEvent> history = new ArrayList<IItemEvent>();
-		UUID id = UUID.randomUUID();
-		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 		ItemList list = new ItemList(history);
-		
 		list.handle(new ItemCancelled(id));
-		
-		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCancelled()).isTrue();
+
+		assertThat(getItem(list).isCancelled()).isTrue();
 	}
 
 	@Test
 	public void setItemRestoredWhenItemRestored() {
-		List<IItemEvent> history = new ArrayList<IItemEvent>();
-		UUID id = UUID.randomUUID();
-		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 		history.add(new ItemCancelled(id));
 		ItemList list = new ItemList(history);
-		
+
 		list.handle(new ItemRestored(id));
-		
-		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCancelled()).isFalse();
+
+		assertThat(getItem(list).isCancelled()).isFalse();
 	}
 
 	@Test
 	public void setTaskCompletedWhenTaskCompleted() {
-		List<IItemEvent> history = new ArrayList<IItemEvent>();
-		UUID id1 = UUID.randomUUID();
-		history.add(new ItemAdded(id1, "buy bread", "2017-05", ItemType.TASK));
 		UUID id2 = UUID.randomUUID();
 		history.add(new ItemAdded(id2, "pet cat", "2017-05", ItemType.TASK));
 		ItemList list = new ItemList(history);
-		
-		list.handle(new TaskCompleted(id1));
-		
-		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id1)).findFirst().get().isCompleted()).isTrue();
+
+		list.handle(new TaskCompleted(id));
+
+		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id2)).findFirst().get().isCompleted())
+				.isFalse();
+		assertThat(getItem(list).isCompleted()).isTrue();
 	}
 
 	@Test
 	public void setTaskUncompletedWhenTaskUncompleted() {
-		List<IItemEvent> history = new ArrayList<IItemEvent>();
-		UUID id = UUID.randomUUID();
-		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 		history.add(new TaskCompleted(id));
 		ItemList list = new ItemList(history);
-		
+
 		list.handle(new TaskUncompleted(id));
-		
-		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCompleted()).isFalse();
+
+		assertThat(getItem(list).isCompleted()).isFalse();
 	}
 
 }
