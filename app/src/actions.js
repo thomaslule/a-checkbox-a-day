@@ -6,7 +6,7 @@ actions.fetchTasks = ( month ) => ( {
 } );
 
 actions.receiveTasks = ( tasks ) => ( {
-    type: "RECEIVE_TASKS",
+    type: "FETCH_TASKS_SUCCESS",
     tasks
 } );
 
@@ -24,5 +24,10 @@ actions.completeTask = ( id ) => ( {
     type: "COMPLETE_TASK",
     id
 } );
+
+actions.error = (error) => ({
+    type: "ERROR",
+    error
+});
 
 export default actions;

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import moment from "moment";
 import MonthPage from "./components/MonthPage";
+import ErrorContainer from "./containers/ErrorContainer";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
@@ -21,6 +22,7 @@ class App extends React.Component {
                         <span className="navbar-brand">A checkbox a day</span>
                     </div>
                 </nav>
+                <ErrorContainer />
                 <div className="container">
                     <Router>
                         <Switch>

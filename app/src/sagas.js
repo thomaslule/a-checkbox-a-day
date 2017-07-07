@@ -5,23 +5,35 @@ import api from "./api";
 function* watchFetchTasks() {
     yield takeLatest( "FETCH_TASKS",
         function* ( action ) {
-            const tasks = yield call( api.fetchTasks, action.month );
-            yield put( actions.receiveTasks( tasks ) );
+            try {
+                const tasks = yield call( api.fetchTasks, action.month );
+                yield put( actions.receiveTasks( tasks ) );
+            } catch ( e ) {
+                yield put( actions.error( e ) );
+            }
         } );
 }
 
 function* watchAddTask() {
     yield takeEvery( "ADD_TASK",
         function* ( action ) {
-            const task = yield call( api.addTask, action.task );
-            yield put( actions.taskAdded( task ) );
+            try {
+                const task = yield call( api.addTask, action.task );
+                yield put( actions.taskAdded( task ) );
+            } catch ( e ) {
+                yield put( actions.error( e ) );
+            }
         } );
 }
 
 function* watchCompleteTask() {
     yield takeEvery( "COMPLETE_TASK",
         function* ( action ) {
-            yield call( api.completeTask, action.id );
+            try {
+                yield call( api.completeTask, action.id );
+            } catch ( e ) {
+                yield put( actions.error( e ) );
+            }
         } );
 }
 
