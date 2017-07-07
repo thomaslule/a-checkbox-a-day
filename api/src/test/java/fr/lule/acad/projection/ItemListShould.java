@@ -12,6 +12,7 @@ import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
+import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 
@@ -50,6 +51,19 @@ public class ItemListShould {
 		list.handle(new ItemCancelled(id));
 		
 		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCancelled()).isTrue();
+	}
+
+	@Test
+	public void setItemRestoredWhenItemRestored() {
+		List<IItemEvent> history = new ArrayList<IItemEvent>();
+		UUID id = UUID.randomUUID();
+		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		history.add(new ItemCancelled(id));
+		ItemList list = new ItemList(history);
+		
+		list.handle(new ItemRestored(id));
+		
+		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCancelled()).isFalse();
 	}
 
 	@Test

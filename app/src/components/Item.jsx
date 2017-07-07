@@ -13,11 +13,12 @@ class Item extends React.Component {
                 />
             </div> ) : null;
         const buttonCancel = this.props.item.cancelled ? null : ( <a href="" title="Cancel" onClick={( e ) => this.handleCancel( e )}><i className="glyphicon glyphicon-remove" /></a> );
+        const buttonRestore = this.props.item.cancelled ? ( <a href="" title="Restore" onClick={( e ) => this.handleRestore( e )}><i className="glyphicon glyphicon-asterisk" /></a> ) : null;
         return (
             <li className={this.getItemClass()}>
                 {checkbox}
                 <span className="item-name">{this.props.item.text}</span>
-                <span className="action-buttons">{buttonCancel}</span>
+                <span className="action-buttons">{buttonCancel}{buttonRestore}</span>
             </li> );
     }
 
@@ -31,6 +32,11 @@ class Item extends React.Component {
 
     handleCancel( e ) {
         this.props.onCancel();
+        e.preventDefault();
+    }
+
+    handleRestore( e ) {
+        this.props.onRestore();
         e.preventDefault();
     }
 

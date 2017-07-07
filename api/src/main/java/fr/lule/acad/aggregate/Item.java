@@ -6,6 +6,7 @@ import java.util.UUID;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
+import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.IEventPublisher;
@@ -29,6 +30,15 @@ public class Item {
 			return false;
 		}
 		ItemCancelled event = new ItemCancelled(projection.id);
+		publisher.publish(event);
+		return true;
+	}
+
+	public boolean restore(IEventPublisher publisher) {
+		if (!projection.exists || !projection.cancelled) {
+			return false;
+		}
+		ItemRestored event = new ItemRestored(projection.id);
 		publisher.publish(event);
 		return true;
 	}
@@ -73,6 +83,8 @@ public class Item {
 				done = false;
 			} else if (event instanceof ItemCancelled) {
 				cancelled = true;
+			} else if (event instanceof ItemRestored) {
+				cancelled = false;
 			} else if (event instanceof TaskCompleted) {
 				done = true;
 			} else if (event instanceof TaskUncompleted) {

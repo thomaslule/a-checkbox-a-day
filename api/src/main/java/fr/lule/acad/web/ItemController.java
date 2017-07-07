@@ -52,6 +52,30 @@ public class ItemController {
 		});
 	}
 
+	@Post("/CancelItem")
+	public Payload cancelItem(IdCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item item = new Item(itemEventStore.getEventsFor(command.id));
+			if (item.cancel(publisher)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
+	@Post("/RestoreItem")
+	public Payload restoreItem(IdCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item item = new Item(itemEventStore.getEventsFor(command.id));
+			if (item.restore(publisher)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
 	@Post("/CompleteTask")
 	public Payload completeTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
@@ -69,18 +93,6 @@ public class ItemController {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
 			if (task.uncompleteTask(publisher)) {
-				return Payload.ok();
-			} else {
-				return Payload.badRequest();
-			}
-		});
-	}
-
-	@Post("/CancelItem")
-	public Payload cancelItem(IdCommand command) {
-		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item item = new Item(itemEventStore.getEventsFor(command.id));
-			if (item.cancel(publisher)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();

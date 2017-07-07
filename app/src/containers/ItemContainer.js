@@ -9,6 +9,7 @@ const mapStateToProps = ( state, ownProps ) => ( {
 const mapDispatchToProps = ( dispatch, props ) => {
     return {
         onCancel: () => dispatch( actions.cancelItem( props.item.id ) ),
+        onRestore: () => dispatch( actions.restoreItem( props.item.id ) ),
         onChangeCompleteTask: () => {
             if ( props.item.completed ) {
                 dispatch( actions.uncompleteTask( props.item.id ) );

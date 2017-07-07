@@ -25,6 +25,11 @@ actions.cancelItem = ( id ) => ( {
     id
 } );
 
+actions.restoreItem = ( id ) => ( {
+    type: "RESTORE_ITEM",
+    id
+} );
+
 actions.completeTask = ( id ) => ( {
     type: "COMPLETE_TASK",
     id
