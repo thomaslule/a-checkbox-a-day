@@ -76,6 +76,18 @@ public class ItemController {
 		});
 	}
 
+	@Post("/DeleteItem")
+	public Payload deleteItem(IdCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item item = new Item(itemEventStore.getEventsFor(command.id));
+			if (item.delete(publisher)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
 	@Post("/CompleteTask")
 	public Payload completeTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {

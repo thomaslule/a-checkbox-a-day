@@ -10,6 +10,7 @@ import org.junit.Test;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
+import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
@@ -59,6 +60,17 @@ public class ItemShould {
 	}
 
 	@Test
+	public void dontRaiseItemCancelledWhenItemDeleted() {
+		store.add(new ItemDeleted(id));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.cancel(bus);
+
+		assertThat(res).isFalse();
+		assertThat(store.getAllEvents()).doesNotContain(new ItemCancelled(id));
+	}
+
+	@Test
 	public void raiseItemRestoredWhenRestoreItem() {
 		store.add(new ItemCancelled(id));
 		Item item = new Item(store.getEventsFor(id));
@@ -77,6 +89,38 @@ public class ItemShould {
 
 		assertThat(res).isFalse();
 		assertThat(store.getAllEvents()).doesNotContain(new ItemRestored(id));
+	}
+
+	@Test
+	public void dontRaiseItemRestoredWhenItemDeleted() {
+		store.add(new ItemDeleted(id));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.restore(bus);
+
+		assertThat(res).isFalse();
+		assertThat(store.getAllEvents()).doesNotContain(new ItemRestored(id));
+	}
+
+	@Test
+	public void raiseItemDeletedWhenDeleteItem() {
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.delete(bus);
+
+		assertThat(res).isTrue();
+		assertThat(store.getAllEvents()).contains(new ItemDeleted(id));
+	}
+
+	@Test
+	public void dontRaiseItemDeletedWhenItemAlreadyDeleted() {
+		store.add(new ItemDeleted(id));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.delete(bus);
+
+		assertThat(res).isFalse();
+		assertThat(store.getAllEvents()).containsOnlyOnce(new ItemDeleted(id));
 	}
 	
 	@Test
@@ -136,6 +180,17 @@ public class ItemShould {
 	}
 
 	@Test
+	public void dontRaiseTaskCompletedWhenItemDeleted() {
+		store.add(new ItemDeleted(id));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.completeTask(bus);
+
+		assertThat(res).isFalse();
+		assertThat(store.getAllEvents()).doesNotContain(new TaskCompleted(id));
+	}
+
+	@Test
 	public void raiseTaskUncompletedWhenUncompleteTask() {
 		store.add(new TaskCompleted(id));
 		Item task = new Item(store.getEventsFor(id));
@@ -170,11 +225,25 @@ public class ItemShould {
 	
 	@Test
 	public void dontRaiseTaskUncompletedWhenNotATask() {
-		Item task = new Item(store.getEventsFor(id));
+		UUID id = Item.add(bus, "something", "2017-05", ItemType.EVENT);
+		Item item = new Item(store.getEventsFor(id));
 		
-		boolean res = task.uncompleteTask(bus);
+		boolean res = item.uncompleteTask(bus);
 
 		assertThat(res).isFalse();
 		assertThat(store.getAllEvents()).doesNotContain(new TaskUncompleted(id));
 	}
+
+	@Test
+	public void dontRaiseTaskUncompletedWhenItemDeleted() {
+		store.add(new TaskCompleted(id));
+		store.add(new ItemDeleted(id));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.uncompleteTask(bus);
+
+		assertThat(res).isFalse();
+		assertThat(store.getAllEvents()).doesNotContain(new TaskUncompleted(id));
+	}
+
 }

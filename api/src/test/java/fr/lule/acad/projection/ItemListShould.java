@@ -13,6 +13,7 @@ import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
+import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
@@ -69,6 +70,15 @@ public class ItemListShould {
 		list.handle(new ItemRestored(id));
 
 		assertThat(getItem(list).isCancelled()).isFalse();
+	}
+	
+	@Test
+	public void removeItemWhenItemDeleted() {
+		ItemList list = new ItemList(history);
+		
+		list.handle(new ItemDeleted(id));
+		
+		assertThat(list.getList("2017-05")).isEmpty();
 	}
 
 	@Test

@@ -6,6 +6,7 @@ import java.util.UUID;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
+import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
@@ -26,7 +27,7 @@ public class Item {
 	}
 	
 	public boolean cancel(IEventPublisher publisher) {
-		if (!projection.exists || projection.cancelled) {
+		if (!projection.exists || projection.deleted || projection.cancelled) {
 			return false;
 		}
 		ItemCancelled event = new ItemCancelled(projection.id);
@@ -35,7 +36,7 @@ public class Item {
 	}
 
 	public boolean restore(IEventPublisher publisher) {
-		if (!projection.exists || !projection.cancelled) {
+		if (!projection.exists || projection.deleted || !projection.cancelled) {
 			return false;
 		}
 		ItemRestored event = new ItemRestored(projection.id);
@@ -43,8 +44,17 @@ public class Item {
 		return true;
 	}
 
+	public boolean delete(IEventPublisher publisher) {
+		if (!projection.exists || projection.deleted) {
+			return false;
+		}
+		ItemDeleted event = new ItemDeleted(projection.id);
+		publisher.publish(event);
+		return true;
+	}
+
 	public boolean completeTask(IEventPublisher publisher) {
-		if (!projection.exists || projection.type != ItemType.TASK || projection.done) {
+		if (!projection.exists || projection.deleted || projection.type != ItemType.TASK || projection.done) {
 			return false;
 		}
 		TaskCompleted event = new TaskCompleted(projection.id);
@@ -52,9 +62,9 @@ public class Item {
 		publisher.publish(event);
 		return true;
 	}
-	
+
 	public boolean uncompleteTask(IEventPublisher publisher) {
-		if (!projection.exists || projection.type != ItemType.TASK || !projection.done) {
+		if (!projection.exists || projection.deleted || projection.type != ItemType.TASK || !projection.done) {
 			return false;
 		}
 		TaskUncompleted event = new TaskUncompleted(projection.id);
@@ -70,6 +80,7 @@ public class Item {
 		private ItemType type;
 		private boolean done = false;
 		private boolean cancelled = false;
+		private boolean deleted = false;
 
 		public DecisionProjection(List<IItemEvent> history) {
 			history.forEach(this::apply);
@@ -85,6 +96,8 @@ public class Item {
 				cancelled = true;
 			} else if (event instanceof ItemRestored) {
 				cancelled = false;
+			} else if (event instanceof ItemDeleted) {
+				deleted = true;
 			} else if (event instanceof TaskCompleted) {
 				done = true;
 			} else if (event instanceof TaskUncompleted) {

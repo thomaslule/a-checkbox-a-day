@@ -9,6 +9,7 @@ import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
+import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
@@ -43,6 +44,10 @@ public class ItemList implements IEventSubscriber {
 		if (event instanceof ItemRestored) {
 			UUID id = ((ItemRestored) event).getAggregateId();
 			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCancelled(false));
+		}
+		if (event instanceof ItemDeleted) {
+			UUID id = ((ItemDeleted) event).getAggregateId();
+			list.removeIf(t -> t.getId().equals(id));
 		}
 		if (event instanceof TaskCompleted) {
 			UUID id = ((TaskCompleted) event).getAggregateId();
