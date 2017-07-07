@@ -7,9 +7,9 @@ import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import fr.lule.acad.aggregate.Task;
-import fr.lule.acad.event.ITaskEvent;
-import fr.lule.acad.projection.TaskList;
+import fr.lule.acad.aggregate.Item;
+import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.IEventStore;
 import fr.lule.acad.stream.IEventPublisher;
 import fr.lule.acad.web.validation.CommandRunner;
@@ -21,41 +21,41 @@ import net.codestory.http.constants.HttpStatus;
 import net.codestory.http.payload.Payload;
 
 @Prefix("/api")
-public class TasksController {
+public class ItemController {
 
-	private TaskList list;
+	private ItemList list;
 	private IEventPublisher publisher;
-	private IEventStore<ITaskEvent> taskEventStore;
+	private IEventStore<IItemEvent> itemEventStore;
 	private Validator validator;
 
-	public TasksController(TaskList list, IEventPublisher publisher, IEventStore<ITaskEvent> taskEventStore) {
+	public ItemController(ItemList list, IEventPublisher publisher, IEventStore<IItemEvent> itemEventStore) {
 		this.list = list;
 		this.publisher = publisher;
-		this.taskEventStore = taskEventStore;
+		this.itemEventStore = itemEventStore;
 		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
-	@Get("/Tasks/:month")
-	public Payload getTasks(GetMonthCommand month) {
+	@Get("/Items/:month")
+	public Payload getItems(GetMonthItemsCommand month) {
 		return CommandRunner.ifValid(month, validator, (c) -> {
 			return new Payload(null, list.getList(month.month));
 		});
 	}
 
-	@Post("/AddTask")
-	public Payload addTask(AddTaskCommand command) {
+	@Post("/AddItem")
+	public Payload addItem(AddItemCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			UUID id = Task.add(publisher, c.todo, c.month);
-			// TODO use a repository instead of getting the task from the list
-			return new Payload(null, list.getTask(id), HttpStatus.CREATED);
+			UUID id = Item.add(publisher, c.text, c.month);
+			// TODO use a repository instead of getting the item from the list
+			return new Payload(null, list.getItem(id), HttpStatus.CREATED);
 		});
 	}
 
 	@Post("/CompleteTask")
 	public Payload completeTask(CompleteTaskCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Task task = new Task(taskEventStore.getEventsFor(command.id));
-			if (task.complete(publisher)) {
+			Item task = new Item(itemEventStore.getEventsFor(command.id));
+			if (task.completeTask(publisher)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -63,21 +63,21 @@ public class TasksController {
 		});
 	}
 
-	public static class GetMonthCommand {
+	public static class GetMonthItemsCommand {
 		@NotNull
 		@Month
 		public String month;
 
-		public GetMonthCommand(String month) {
+		public GetMonthItemsCommand(String month) {
 			this.month = month;
 		}
 
 	}
 
-	public static class AddTaskCommand {
+	public static class AddItemCommand {
 		@NotNull
 		@Size(min = 1)
-		public String todo;
+		public String text;
 
 		@NotNull
 		@Month

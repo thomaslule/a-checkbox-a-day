@@ -1,7 +1,7 @@
 package fr.lule.acad.web;
 
-import fr.lule.acad.event.ITaskEvent;
-import fr.lule.acad.projection.TaskList;
+import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
 import net.codestory.http.WebServer;
@@ -10,14 +10,14 @@ public class AcadServer {
 
 	public static void main(String[] args) {
 		
-		InMemoryEventStore<ITaskEvent> taskEventStore = new InMemoryEventStore<ITaskEvent>();
-		TaskList list = new TaskList(taskEventStore.getAllEvents());
-		EventsBus bus = new EventsBus(taskEventStore);
+		InMemoryEventStore<IItemEvent> itemEventStore = new InMemoryEventStore<IItemEvent>();
+		ItemList list = new ItemList(itemEventStore.getAllEvents());
+		EventsBus bus = new EventsBus(itemEventStore);
 		bus.subscribe(list);
 		
 		new WebServer()
 		.configure(routes -> {
-			routes.add(new TasksController(list, bus, taskEventStore));
+			routes.add(new ItemController(list, bus, itemEventStore));
 		})
 		.start();
 	}

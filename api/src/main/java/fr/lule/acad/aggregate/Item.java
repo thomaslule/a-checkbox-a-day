@@ -3,26 +3,26 @@ package fr.lule.acad.aggregate;
 import java.util.List;
 import java.util.UUID;
 
-import fr.lule.acad.event.ITaskEvent;
-import fr.lule.acad.event.TaskAdded;
+import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.stream.IEventPublisher;
 
-public class Task {
+public class Item {
 
 	private DecisionProjection projection;
 
-	public static UUID add(IEventPublisher publisher, String todo, String month) {
+	public static UUID add(IEventPublisher publisher, String text, String month) {
 		UUID id = UUID.randomUUID();
-		publisher.publish(new TaskAdded(id, todo, month));
+		publisher.publish(new ItemAdded(id, text, month));
 		return id;
 	}
 
-	public Task(List<ITaskEvent> history) {
+	public Item(List<IItemEvent> history) {
 		projection = new DecisionProjection(history);
 	}
 
-	public boolean complete(IEventPublisher publisher) {
+	public boolean completeTask(IEventPublisher publisher) {
 		if (!projection.exists || projection.done) {
 			return false;
 		}
@@ -38,14 +38,14 @@ public class Task {
 		private UUID id;
 		private boolean done = false;
 
-		public DecisionProjection(List<ITaskEvent> history) {
+		public DecisionProjection(List<IItemEvent> history) {
 			history.forEach(this::apply);
 		}
 
-		public void apply(ITaskEvent event) {
-			if (event instanceof TaskAdded) {
+		public void apply(IItemEvent event) {
+			if (event instanceof ItemAdded) {
 				exists = true;
-				id = ((TaskAdded) event).getAggregateId();
+				id = ((ItemAdded) event).getAggregateId();
 				done = false;
 			} else if (event instanceof TaskCompleted) {
 				done = true;

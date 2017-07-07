@@ -7,24 +7,24 @@ import java.util.UUID;
 
 import org.junit.Test;
 
-import fr.lule.acad.aggregate.Task;
-import fr.lule.acad.event.ITaskEvent;
-import fr.lule.acad.projection.TaskDisplayed;
-import fr.lule.acad.projection.TaskList;
+import fr.lule.acad.aggregate.Item;
+import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.projection.ItemDisplayed;
+import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
 
 public class AcadShould {
 	
 	@Test
-	public void displayTaskInTaskListWhenAddTask() {
-		TaskList list = new TaskList(new ArrayList<ITaskEvent>());
-		EventsBus bus = new EventsBus(new InMemoryEventStore<ITaskEvent>());
+	public void displayItemInItemListWhenAddItem() {
+		ItemList list = new ItemList(new ArrayList<IItemEvent>());
+		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>());
 		bus.subscribe(list);
 		
-		UUID id = Task.add(bus, "buy bread", "2017-05");
+		UUID id = Item.add(bus, "buy bread", "2017-05");
 		
-		assertThat(list.getList("2017-05")).contains(new TaskDisplayed(id, "buy bread", "2017-05", false));
+		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, "buy bread", "2017-05", false));
 	}
 	
 

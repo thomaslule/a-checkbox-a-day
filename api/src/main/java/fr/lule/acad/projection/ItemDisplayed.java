@@ -2,16 +2,16 @@ package fr.lule.acad.projection;
 
 import java.util.UUID;
 
-public class TaskDisplayed {
+public class ItemDisplayed {
 	
 	private UUID id;
-	private String todo;
+	private String text;
 	private String month;
 	private boolean completed;
 
-	public TaskDisplayed(UUID id, String todo, String month, boolean completed) {
+	public ItemDisplayed(UUID id, String text, String month, boolean completed) {
 		this.id = id;
-		this.todo = todo;
+		this.text = text;
 		this.setMonth(month);
 		this.completed = completed;
 	}
@@ -33,15 +33,15 @@ public class TaskDisplayed {
 	/**
 	 * @return the todo
 	 */
-	public String getTodo() {
-		return todo;
+	public String getText() {
+		return text;
 	}
 
 	/**
-	 * @param todo the todo to set
+	 * @param text the todo to set
 	 */
-	public void setTodo(String todo) {
-		this.todo = todo;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getMonth() {
@@ -70,7 +70,7 @@ public class TaskDisplayed {
 		result = prime * result + (completed ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
-		result = prime * result + ((todo == null) ? 0 : todo.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
 
@@ -85,7 +85,7 @@ public class TaskDisplayed {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TaskDisplayed other = (TaskDisplayed) obj;
+		ItemDisplayed other = (ItemDisplayed) obj;
 		if (completed != other.completed)
 			return false;
 		if (id == null) {
@@ -98,10 +98,10 @@ public class TaskDisplayed {
 				return false;
 		} else if (!month.equals(other.month))
 			return false;
-		if (todo == null) {
-			if (other.todo != null)
+		if (text == null) {
+			if (other.text != null)
 				return false;
-		} else if (!todo.equals(other.todo))
+		} else if (!text.equals(other.text))
 			return false;
 		return true;
 	}

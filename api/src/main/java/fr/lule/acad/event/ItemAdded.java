@@ -2,20 +2,20 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
-public class TaskAdded implements ITaskEvent {
+public class ItemAdded implements IItemEvent {
 	
 	private final UUID aggregateId;
-	private String todo;
+	private String text;
 	private String month;
 
-	public TaskAdded(UUID aggregateId, String todo, String month) {
+	public ItemAdded(UUID aggregateId, String text, String month) {
 		this.aggregateId = aggregateId;
-		this.todo = todo;
+		this.text = text;
 		this.month = month;
 	}
 
-	public String getTodo() {
-		return todo;
+	public String getText() {
+		return text;
 	}
 	
 	public String getMonth() {
@@ -36,7 +36,7 @@ public class TaskAdded implements ITaskEvent {
 		int result = 1;
 		result = prime * result + ((aggregateId == null) ? 0 : aggregateId.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
-		result = prime * result + ((todo == null) ? 0 : todo.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
 
@@ -51,7 +51,7 @@ public class TaskAdded implements ITaskEvent {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TaskAdded other = (TaskAdded) obj;
+		ItemAdded other = (ItemAdded) obj;
 		if (aggregateId == null) {
 			if (other.aggregateId != null)
 				return false;
@@ -62,10 +62,10 @@ public class TaskAdded implements ITaskEvent {
 				return false;
 		} else if (!month.equals(other.month))
 			return false;
-		if (todo == null) {
-			if (other.todo != null)
+		if (text == null) {
+			if (other.text != null)
 				return false;
-		} else if (!todo.equals(other.todo))
+		} else if (!text.equals(other.text))
 			return false;
 		return true;
 	}

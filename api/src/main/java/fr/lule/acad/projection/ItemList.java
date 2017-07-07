@@ -6,32 +6,32 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import fr.lule.acad.event.IEvent;
-import fr.lule.acad.event.ITaskEvent;
-import fr.lule.acad.event.TaskAdded;
+import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.stream.IEventSubscriber;
 
-public class TaskList implements IEventSubscriber {
+public class ItemList implements IEventSubscriber {
 	
-	private List<TaskDisplayed> list = new ArrayList<TaskDisplayed>();
+	private List<ItemDisplayed> list = new ArrayList<ItemDisplayed>();
 
-	public TaskList(List<ITaskEvent> history) {
+	public ItemList(List<IItemEvent> history) {
 		history.forEach(this::handle);
 	}
 
-	public List<TaskDisplayed> getList(String month) {
+	public List<ItemDisplayed> getList(String month) {
 		return list.stream().filter(t -> t.getMonth().equals(month)).collect(Collectors.toList());
 	}
 	
-	public TaskDisplayed getTask(UUID id) {
+	public ItemDisplayed getItem(UUID id) {
 		return list.stream().filter(t -> t.getId().equals(id)).findFirst().get();
 	}
 
 	@Override
 	public void handle(IEvent event) {
-		if (event instanceof TaskAdded) {
-			TaskAdded taskAdded = (TaskAdded) event;
-			list.add(new TaskDisplayed(taskAdded.getAggregateId(), taskAdded.getTodo(), taskAdded.getMonth(), false));
+		if (event instanceof ItemAdded) {
+			ItemAdded itemAdded = (ItemAdded) event;
+			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getText(), itemAdded.getMonth(), false));
 		}
 		if (event instanceof TaskCompleted) {
 			UUID id = ((TaskCompleted) event).getAggregateId();

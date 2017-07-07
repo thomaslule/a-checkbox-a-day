@@ -8,66 +8,66 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.lule.acad.event.ITaskEvent;
-import fr.lule.acad.event.TaskAdded;
-import fr.lule.acad.projection.TaskDisplayed;
-import fr.lule.acad.projection.TaskList;
+import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.projection.ItemDisplayed;
+import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
-import fr.lule.acad.web.TasksController.AddTaskCommand;
-import fr.lule.acad.web.TasksController.CompleteTaskCommand;
-import fr.lule.acad.web.TasksController.GetMonthCommand;
+import fr.lule.acad.web.ItemController.AddItemCommand;
+import fr.lule.acad.web.ItemController.CompleteTaskCommand;
+import fr.lule.acad.web.ItemController.GetMonthItemsCommand;
 import net.codestory.http.payload.Payload;
 
 @SuppressWarnings("unchecked")
-public class TasksControllerShould {
+public class ItemControllerShould {
 
-	private InMemoryEventStore<ITaskEvent> taskEventStore;
-	private TaskList list;
+	private InMemoryEventStore<IItemEvent> itemEventStore;
+	private ItemList list;
 	private EventsBus bus;
-	private TasksController controller;
+	private ItemController controller;
 	UUID eventId;
 
 	@Before
 	public void before() {
-		taskEventStore = new InMemoryEventStore<ITaskEvent>();
+		itemEventStore = new InMemoryEventStore<IItemEvent>();
 		eventId = UUID.randomUUID();
-		taskEventStore.add(new TaskAdded(eventId, "todo", "2017-01"));
-		list = new TaskList(taskEventStore.getAllEvents());
-		bus = new EventsBus(taskEventStore);
+		itemEventStore.add(new ItemAdded(eventId, "todo", "2017-01"));
+		list = new ItemList(itemEventStore.getAllEvents());
+		bus = new EventsBus(itemEventStore);
 		bus.subscribe(list);
-		controller = new TasksController(list, bus, taskEventStore);
+		controller = new ItemController(list, bus, itemEventStore);
 	}
 
 	@Test
-	public void getTasksReturnsList() {
-		Payload res = controller.getTasks(new GetMonthCommand("2017-01"));
+	public void getItemsReturnsList() {
+		Payload res = controller.getItems(new GetMonthItemsCommand("2017-01"));
 		assertThat(res.isSuccess()).isTrue();
-		assertThat(((List<TaskDisplayed>) res.rawContent()).get(0).getTodo()).isEqualTo("todo");
+		assertThat(((List<ItemDisplayed>) res.rawContent()).get(0).getText()).isEqualTo("todo");
 	}
 
 	@Test
-	public void getTasksFailsForInvalidCommand() {
-		Payload res = controller.getTasks(new GetMonthCommand("2017-1"));
+	public void getItemsFailsForInvalidCommand() {
+		Payload res = controller.getItems(new GetMonthItemsCommand("2017-1"));
 		assertThat(res.isError()).isTrue();
 	}
 
 	@Test
-	public void addTaskReturnsTask() {
-		AddTaskCommand command = new AddTaskCommand();
+	public void addItemReturnsItem() {
+		AddItemCommand command = new AddItemCommand();
 		command.month = "2017-01";
-		command.todo = "todo";
-		Payload res = controller.addTask(command);
+		command.text = "todo";
+		Payload res = controller.addItem(command);
 		assertThat(res.isSuccess()).isTrue();
 		assertThat(list.getList("2017-01").size()).isEqualTo(2);
 	}
 
 	@Test
-	public void addTaskFailsForInvalidCommand() {
-		AddTaskCommand command = new AddTaskCommand();
+	public void addItemFailsForInvalidCommand() {
+		AddItemCommand command = new AddItemCommand();
 		command.month = "2017-1";
-		command.todo = "todo";
-		Payload res = controller.addTask(command);
+		command.text = "todo";
+		Payload res = controller.addItem(command);
 		assertThat(res.isError()).isTrue();
 		assertThat(list.getList("2017-01").size()).isEqualTo(1);
 	}
