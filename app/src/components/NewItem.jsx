@@ -11,19 +11,17 @@ class NewItem extends React.Component {
     }
 
     render() {
+        const dropdownButtons = Object.keys( this.typeLabel ).map(( itemType ) =>
+            ( <li onClick={( e ) => this.handleChangeType( e, itemType )} key={itemType}><a href="">{this.typeLabel[itemType]}</a></li> ) );
         return (
             <li className="newItem">
-                <form onSubmit={(e) => this.handleSubmit(e)}>
+                <form onSubmit={( e ) => this.handleSubmit( e )}>
                     <div className="input-group">
                         <span className="input-group-btn">
-                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" id="choose-type-button">
+                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 {this.typeLabel[this.state.itemType]} <span className="caret"></span>
                             </button>
-                            <ul className="dropdown-menu">
-                                <li onClick={( e ) => this.handleChangeType( e, "TASK" )}><a href="" id="choose-task-button">Task</a></li>
-                                <li onClick={( e ) => this.handleChangeType( e, "EVENT" )}><a href="" id="choose-event-button">Event</a></li>
-                                <li onClick={( e ) => this.handleChangeType( e, "NOTE" )}><a href="" id="choose-note-button">Note</a></li>
-                            </ul>
+                            <ul className="dropdown-menu">{dropdownButtons}</ul>
                         </span>
                         <input
                             type="text"
@@ -49,7 +47,7 @@ class NewItem extends React.Component {
         e.preventDefault();
     }
 
-    handleSubmit(e) {
+    handleSubmit( e ) {
         this.props.onAddItem( this.state.itemType, this.state.text );
         this.setState( { text: "" } );
         e.preventDefault();
