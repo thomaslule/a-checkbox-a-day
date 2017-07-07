@@ -9,14 +9,7 @@ const mapStateToProps = ( state, ownProps ) => ( {
 
 const mapDispatchToProps = ( dispatch, props ) => {
     return {
-        onChangeMonth: ( month ) => dispatch( actions.fetchItems( month ) ),
-        onChangeCompleteTask: ( newVal, id ) => {
-            if (newVal) {
-                dispatch( actions.completeTask( id ) );
-            } else {
-                dispatch( actions.uncompleteTask( id ) );
-            }
-        }
+        onChangeMonth: ( month ) => dispatch( actions.fetchItems( month ) )
     }
 }
 

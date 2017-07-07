@@ -1,5 +1,5 @@
 import React from "react";
-import Item from "./Item";
+import ItemContainer from "../containers/ItemContainer";
 import NewItemContainer from "../containers/NewItemContainer";
 
 class ItemList extends React.Component {
@@ -16,10 +16,9 @@ class ItemList extends React.Component {
 
     render() {
         let itemList = this.props.items.map(( item ) =>
-            <Item
+            <ItemContainer
                 key={item.id}
                 item={item}
-                onChangeCompleteTask={( newVal, id ) => this.props.onChangeCompleteTask( newVal, id )}
             /> );
         return (
             <div className="row">
