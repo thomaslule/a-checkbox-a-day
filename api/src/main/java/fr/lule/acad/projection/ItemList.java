@@ -31,7 +31,7 @@ public class ItemList implements IEventSubscriber {
 	public void handle(IEvent event) {
 		if (event instanceof ItemAdded) {
 			ItemAdded itemAdded = (ItemAdded) event;
-			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getText(), itemAdded.getMonth(), false));
+			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getType(), itemAdded.getText(), itemAdded.getMonth(), false));
 		}
 		if (event instanceof TaskCompleted) {
 			UUID id = ((TaskCompleted) event).getAggregateId();

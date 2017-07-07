@@ -12,9 +12,9 @@ public class Item {
 
 	private DecisionProjection projection;
 
-	public static UUID add(IEventPublisher publisher, String text, String month) {
+	public static UUID add(IEventPublisher publisher, String text, String month, ItemType type) {
 		UUID id = UUID.randomUUID();
-		publisher.publish(new ItemAdded(id, text, month));
+		publisher.publish(new ItemAdded(id, text, month, type));
 		return id;
 	}
 
@@ -23,7 +23,7 @@ public class Item {
 	}
 
 	public boolean completeTask(IEventPublisher publisher) {
-		if (!projection.exists || projection.done) {
+		if (!projection.exists || projection.type != ItemType.TASK || projection.done) {
 			return false;
 		}
 		TaskCompleted event = new TaskCompleted(projection.id);
@@ -36,6 +36,7 @@ public class Item {
 
 		private boolean exists = false;
 		private UUID id;
+		private ItemType type;
 		private boolean done = false;
 
 		public DecisionProjection(List<IItemEvent> history) {
@@ -46,6 +47,7 @@ public class Item {
 			if (event instanceof ItemAdded) {
 				exists = true;
 				id = ((ItemAdded) event).getAggregateId();
+				type = ((ItemAdded) event).getType();
 				done = false;
 			} else if (event instanceof TaskCompleted) {
 				done = true;

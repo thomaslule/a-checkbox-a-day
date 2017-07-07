@@ -2,16 +2,20 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import fr.lule.acad.aggregate.ItemType;
+
 public class ItemAdded implements IItemEvent {
 	
 	private final UUID aggregateId;
 	private String text;
 	private String month;
+	private ItemType type;
 
-	public ItemAdded(UUID aggregateId, String text, String month) {
+	public ItemAdded(UUID aggregateId, String text, String month, ItemType type) {
 		this.aggregateId = aggregateId;
 		this.text = text;
 		this.month = month;
+		this.type = type;
 	}
 
 	public String getText() {
@@ -20,6 +24,10 @@ public class ItemAdded implements IItemEvent {
 	
 	public String getMonth() {
 		return month;
+	}
+	
+	public ItemType getType() {
+		return type;
 	}
 
 	@Override
@@ -37,6 +45,7 @@ public class ItemAdded implements IItemEvent {
 		result = prime * result + ((aggregateId == null) ? 0 : aggregateId.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -66,6 +75,8 @@ public class ItemAdded implements IItemEvent {
 			if (other.text != null)
 				return false;
 		} else if (!text.equals(other.text))
+			return false;
+		if (type != other.type)
 			return false;
 		return true;
 	}

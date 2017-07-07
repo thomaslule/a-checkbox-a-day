@@ -26,15 +26,15 @@ public class ItemShould {
 	
 	@Test
 	public void raiseItemAddedWhenAddItem() {
-		UUID id = Item.add(bus, "buy baguette", "2017-05");
+		UUID id = Item.add(bus, "buy baguette", "2017-05", ItemType.TASK);
 		
-		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy baguette", "2017-05"));
+		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 	}
 	
 	@Test
 	public void raiseTaskCompletedWhenCompleteTask() {
 		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05"));
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item task = new Item(store.getEventsFor(id));
 		
 		task.completeTask(bus);
@@ -45,7 +45,7 @@ public class ItemShould {
 	@Test
 	public void dontRaiseTaskCompletedWhenCompleteTaskAlreadyCompleted() {
 		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05"));
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		store.add(new TaskCompleted(id));
 		Item task = new Item(store.getEventsFor(id));
 		
@@ -65,9 +65,20 @@ public class ItemShould {
 	}
 	
 	@Test
+	public void dontRaiseTaskCompletedWhenItemNotTask() {
+		UUID id = UUID.randomUUID();
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.EVENT));
+		Item task = new Item(store.getEventsFor(id));
+		
+		task.completeTask(bus);
+		
+		assertThat(store.getEventsFor(id)).doesNotContain(new TaskCompleted(id));
+	}
+	
+	@Test
 	public void raiseTaskCompletedOnlyOnceWhenCompleteTaskTwice() {
 		UUID id = UUID.randomUUID();
-		store.add(new ItemAdded(id, "buy baguette", "2017-05"));
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 		Item task = new Item(store.getEventsFor(id));
 		
 		task.completeTask(bus);

@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
@@ -22,9 +23,9 @@ public class InMemoryEventStoreShould {
 	public void before() {
 		store = new InMemoryEventStore<IItemEvent>();
 		id1 = UUID.randomUUID();
-		ItemAdded item1 = new ItemAdded(id1, "task 1", "2017-05");
+		ItemAdded item1 = new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK);
 		id2 = UUID.randomUUID();
-		ItemAdded item2 = new ItemAdded(id2, "task 2", "2017-05");
+		ItemAdded item2 = new ItemAdded(id2, "task 2", "2017-05", ItemType.TASK);
 		TaskCompleted item3 = new TaskCompleted(id1);
 		
 		store.add(item1);
@@ -36,8 +37,8 @@ public class InMemoryEventStoreShould {
 	public void getAllEventsRestituteEventsInSameOrder() {
 		List<IItemEvent> events = store.getAllEvents();
 
-		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05"));
-		assertThat(events.get(1)).isEqualTo(new ItemAdded(id2, "task 2", "2017-05"));
+		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK));
+		assertThat(events.get(1)).isEqualTo(new ItemAdded(id2, "task 2", "2017-05", ItemType.TASK));
 		assertThat(events.get(2)).isEqualTo(new TaskCompleted(id1));
 	}
 	
@@ -45,7 +46,7 @@ public class InMemoryEventStoreShould {
 	public void getEventsForRestituteEventsForAggregate() {
 		List<IItemEvent> events = store.getEventsFor(id1);
 
-		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05"));
+		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK));
 		assertThat(events.get(1)).isEqualTo(new TaskCompleted(id1));
 	}
 	

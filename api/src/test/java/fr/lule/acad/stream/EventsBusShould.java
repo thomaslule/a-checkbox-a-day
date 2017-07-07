@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
@@ -27,9 +28,9 @@ public class EventsBusShould {
 	public void storeEventWhenPublishEvent() {
 		UUID id = UUID.randomUUID();
 		
-		bus.publish(new ItemAdded(id, "buy bread", "2017-05"));
+		bus.publish(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 		
-		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy bread", "2017-05"));
+		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 	}
 	
 	@Test
@@ -37,7 +38,7 @@ public class EventsBusShould {
 		SpySubscriber spy = new SpySubscriber();
 		bus.subscribe(spy);
 		
-		bus.publish(new ItemAdded(UUID.randomUUID(), "buy bread", "2017-05"));
+		bus.publish(new ItemAdded(UUID.randomUUID(), "buy bread", "2017-05", ItemType.TASK));
 
 		assertThat(spy.called).isTrue();
 	}

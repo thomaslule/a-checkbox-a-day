@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.projection.ItemDisplayed;
@@ -32,7 +33,7 @@ public class ItemControllerShould {
 	public void before() {
 		itemEventStore = new InMemoryEventStore<IItemEvent>();
 		eventId = UUID.randomUUID();
-		itemEventStore.add(new ItemAdded(eventId, "todo", "2017-01"));
+		itemEventStore.add(new ItemAdded(eventId, "todo", "2017-01", ItemType.TASK));
 		list = new ItemList(itemEventStore.getAllEvents());
 		bus = new EventsBus(itemEventStore);
 		bus.subscribe(list);
@@ -57,6 +58,7 @@ public class ItemControllerShould {
 		AddItemCommand command = new AddItemCommand();
 		command.month = "2017-01";
 		command.text = "todo";
+		command.type = ItemType.TASK;
 		Payload res = controller.addItem(command);
 		assertThat(res.isSuccess()).isTrue();
 		assertThat(list.getList("2017-01").size()).isEqualTo(2);

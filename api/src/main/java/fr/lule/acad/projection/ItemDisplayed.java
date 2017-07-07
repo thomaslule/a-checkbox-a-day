@@ -2,15 +2,19 @@ package fr.lule.acad.projection;
 
 import java.util.UUID;
 
+import fr.lule.acad.aggregate.ItemType;
+
 public class ItemDisplayed {
 	
 	private UUID id;
+	private ItemType type;
 	private String text;
 	private String month;
 	private boolean completed;
 
-	public ItemDisplayed(UUID id, String text, String month, boolean completed) {
+	public ItemDisplayed(UUID id, ItemType type, String text, String month, boolean completed) {
 		this.id = id;
+		this.setType(type);
 		this.text = text;
 		this.setMonth(month);
 		this.completed = completed;
@@ -28,6 +32,20 @@ public class ItemDisplayed {
 	 */
 	public void setId(UUID id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public ItemType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(ItemType type) {
+		this.type = type;
 	}
 
 	/**
@@ -71,6 +89,7 @@ public class ItemDisplayed {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -102,6 +121,8 @@ public class ItemDisplayed {
 			if (other.text != null)
 				return false;
 		} else if (!text.equals(other.text))
+			return false;
+		if (type != other.type)
 			return false;
 		return true;
 	}

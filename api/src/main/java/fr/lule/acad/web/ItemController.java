@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import fr.lule.acad.aggregate.Item;
+import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.IEventStore;
@@ -45,7 +46,7 @@ public class ItemController {
 	@Post("/AddItem")
 	public Payload addItem(AddItemCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			UUID id = Item.add(publisher, c.text, c.month);
+			UUID id = Item.add(publisher, c.text, c.month, c.type);
 			// TODO use a repository instead of getting the item from the list
 			return new Payload(null, list.getItem(id), HttpStatus.CREATED);
 		});
@@ -82,11 +83,14 @@ public class ItemController {
 		@NotNull
 		@Month
 		public String month;
+		
+		@NotNull
+		public ItemType type;
 	}
 
 	public static class CompleteTaskCommand {
 		@NotNull
 		public UUID id;
 	}
-
+	
 }
