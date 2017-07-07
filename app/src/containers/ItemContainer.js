@@ -9,11 +9,11 @@ const mapStateToProps = ( state, ownProps ) => ( {
 const mapDispatchToProps = ( dispatch, props ) => {
     return {
         onCancel: () => dispatch( actions.cancelItem( props.item.id ) ),
-        onChangeCompleteTask: ( newVal, id ) => {
-            if ( newVal ) {
-                dispatch( actions.completeTask( id ) );
+        onChangeCompleteTask: () => {
+            if ( props.item.completed ) {
+                dispatch( actions.uncompleteTask( props.item.id ) );
             } else {
-                dispatch( actions.uncompleteTask( id ) );
+                dispatch( actions.completeTask( props.item.id ) );
             }
         }
     }
