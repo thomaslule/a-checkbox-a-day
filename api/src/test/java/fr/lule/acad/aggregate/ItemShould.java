@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.store.InMemoryEventStore;
@@ -24,12 +25,37 @@ public class ItemShould {
 		store = new InMemoryEventStore<IItemEvent>();
 		bus = new EventsBus(store);
 	}
-	
+
 	@Test
 	public void raiseItemAddedWhenAddItem() {
 		UUID id = Item.add(bus, "buy baguette", "2017-05", ItemType.TASK);
 		
 		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
+	}
+
+	@Test
+	public void raiseItemCancelledWhenCancelItem() {
+		UUID id = UUID.randomUUID();
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.cancel(bus);
+
+		assertThat(res).isTrue();
+		assertThat(store.getAllEvents()).contains(new ItemCancelled(id));
+	}
+
+	@Test
+	public void dontRaiseItemCancelledWhenItemAlreadyCancelled() {
+		UUID id = UUID.randomUUID();
+		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
+		store.add(new ItemCancelled(id));
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.cancel(bus);
+
+		assertThat(res).isFalse();
+		assertThat(store.getAllEvents()).containsOnlyOnce(new ItemCancelled(id));
 	}
 	
 	@Test

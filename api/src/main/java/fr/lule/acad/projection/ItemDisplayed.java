@@ -10,13 +10,15 @@ public class ItemDisplayed {
 	private ItemType itemType;
 	private String text;
 	private String month;
+	private boolean cancelled;
 	private boolean completed;
 
-	public ItemDisplayed(UUID id, ItemType type, String text, String month, boolean completed) {
+	public ItemDisplayed(UUID id, ItemType type, String text, String month, boolean cancelled, boolean completed) {
 		this.id = id;
-		this.setItemType(type);
+		this.itemType = type;
 		this.text = text;
-		this.setMonth(month);
+		this.month = month;
+		this.cancelled = cancelled;
 		this.completed = completed;
 	}
 
@@ -70,6 +72,20 @@ public class ItemDisplayed {
 		this.month = month;
 	}
 
+	/**
+	 * @return the cancelled
+	 */
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	/**
+	 * @param cancelled the cancelled to set
+	 */
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
 	public boolean isCompleted() {
 		return completed;
 	}
@@ -85,11 +101,12 @@ public class ItemDisplayed {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (cancelled ? 1231 : 1237);
 		result = prime * result + (completed ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((itemType == null) ? 0 : itemType.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
-		result = prime * result + ((itemType == null) ? 0 : itemType.hashCode());
 		return result;
 	}
 
@@ -105,12 +122,16 @@ public class ItemDisplayed {
 		if (getClass() != obj.getClass())
 			return false;
 		ItemDisplayed other = (ItemDisplayed) obj;
+		if (cancelled != other.cancelled)
+			return false;
 		if (completed != other.completed)
 			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (itemType != other.itemType)
 			return false;
 		if (month == null) {
 			if (other.month != null)
@@ -121,8 +142,6 @@ public class ItemDisplayed {
 			if (other.text != null)
 				return false;
 		} else if (!text.equals(other.text))
-			return false;
-		if (itemType != other.itemType)
 			return false;
 		return true;
 	}

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.IEventPublisher;
@@ -21,6 +22,15 @@ public class Item {
 
 	public Item(List<IItemEvent> history) {
 		projection = new DecisionProjection(history);
+	}
+	
+	public boolean cancel(IEventPublisher publisher) {
+		if (!projection.exists || projection.cancelled) {
+			return false;
+		}
+		ItemCancelled event = new ItemCancelled(projection.id);
+		publisher.publish(event);
+		return true;
 	}
 
 	public boolean completeTask(IEventPublisher publisher) {
@@ -49,6 +59,7 @@ public class Item {
 		private UUID id;
 		private ItemType type;
 		private boolean done = false;
+		private boolean cancelled = false;
 
 		public DecisionProjection(List<IItemEvent> history) {
 			history.forEach(this::apply);
@@ -60,6 +71,8 @@ public class Item {
 				id = ((ItemAdded) event).getAggregateId();
 				type = ((ItemAdded) event).getType();
 				done = false;
+			} else if (event instanceof ItemCancelled) {
+				cancelled = true;
 			} else if (event instanceof TaskCompleted) {
 				done = true;
 			} else if (event instanceof TaskUncompleted) {

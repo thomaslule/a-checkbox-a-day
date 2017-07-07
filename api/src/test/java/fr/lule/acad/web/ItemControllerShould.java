@@ -11,12 +11,13 @@ import org.junit.Test;
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
 import fr.lule.acad.web.ItemController.AddItemCommand;
-import fr.lule.acad.web.ItemController.CompleteTaskCommand;
+import fr.lule.acad.web.ItemController.IdCommand;
 import fr.lule.acad.web.ItemController.GetMonthItemsCommand;
 import net.codestory.http.payload.Payload;
 
@@ -76,7 +77,7 @@ public class ItemControllerShould {
 
 	@Test
 	public void completeTaskReturnsOk() {
-		CompleteTaskCommand command = new CompleteTaskCommand();
+		IdCommand command = new IdCommand();
 		command.id = eventId;
 		Payload res = controller.completeTask(command);
 		assertThat(res.isSuccess()).isTrue();
@@ -85,7 +86,7 @@ public class ItemControllerShould {
 
 	@Test
 	public void completeTaskFailsForInvalidUUID() {
-		CompleteTaskCommand command = new CompleteTaskCommand();
+		IdCommand command = new IdCommand();
 		command.id = UUID.randomUUID(); // bad uuid
 		Payload res = controller.completeTask(command);
 		assertThat(res.isError()).isTrue();
@@ -94,9 +95,19 @@ public class ItemControllerShould {
 
 	@Test
 	public void completeTaskFailsForNullUUID() {
-		CompleteTaskCommand command = new CompleteTaskCommand();
+		IdCommand command = new IdCommand();
 		Payload res = controller.completeTask(command);
 		assertThat(res.isError()).isTrue();
+		assertThat(list.getList("2017-01").get(0).isCompleted()).isFalse();
+	}
+
+	@Test
+	public void uncompleteTaskReturnsOk() {
+		itemEventStore.add(new TaskCompleted(eventId));
+		IdCommand command = new IdCommand();
+		command.id = eventId;
+		Payload res = controller.uncompleteTask(command);
+		assertThat(res.isSuccess()).isTrue();
 		assertThat(list.getList("2017-01").get(0).isCompleted()).isFalse();
 	}
 

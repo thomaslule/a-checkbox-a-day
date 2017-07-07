@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.IEventSubscriber;
@@ -32,7 +33,11 @@ public class ItemList implements IEventSubscriber {
 	public void handle(IEvent event) {
 		if (event instanceof ItemAdded) {
 			ItemAdded itemAdded = (ItemAdded) event;
-			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getType(), itemAdded.getText(), itemAdded.getMonth(), false));
+			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getType(), itemAdded.getText(), itemAdded.getMonth(), false, false));
+		}
+		if (event instanceof ItemCancelled) {
+			UUID id = ((ItemCancelled) event).getAggregateId();
+			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCancelled(true));
 		}
 		if (event instanceof TaskCompleted) {
 			UUID id = ((TaskCompleted) event).getAggregateId();

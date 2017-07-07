@@ -53,7 +53,7 @@ public class ItemController {
 	}
 
 	@Post("/CompleteTask")
-	public Payload completeTask(CompleteTaskCommand command) {
+	public Payload completeTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
 			if (task.completeTask(publisher)) {
@@ -65,10 +65,22 @@ public class ItemController {
 	}
 
 	@Post("/UncompleteTask")
-	public Payload uncompleteTask(UncompleteTaskCommand command) {
+	public Payload uncompleteTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
 			if (task.uncompleteTask(publisher)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
+	@Post("/CancelItem")
+	public Payload cancelItem(IdCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item item = new Item(itemEventStore.getEventsFor(command.id));
+			if (item.cancel(publisher)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -100,14 +112,8 @@ public class ItemController {
 		public ItemType itemType;
 	}
 
-	public static class CompleteTaskCommand {
+	public static class IdCommand {
 		@NotNull
 		public UUID id;
 	}
-
-	public static class UncompleteTaskCommand {
-		@NotNull
-		public UUID id;
-	}
-	
 }

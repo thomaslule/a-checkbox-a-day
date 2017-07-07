@@ -11,6 +11,7 @@ import org.junit.Test;
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 
@@ -23,7 +24,7 @@ public class ItemListShould {
 		
 		list.handle(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 		
-		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false));
+		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
 		assertThat(list.getList("2017-06")).isEmpty();
 	}
 	
@@ -35,8 +36,20 @@ public class ItemListShould {
 		
 		ItemList list = new ItemList(history);
 
-		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false));
+		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
 		assertThat(list.getList("2017-06")).isEmpty();
+	}
+
+	@Test
+	public void setItemCancelledWhenItemCancelled() {
+		List<IItemEvent> history = new ArrayList<IItemEvent>();
+		UUID id = UUID.randomUUID();
+		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		ItemList list = new ItemList(history);
+		
+		list.handle(new ItemCancelled(id));
+		
+		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get().isCancelled()).isTrue();
 	}
 
 	@Test
