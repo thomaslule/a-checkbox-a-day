@@ -13,28 +13,30 @@ class NewItem extends React.Component {
     render() {
         return (
             <li className="newItem">
-                <div className="input-group">
-                    <span className="input-group-btn">
-                        <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" id="choose-type-button">
-                            {this.typeLabel[this.state.itemType]} <span className="caret"></span>
-                        </button>
-                        <ul className="dropdown-menu">
-                            <li onClick={(e) => this.handleChangeType(e, "TASK" )}><a href="" id="choose-task-button">Task</a></li>
-                            <li onClick={(e) => this.handleChangeType(e, "EVENT" )}><a href="" id="choose-event-button">Event</a></li>
-                            <li onClick={(e) => this.handleChangeType(e, "NOTE" )}><a href="" id="choose-note-button">Note</a></li>
-                        </ul>
-                    </span>
-                    <input
-                        type="text"
-                        required="required"
-                        className="form-control"
-                        value={this.state.text}
-                        onChange={( e ) => this.handleChangeText( e )}
-                    />
-                    <span className="input-group-btn">
-                        <button onClick={() => this.handleClickAdd()} className="btn">Add Item</button>
-                    </span>
-                </div>
+                <form onSubmit={(e) => this.handleSubmit(e)}>
+                    <div className="input-group">
+                        <span className="input-group-btn">
+                            <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" id="choose-type-button">
+                                {this.typeLabel[this.state.itemType]} <span className="caret"></span>
+                            </button>
+                            <ul className="dropdown-menu">
+                                <li onClick={( e ) => this.handleChangeType( e, "TASK" )}><a href="" id="choose-task-button">Task</a></li>
+                                <li onClick={( e ) => this.handleChangeType( e, "EVENT" )}><a href="" id="choose-event-button">Event</a></li>
+                                <li onClick={( e ) => this.handleChangeType( e, "NOTE" )}><a href="" id="choose-note-button">Note</a></li>
+                            </ul>
+                        </span>
+                        <input
+                            type="text"
+                            required="required"
+                            className="form-control"
+                            value={this.state.text}
+                            onChange={( e ) => this.handleChangeText( e )}
+                        />
+                        <span className="input-group-btn">
+                            <button type="submit" className="btn">Add Item</button>
+                        </span>
+                    </div>
+                </form>
             </li> );
     }
 
@@ -42,14 +44,15 @@ class NewItem extends React.Component {
         this.setState( Object.assign( {}, this.state, { text: event.target.value } ) );
     }
 
-    handleChangeType(e, itemType ) {
+    handleChangeType( e, itemType ) {
         this.setState( Object.assign( {}, this.state, { itemType: itemType } ) );
         e.preventDefault();
     }
 
-    handleClickAdd() {
+    handleSubmit(e) {
         this.props.onAddItem( this.state.itemType, this.state.text );
         this.setState( { text: "" } );
+        e.preventDefault();
     }
 
     typeLabel = {
