@@ -17,29 +17,36 @@ import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
+import fr.lule.acad.store.InMemoryEventStore;
+import fr.lule.acad.stream.EventsBus;
+import fr.lule.acad.stream.IEventPublisher;
 
 public class ItemListShould {
-	
+
 	private List<IItemEvent> history;
 	private UUID id;
+	private ItemList list;
+	private IEventPublisher bus;
 
 	@Before
 	public void before() {
 		history = new ArrayList<IItemEvent>();
 		id = UUID.randomUUID();
 		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		bus = new EventsBus(new InMemoryEventStore<IItemEvent>());
 	}
-	
-	private ItemDisplayed getItem(ItemList list) {
+
+	private ItemDisplayed getItem() {
 		return list.getList("2017-05").stream().filter(t -> t.getId().equals(id)).findFirst().get();
 	}
 
 	@Test
 	public void addItemInListWhenItemAdded() {
-		ItemList list = new ItemList(history);
+		list = new ItemList(history);
+		list.subscribeTo(bus);
 		UUID id = UUID.randomUUID();
 
-		list.handle(new ItemAdded(id, "something", "2017-05", ItemType.TASK));
+		bus.publish(new ItemAdded(id, "something", "2017-05", ItemType.TASK));
 
 		assertThat(list.getList("2017-05"))
 				.contains(new ItemDisplayed(id, ItemType.TASK, "something", "2017-05", false, false));
@@ -48,7 +55,7 @@ public class ItemListShould {
 
 	@Test
 	public void haveItemInListWhenHistoryContainsItemAdded() {
-		ItemList list = new ItemList(history);
+		list = new ItemList(history);
 		assertThat(list.getList("2017-05"))
 				.contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
 		assertThat(list.getList("2017-06")).isEmpty();
@@ -56,28 +63,31 @@ public class ItemListShould {
 
 	@Test
 	public void setItemCancelledWhenItemCancelled() {
-		ItemList list = new ItemList(history);
-		list.handle(new ItemCancelled(id));
+		list = new ItemList(history);
+		list.subscribeTo(bus);
+		bus.publish(new ItemCancelled(id));
 
-		assertThat(getItem(list).isCancelled()).isTrue();
+		assertThat(getItem().isCancelled()).isTrue();
 	}
 
 	@Test
 	public void setItemRestoredWhenItemRestored() {
 		history.add(new ItemCancelled(id));
-		ItemList list = new ItemList(history);
+		list = new ItemList(history);
+		list.subscribeTo(bus);
 
-		list.handle(new ItemRestored(id));
+		bus.publish(new ItemRestored(id));
 
-		assertThat(getItem(list).isCancelled()).isFalse();
+		assertThat(getItem().isCancelled()).isFalse();
 	}
-	
+
 	@Test
 	public void removeItemWhenItemDeleted() {
-		ItemList list = new ItemList(history);
-		
-		list.handle(new ItemDeleted(id));
-		
+		list = new ItemList(history);
+		list.subscribeTo(bus);
+
+		bus.publish(new ItemDeleted(id));
+
 		assertThat(list.getList("2017-05")).isEmpty();
 	}
 
@@ -85,23 +95,25 @@ public class ItemListShould {
 	public void setTaskCompletedWhenTaskCompleted() {
 		UUID id2 = UUID.randomUUID();
 		history.add(new ItemAdded(id2, "pet cat", "2017-05", ItemType.TASK));
-		ItemList list = new ItemList(history);
+		list = new ItemList(history);
+		list.subscribeTo(bus);
 
-		list.handle(new TaskCompleted(id));
+		bus.publish(new TaskCompleted(id));
 
 		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id2)).findFirst().get().isCompleted())
 				.isFalse();
-		assertThat(getItem(list).isCompleted()).isTrue();
+		assertThat(getItem().isCompleted()).isTrue();
 	}
 
 	@Test
 	public void setTaskUncompletedWhenTaskUncompleted() {
 		history.add(new TaskCompleted(id));
-		ItemList list = new ItemList(history);
+		list = new ItemList(history);
+		list.subscribeTo(bus);
 
-		list.handle(new TaskUncompleted(id));
+		bus.publish(new TaskUncompleted(id));
 
-		assertThat(getItem(list).isCompleted()).isFalse();
+		assertThat(getItem().isCompleted()).isFalse();
 	}
 
 }

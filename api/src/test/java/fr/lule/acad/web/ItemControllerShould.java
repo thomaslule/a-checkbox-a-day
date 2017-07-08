@@ -35,9 +35,9 @@ public class ItemControllerShould {
 		itemEventStore = new InMemoryEventStore<IItemEvent>();
 		eventId = UUID.randomUUID();
 		itemEventStore.add(new ItemAdded(eventId, "todo", "2017-01", ItemType.TASK));
-		list = new ItemList(itemEventStore.getAllEvents());
 		bus = new EventsBus(itemEventStore);
-		bus.subscribe(list);
+		list = new ItemList(itemEventStore.getAllEvents());
+		list.subscribeTo(bus);
 		controller = new ItemController(list, bus, itemEventStore);
 	}
 

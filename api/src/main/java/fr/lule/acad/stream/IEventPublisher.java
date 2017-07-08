@@ -1,9 +1,13 @@
 package fr.lule.acad.stream;
 
-import fr.lule.acad.event.IItemEvent;
+import java.util.function.Consumer;
+
+import fr.lule.acad.event.IEvent;
 
 public interface IEventPublisher {
-	
-	public void publish(IItemEvent event);
+
+	public <T extends IEvent> void publish(T event);
+
+	public <T extends IEvent> void on(Class<T> eventClass, Consumer<T> listener);
 
 }

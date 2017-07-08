@@ -11,9 +11,9 @@ public class AcadServer {
 	public static void main(String[] args) {
 		
 		InMemoryEventStore<IItemEvent> itemEventStore = new InMemoryEventStore<IItemEvent>();
-		ItemList list = new ItemList(itemEventStore.getAllEvents());
 		EventsBus bus = new EventsBus(itemEventStore);
-		bus.subscribe(list);
+		ItemList list = new ItemList(itemEventStore.getAllEvents());
+		list.subscribeTo(bus);
 		
 		new WebServer()
 		.configure(routes -> {

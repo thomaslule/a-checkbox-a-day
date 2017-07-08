@@ -2,10 +2,10 @@ package fr.lule.acad.projection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
@@ -13,50 +13,60 @@ import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
-import fr.lule.acad.stream.IEventSubscriber;
+import fr.lule.acad.stream.HistoryPublisher;
+import fr.lule.acad.stream.IEventPublisher;
 
-public class ItemList implements IEventSubscriber {
-	
+public class ItemList {
+
 	private List<ItemDisplayed> list = new ArrayList<ItemDisplayed>();
 
-	public ItemList(List<IItemEvent> history) {
-		history.forEach(this::handle);
+	public ItemList(List<? extends IItemEvent> history) {
+		HistoryPublisher hp = new HistoryPublisher();
+		subscribeTo(hp);
+		hp.publishAll(history);
+
+	}
+
+	public void subscribeTo(IEventPublisher bus) {
+		bus.on(ItemAdded.class, itemAdded -> {
+			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getType(), itemAdded.getText(),
+					itemAdded.getMonth(), false, false));
+		});
+		bus.on(ItemCancelled.class, event -> {
+			findInList(event.getAggregateId()).ifPresent(item -> {
+				item.setCancelled(true);
+			});
+		});
+		bus.on(ItemRestored.class, event -> {
+			findInList(event.getAggregateId()).ifPresent(item -> {
+				item.setCancelled(false);
+			});
+		});
+		bus.on(ItemDeleted.class, event -> {
+			list.removeIf(t -> t.getId().equals(event.getAggregateId()));
+		});
+		bus.on(TaskCompleted.class, event -> {
+			findInList(event.getAggregateId()).ifPresent(item -> {
+				item.setCompleted(true);
+			});
+		});
+		bus.on(TaskUncompleted.class, event -> {
+			findInList(event.getAggregateId()).ifPresent(item -> {
+				item.setCompleted(false);
+			});
+		});
 	}
 
 	public List<ItemDisplayed> getList(String month) {
 		return list.stream().filter(t -> t.getMonth().equals(month)).collect(Collectors.toList());
 	}
-	
+
 	public ItemDisplayed getItem(UUID id) {
-		return list.stream().filter(t -> t.getId().equals(id)).findFirst().get();
+		return findInList(id).get();
 	}
 
-	@Override
-	public void handle(IEvent event) {
-		if (event instanceof ItemAdded) {
-			ItemAdded itemAdded = (ItemAdded) event;
-			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getType(), itemAdded.getText(), itemAdded.getMonth(), false, false));
-		}
-		if (event instanceof ItemCancelled) {
-			UUID id = ((ItemCancelled) event).getAggregateId();
-			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCancelled(true));
-		}
-		if (event instanceof ItemRestored) {
-			UUID id = ((ItemRestored) event).getAggregateId();
-			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCancelled(false));
-		}
-		if (event instanceof ItemDeleted) {
-			UUID id = ((ItemDeleted) event).getAggregateId();
-			list.removeIf(t -> t.getId().equals(id));
-		}
-		if (event instanceof TaskCompleted) {
-			UUID id = ((TaskCompleted) event).getAggregateId();
-			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCompleted(true));
-		}
-		if (event instanceof TaskUncompleted) {
-			UUID id = ((TaskUncompleted) event).getAggregateId();
-			list.stream().filter(t -> t.getId().equals(id)).findFirst().ifPresent(t -> t.setCompleted(false));
-		}
+	private Optional<ItemDisplayed> findInList(UUID id) {
+		return list.stream().filter(item -> item.getId().equals(id)).findFirst();
 	}
 
 }

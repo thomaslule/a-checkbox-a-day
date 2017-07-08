@@ -19,9 +19,9 @@ public class AcadShould {
 	
 	@Test
 	public void displayItemInItemListWhenAddItem() {
-		ItemList list = new ItemList(new ArrayList<IItemEvent>());
 		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>());
-		bus.subscribe(list);
+		ItemList list = new ItemList(new ArrayList<IItemEvent>());
+		list.subscribeTo(bus);
 		
 		UUID id = Item.add(bus, "buy bread", "2017-05", ItemType.TASK);
 		
