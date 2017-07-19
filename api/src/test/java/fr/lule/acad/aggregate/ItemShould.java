@@ -12,17 +12,18 @@ import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
+import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
 
 public class ItemShould {
-	
+
 	InMemoryEventStore<IItemEvent> store;
 	EventsBus bus;
 	UUID id;
-	
+
 	@Before
 	public void before() {
 		store = new InMemoryEventStore<IItemEvent>();
@@ -34,7 +35,7 @@ public class ItemShould {
 	@Test
 	public void raiseItemAddedWhenAddItem() {
 		UUID id = Item.add(bus, "something", "2017-05", ItemType.EVENT);
-		
+
 		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "something", "2017-05", ItemType.EVENT));
 	}
 
@@ -122,13 +123,13 @@ public class ItemShould {
 		assertThat(res).isFalse();
 		assertThat(store.getAllEvents()).containsOnlyOnce(new ItemDeleted(id));
 	}
-	
+
 	@Test
 	public void raiseTaskCompletedWhenCompleteTask() {
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.completeTask(bus);
-		
+
 		assertThat(res).isTrue();
 		assertThat(store.getEventsFor(id)).contains(new TaskCompleted(id));
 	}
@@ -137,7 +138,7 @@ public class ItemShould {
 	public void dontRaiseTaskCompletedWhenCompleteTaskAlreadyCompleted() {
 		store.add(new TaskCompleted(id));
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.completeTask(bus);
 
 		assertThat(res).isFalse();
@@ -148,29 +149,29 @@ public class ItemShould {
 	public void dontRaiseTaskCompletedWhenTaskDoesntExist() {
 		UUID id = UUID.randomUUID();
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.completeTask(bus);
 
 		assertThat(res).isFalse();
 		assertThat(store.getAllEvents()).doesNotContain(new TaskCompleted(id));
 	}
-	
+
 	@Test
 	public void dontRaiseTaskCompletedWhenItemNotTask() {
 		id = UUID.randomUUID();
 		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.EVENT));
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.completeTask(bus);
 
 		assertThat(res).isFalse();
 		assertThat(store.getEventsFor(id)).doesNotContain(new TaskCompleted(id));
 	}
-	
+
 	@Test
 	public void raiseTaskCompletedOnlyOnceWhenCompleteTaskTwice() {
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res1 = task.completeTask(bus);
 		boolean res2 = task.completeTask(bus);
 
@@ -194,7 +195,7 @@ public class ItemShould {
 	public void raiseTaskUncompletedWhenUncompleteTask() {
 		store.add(new TaskCompleted(id));
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.uncompleteTask(bus);
 
 		assertThat(res).isTrue();
@@ -204,7 +205,7 @@ public class ItemShould {
 	@Test
 	public void dontRaiseTaskUncompletedWhenTaskNotComplete() {
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.uncompleteTask(bus);
 
 		assertThat(res).isFalse();
@@ -216,18 +217,18 @@ public class ItemShould {
 		store.add(new TaskCompleted(id));
 		store.add(new TaskUncompleted(id));
 		Item task = new Item(store.getEventsFor(id));
-		
+
 		boolean res = task.uncompleteTask(bus);
 
 		assertThat(res).isFalse();
 		assertThat(store.getAllEvents()).containsOnlyOnce(new TaskUncompleted(id));
 	}
-	
+
 	@Test
 	public void dontRaiseTaskUncompletedWhenNotATask() {
 		UUID id = Item.add(bus, "something", "2017-05", ItemType.EVENT);
 		Item item = new Item(store.getEventsFor(id));
-		
+
 		boolean res = item.uncompleteTask(bus);
 
 		assertThat(res).isFalse();
@@ -244,6 +245,16 @@ public class ItemShould {
 
 		assertThat(res).isFalse();
 		assertThat(store.getAllEvents()).doesNotContain(new TaskUncompleted(id));
+	}
+
+	@Test
+	public void raiseItemTextChangedWhenChangeItemText() {
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.changeItemText("new text", bus);
+
+		assertThat(res).isTrue();
+		assertThat(store.getAllEvents()).contains(new ItemTextChanged(id, "new text"));
 	}
 
 }

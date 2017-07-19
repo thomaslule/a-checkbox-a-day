@@ -15,6 +15,7 @@ import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
+import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.store.InMemoryEventStore;
@@ -114,6 +115,16 @@ public class ItemListShould {
 		bus.publish(new TaskUncompleted(id));
 
 		assertThat(getItem().isCompleted()).isFalse();
+	}
+
+	@Test
+	public void updateTextWhenItemTextChanged() {
+		list = new ItemList(history);
+		list.subscribeTo(bus);
+
+		bus.publish(new ItemTextChanged(id, "new text"));
+
+		assertThat(getItem().getText()).isEqualTo("new text");
 	}
 
 }

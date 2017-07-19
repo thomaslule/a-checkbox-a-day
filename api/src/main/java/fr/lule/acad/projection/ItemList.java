@@ -11,6 +11,7 @@ import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
+import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.HistoryPublisher;
@@ -53,6 +54,11 @@ public class ItemList {
 		bus.on(TaskUncompleted.class, event -> {
 			findInList(event.getAggregateId()).ifPresent(item -> {
 				item.setCompleted(false);
+			});
+		});
+		bus.on(ItemTextChanged.class, event -> {
+			findInList(event.getAggregateId()).ifPresent(item -> {
+				item.setText(event.getNewText());
 			});
 		});
 	}

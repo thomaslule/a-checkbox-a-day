@@ -45,6 +45,12 @@ actions.uncompleteTask = ( id ) => ( {
     id
 } );
 
+actions.changeItemText = ( id, newText ) => ({
+    type: "CHANGE_ITEM_TEXT",
+    id,
+    newText
+});
+
 actions.error = (error) => ({
     type: "ERROR",
     error

@@ -112,6 +112,18 @@ public class ItemController {
 		});
 	}
 
+	@Post("/ChangeItemText")
+	public Payload changeItemText(ChangeItemTextCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item task = new Item(itemEventStore.getEventsFor(command.id));
+			if (task.changeItemText(command.newText, publisher)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
 	public static class GetMonthItemsCommand {
 		@NotNull
 		@Month
@@ -131,7 +143,7 @@ public class ItemController {
 		@NotNull
 		@Month
 		public String month;
-		
+
 		@NotNull
 		public ItemType itemType;
 	}
@@ -139,5 +151,14 @@ public class ItemController {
 	public static class IdCommand {
 		@NotNull
 		public UUID id;
+	}
+
+	public static class ChangeItemTextCommand {
+		@NotNull
+		public UUID id;
+
+		@NotNull
+		@Size(min = 1)
+		public String newText;
 	}
 }

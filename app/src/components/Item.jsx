@@ -1,4 +1,5 @@
 import React from "react";
+import ContentEditable from "react-contenteditable";
 import "./Item.css";
 
 class Item extends React.Component {
@@ -18,7 +19,7 @@ class Item extends React.Component {
         return (
             <li className={this.getItemClass()}>
                 {checkbox}
-                <span className="item-name">{this.props.item.text}</span>
+                <ContentEditable tagName="span" className="item-name" html={this.props.item.text} onKeyDown={ (e) => this.handleTextKeyDown( e ) } onBlur={( e ) => this.handleChangeText( e )} />
                 <span className="action-buttons">{buttonCancel}{buttonRestore}{buttonDelete}</span>
             </li> );
     }
@@ -44,6 +45,23 @@ class Item extends React.Component {
     handleDelete( e ) {
         this.props.onDelete();
         e.preventDefault();
+    }
+
+    handleChangeText( e ) {
+        if (e.target.innerText !== this.props.item.text) {
+            this.props.onChangeText(e.target.innerText);
+        }
+    }
+    
+    handleTextKeyDown( e ) {
+        if (e.keyCode === 27) { // ESCAPE
+            e.target.innerText = this.props.item.text;
+            e.target.blur();
+            e.preventDefault();
+        } else if (e.keyCode === 13) { // ENTER
+            e.target.blur();
+            e.preventDefault();
+        }
     }
 
 }

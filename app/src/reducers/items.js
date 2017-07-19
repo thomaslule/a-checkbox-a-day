@@ -33,6 +33,12 @@ const items = ( state = [], action ) => {
                     ? { ...item, completed: false }
                     : item
             )
+        case "CHANGE_ITEM_TEXT":
+            return state.map( item =>
+                ( item.id === action.id )
+                    ? { ...item, text: action.newText }
+                    : item
+            )
         default:
             return state
     }

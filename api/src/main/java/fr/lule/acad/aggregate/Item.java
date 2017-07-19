@@ -8,6 +8,7 @@ import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
 import fr.lule.acad.event.ItemRestored;
+import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.stream.IEventPublisher;
@@ -25,7 +26,7 @@ public class Item {
 	public Item(List<IItemEvent> history) {
 		projection = new DecisionProjection(history);
 	}
-	
+
 	public boolean cancel(IEventPublisher publisher) {
 		if (!projection.exists || projection.deleted || projection.cancelled) {
 			return false;
@@ -68,6 +69,16 @@ public class Item {
 			return false;
 		}
 		TaskUncompleted event = new TaskUncompleted(projection.id);
+		projection.apply(event);
+		publisher.publish(event);
+		return true;
+	}
+
+	public boolean changeItemText(String newText, IEventPublisher publisher) {
+		if (!projection.exists || projection.deleted) {
+			return false;
+		}
+		ItemTextChanged event = new ItemTextChanged(projection.id, newText);
 		projection.apply(event);
 		publisher.publish(event);
 		return true;

@@ -68,4 +68,13 @@ api.uncompleteTask = function( id ) {
         .then( handleErrors );
 }
 
+api.changeItemText = function( id, newText ) {
+    return fetch( "/api/ChangeItemText",
+        {
+            method: "POST",
+            body: JSON.stringify( { id, newText } )
+        } )
+        .then( handleErrors );
+}
+
 export default api;

@@ -81,6 +81,17 @@ function* watchUncompleteTask() {
         } );
 }
 
+function* watchChanteItemText() {
+    yield takeEvery( "CHANGE_ITEM_TEXT",
+        function* ( action ) {
+            try {
+                yield call( api.changeItemText, action.id, action.newText );
+            } catch ( e ) {
+                yield put( actions.error( e ) );
+            }
+        } );
+}
+
 export default function* () {
     yield fork( watchFetchItems );
     yield fork( watchAddItem );
@@ -89,4 +100,5 @@ export default function* () {
     yield fork( watchDeleteItem );
     yield fork( watchCompleteTask );
     yield fork( watchUncompleteTask );
+    yield fork( watchChanteItemText );
 };

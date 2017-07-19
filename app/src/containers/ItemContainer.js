@@ -17,7 +17,8 @@ const mapDispatchToProps = ( dispatch, props ) => {
             } else {
                 dispatch( actions.completeTask( props.item.id ) );
             }
-        }
+        },
+        onChangeText: ( newText ) => dispatch( actions.changeItemText( props.item.id, newText ) )
     }
 }
 
