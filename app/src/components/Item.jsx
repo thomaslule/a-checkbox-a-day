@@ -1,5 +1,5 @@
 import React from "react";
-import ContentEditable from "react-contenteditable";
+import EditableText from "./EditableText";
 import "./Item.css";
 
 class Item extends React.Component {
@@ -13,13 +13,16 @@ class Item extends React.Component {
                     onChange={() => this.props.onChangeCompleteTask()}
                 />
             </div> ) : null;
+        const text = this.props.item.cancelled ?
+            ( <span className="item-name">{this.props.item.text}</span> ) :
+            ( <EditableText className="item-name" text={this.props.item.text} onChangeText={( text ) => this.props.onChangeText( text )} /> );
         const buttonCancel = this.props.item.cancelled ? null : ( <a href="" title="Cancel" onClick={( e ) => this.handleCancel( e )}><i className="glyphicon glyphicon-remove" /></a> );
         const buttonRestore = this.props.item.cancelled ? ( <a href="" title="Restore" onClick={( e ) => this.handleRestore( e )}><i className="glyphicon glyphicon-asterisk" /></a> ) : null;
         const buttonDelete = this.props.item.cancelled ? ( <a href="" title="Delete" onClick={( e ) => this.handleDelete( e )}><i className="glyphicon glyphicon-trash" /></a> ) : null;
         return (
             <li className={this.getItemClass()}>
                 {checkbox}
-                <ContentEditable tagName="span" className="item-name" html={this.props.item.text} onKeyDown={ (e) => this.handleTextKeyDown( e ) } onBlur={( e ) => this.handleChangeText( e )} />
+                {text}
                 <span className="action-buttons">{buttonCancel}{buttonRestore}{buttonDelete}</span>
             </li> );
     }
@@ -45,23 +48,6 @@ class Item extends React.Component {
     handleDelete( e ) {
         this.props.onDelete();
         e.preventDefault();
-    }
-
-    handleChangeText( e ) {
-        if (e.target.innerText !== this.props.item.text) {
-            this.props.onChangeText(e.target.innerText);
-        }
-    }
-    
-    handleTextKeyDown( e ) {
-        if (e.keyCode === 27) { // ESCAPE
-            e.target.innerText = this.props.item.text;
-            e.target.blur();
-            e.preventDefault();
-        } else if (e.keyCode === 13) { // ENTER
-            e.target.blur();
-            e.preventDefault();
-        }
     }
 
 }
