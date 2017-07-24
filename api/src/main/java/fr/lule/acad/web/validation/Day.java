@@ -16,10 +16,10 @@ import javax.validation.Payload;
 @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = MonthValidator.class)
-public @interface Month {
+@Constraint(validatedBy = DayValidator.class)
+public @interface Day {
 
-	String message() default "Month must be defined as YYYY-MM";
+	String message() default "Day must be defined as YYYY-MM-DD";
 
 	Class<?>[] groups() default {};
 

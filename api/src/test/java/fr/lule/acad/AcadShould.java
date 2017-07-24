@@ -9,24 +9,39 @@ import org.junit.Test;
 
 import fr.lule.acad.aggregate.Item;
 import fr.lule.acad.aggregate.ItemType;
+import fr.lule.acad.aggregate.Journal;
 import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
+import fr.lule.acad.projection.JournalEntry;
+import fr.lule.acad.projection.JournalProjection;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.stream.EventsBus;
 
 public class AcadShould {
-	
+
 	@Test
 	public void displayItemInItemListWhenAddItem() {
-		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>());
+		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
 		ItemList list = new ItemList(new ArrayList<IItemEvent>());
 		list.subscribeTo(bus);
-		
+
 		UUID id = Item.add(bus, "buy bread", "2017-05", ItemType.TASK);
-		
-		assertThat(list.getList("2017-05")).contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
+
+		assertThat(list.getList("2017-05"))
+				.contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
 	}
-	
+
+	@Test
+	public void displayJournalEntryWhenEditDay() {
+		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
+		JournalProjection journal = new JournalProjection(new ArrayList<IJournalEvent>());
+		journal.subscribeTo(bus);
+
+		Journal.editJournalEntry(bus, "2017-07-19", "test");
+
+		assertThat(journal.getJournal("2017-07")).contains(new JournalEntry("2017-07-19", "test"));
+	}
 
 }

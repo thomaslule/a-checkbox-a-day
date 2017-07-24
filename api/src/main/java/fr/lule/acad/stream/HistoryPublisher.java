@@ -4,16 +4,17 @@ import java.util.List;
 
 import fr.lule.acad.event.IEvent;
 import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.store.InMemoryEventStore;
 
 public class HistoryPublisher extends EventsBus {
 
 	public HistoryPublisher() {
 		// throw-away event store
-		super(new InMemoryEventStore<IItemEvent>());
+		super(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
 	}
-	
-	public void publishAll(List<? extends IEvent> history) {
+
+	public void publishAll(List<? extends IEvent<?>> history) {
 		history.forEach(event -> publish(event));
 	}
 

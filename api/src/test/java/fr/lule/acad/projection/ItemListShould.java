@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
@@ -34,7 +35,7 @@ public class ItemListShould {
 		history = new ArrayList<IItemEvent>();
 		id = UUID.randomUUID();
 		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
-		bus = new EventsBus(new InMemoryEventStore<IItemEvent>());
+		bus = new EventsBus(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
 	}
 
 	private ItemDisplayed getItem() {

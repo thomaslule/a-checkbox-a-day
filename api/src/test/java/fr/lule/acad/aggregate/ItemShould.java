@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
@@ -27,7 +28,7 @@ public class ItemShould {
 	@Before
 	public void before() {
 		store = new InMemoryEventStore<IItemEvent>();
-		bus = new EventsBus(store);
+		bus = new EventsBus(store, new InMemoryEventStore<IJournalEvent>());
 		id = UUID.randomUUID();
 		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 	}

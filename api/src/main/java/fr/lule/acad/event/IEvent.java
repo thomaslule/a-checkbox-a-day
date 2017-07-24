@@ -1,9 +1,7 @@
 package fr.lule.acad.event;
 
-import java.util.UUID;
+public interface IEvent<ID> {
 
-public interface IEvent {
-	
-	public UUID getAggregateId();
+	public ID getAggregateId();
 
 }

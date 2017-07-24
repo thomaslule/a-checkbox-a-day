@@ -10,27 +10,32 @@ import org.junit.Test;
 
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.JournalEntryEdited;
 import fr.lule.acad.store.InMemoryEventStore;
 
 public class EventsBusShould {
 
-	private InMemoryEventStore<IItemEvent> store;
+	private InMemoryEventStore<IItemEvent> itemStore;
+	private InMemoryEventStore<IJournalEvent> journalStore;
 	private EventsBus bus;
 
 	@Before
 	public void before() {
-		store = new InMemoryEventStore<IItemEvent>();
-		bus = new EventsBus(store);
+		itemStore = new InMemoryEventStore<IItemEvent>();
+		journalStore = new InMemoryEventStore<IJournalEvent>();
+		bus = new EventsBus(itemStore, journalStore);
 	}
 
 	@Test
 	public void storeEventWhenPublishEvent() {
 		UUID id = UUID.randomUUID();
 
-		bus.<ItemAdded>publish(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		bus.publish(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		bus.publish(new JournalEntryEdited("2017-07-19", "journal"));
 
-		assertThat(store.getAllEvents()).contains(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
+		assertThat(itemStore.getAllEvents()).contains(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
 	}
 
 	@Test
@@ -49,7 +54,7 @@ public class EventsBusShould {
 
 		bus.<UnknownEvent>publish(e);
 
-		assertThat(store.getAllEvents()).contains(e);
+		assertThat(itemStore.getAllEvents()).contains(e);
 	}
 
 	private static class Spy implements Consumer<ItemAdded> {

@@ -1,5 +1,7 @@
 package fr.lule.acad.event;
 
-public interface IItemEvent extends IEvent {
+import java.util.UUID;
+
+public interface IItemEvent extends IEvent<UUID> {
 
 }
