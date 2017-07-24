@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
-import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
@@ -19,23 +18,18 @@ import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
-import fr.lule.acad.store.InMemoryEventStore;
-import fr.lule.acad.stream.EventsBus;
-import fr.lule.acad.stream.IEventPublisher;
 
 public class ItemListShould {
 
 	private List<IItemEvent> history;
 	private UUID id;
 	private ItemList list;
-	private IEventPublisher bus;
 
 	@Before
 	public void before() {
 		history = new ArrayList<IItemEvent>();
 		id = UUID.randomUUID();
 		history.add(new ItemAdded(id, "buy bread", "2017-05", ItemType.TASK));
-		bus = new EventsBus(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
 	}
 
 	private ItemDisplayed getItem() {
@@ -45,10 +39,10 @@ public class ItemListShould {
 	@Test
 	public void addItemInListWhenItemAdded() {
 		list = new ItemList(history);
-		list.subscribeTo(bus);
+
 		UUID id = UUID.randomUUID();
 
-		bus.publish(new ItemAdded(id, "something", "2017-05", ItemType.TASK));
+		list.handleItemAdded(new ItemAdded(id, "something", "2017-05", ItemType.TASK));
 
 		assertThat(list.getList("2017-05"))
 				.contains(new ItemDisplayed(id, ItemType.TASK, "something", "2017-05", false, false));
@@ -66,8 +60,7 @@ public class ItemListShould {
 	@Test
 	public void setItemCancelledWhenItemCancelled() {
 		list = new ItemList(history);
-		list.subscribeTo(bus);
-		bus.publish(new ItemCancelled(id));
+		list.handleItemCancelled(new ItemCancelled(id));
 
 		assertThat(getItem().isCancelled()).isTrue();
 	}
@@ -76,9 +69,8 @@ public class ItemListShould {
 	public void setItemRestoredWhenItemRestored() {
 		history.add(new ItemCancelled(id));
 		list = new ItemList(history);
-		list.subscribeTo(bus);
 
-		bus.publish(new ItemRestored(id));
+		list.handleItemRestored(new ItemRestored(id));
 
 		assertThat(getItem().isCancelled()).isFalse();
 	}
@@ -86,9 +78,8 @@ public class ItemListShould {
 	@Test
 	public void removeItemWhenItemDeleted() {
 		list = new ItemList(history);
-		list.subscribeTo(bus);
 
-		bus.publish(new ItemDeleted(id));
+		list.handleItemDeleted(new ItemDeleted(id));
 
 		assertThat(list.getList("2017-05")).isEmpty();
 	}
@@ -98,9 +89,8 @@ public class ItemListShould {
 		UUID id2 = UUID.randomUUID();
 		history.add(new ItemAdded(id2, "pet cat", "2017-05", ItemType.TASK));
 		list = new ItemList(history);
-		list.subscribeTo(bus);
 
-		bus.publish(new TaskCompleted(id));
+		list.handleTaskCompleted(new TaskCompleted(id));
 
 		assertThat(list.getList("2017-05").stream().filter(t -> t.getId().equals(id2)).findFirst().get().isCompleted())
 				.isFalse();
@@ -111,9 +101,8 @@ public class ItemListShould {
 	public void setTaskUncompletedWhenTaskUncompleted() {
 		history.add(new TaskCompleted(id));
 		list = new ItemList(history);
-		list.subscribeTo(bus);
 
-		bus.publish(new TaskUncompleted(id));
+		list.handleTaskUncompleted(new TaskUncompleted(id));
 
 		assertThat(getItem().isCompleted()).isFalse();
 	}
@@ -121,9 +110,8 @@ public class ItemListShould {
 	@Test
 	public void updateTextWhenItemTextChanged() {
 		list = new ItemList(history);
-		list.subscribeTo(bus);
 
-		bus.publish(new ItemTextChanged(id, "new text"));
+		list.handleItemTextChanged(new ItemTextChanged(id, "new text"));
 
 		assertThat(getItem().getText()).isEqualTo("new text");
 	}

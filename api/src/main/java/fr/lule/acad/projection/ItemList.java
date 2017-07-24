@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
@@ -14,52 +17,62 @@ import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
-import fr.lule.acad.stream.HistoryPublisher;
-import fr.lule.acad.stream.IEventPublisher;
 
 public class ItemList {
 
 	private List<ItemDisplayed> list = new ArrayList<ItemDisplayed>();
 
 	public ItemList(List<? extends IItemEvent> history) {
-		HistoryPublisher hp = new HistoryPublisher();
-		subscribeTo(hp);
-		hp.publishAll(history);
-
+		EventBus tempBus = new EventBus();
+		tempBus.register(this);
+		for (IItemEvent event : history) {
+			tempBus.post(event);
+		}
 	}
 
-	public void subscribeTo(IEventPublisher bus) {
-		bus.on(ItemAdded.class, itemAdded -> {
-			list.add(new ItemDisplayed(itemAdded.getAggregateId(), itemAdded.getType(), itemAdded.getText(),
-					itemAdded.getMonth(), false, false));
+	@Subscribe
+	public void handleItemAdded(ItemAdded event) {
+		list.add(new ItemDisplayed(event.getAggregateId(), event.getType(), event.getText(), event.getMonth(), false,
+				false));
+	}
+
+	@Subscribe
+	public void handleItemCancelled(ItemCancelled event) {
+		findInList(event.getAggregateId()).ifPresent(item -> {
+			item.setCancelled(true);
 		});
-		bus.on(ItemCancelled.class, event -> {
-			findInList(event.getAggregateId()).ifPresent(item -> {
-				item.setCancelled(true);
-			});
+	}
+
+	@Subscribe
+	public void handleItemRestored(ItemRestored event) {
+		findInList(event.getAggregateId()).ifPresent(item -> {
+			item.setCancelled(false);
 		});
-		bus.on(ItemRestored.class, event -> {
-			findInList(event.getAggregateId()).ifPresent(item -> {
-				item.setCancelled(false);
-			});
+	}
+
+	@Subscribe
+	public void handleItemDeleted(ItemDeleted event) {
+		list.removeIf(t -> t.getId().equals(event.getAggregateId()));
+	}
+
+	@Subscribe
+	public void handleTaskCompleted(TaskCompleted event) {
+		findInList(event.getAggregateId()).ifPresent(item -> {
+			item.setCompleted(true);
 		});
-		bus.on(ItemDeleted.class, event -> {
-			list.removeIf(t -> t.getId().equals(event.getAggregateId()));
+	}
+
+	@Subscribe
+	public void handleTaskUncompleted(TaskUncompleted event) {
+		findInList(event.getAggregateId()).ifPresent(item -> {
+			item.setCompleted(false);
 		});
-		bus.on(TaskCompleted.class, event -> {
-			findInList(event.getAggregateId()).ifPresent(item -> {
-				item.setCompleted(true);
-			});
-		});
-		bus.on(TaskUncompleted.class, event -> {
-			findInList(event.getAggregateId()).ifPresent(item -> {
-				item.setCompleted(false);
-			});
-		});
-		bus.on(ItemTextChanged.class, event -> {
-			findInList(event.getAggregateId()).ifPresent(item -> {
-				item.setText(event.getNewText());
-			});
+	}
+
+	@Subscribe
+	public void handleItemTextChanged(ItemTextChanged event) {
+		findInList(event.getAggregateId()).ifPresent(item -> {
+			item.setText(event.getNewText());
 		});
 	}
 

@@ -1,11 +1,12 @@
 package fr.lule.acad.web;
 
+import com.google.common.eventbus.EventBus;
+
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.projection.JournalProjection;
 import fr.lule.acad.store.InMemoryEventStore;
-import fr.lule.acad.stream.EventsBus;
 import net.codestory.http.WebServer;
 
 public class AcadServer {
@@ -15,13 +16,15 @@ public class AcadServer {
 		InMemoryEventStore<IItemEvent> itemEventStore = new InMemoryEventStore<IItemEvent>();
 		InMemoryEventStore<IJournalEvent> journalEventStore = new InMemoryEventStore<IJournalEvent>();
 
-		EventsBus bus = new EventsBus(itemEventStore, journalEventStore);
+		EventBus bus = new EventBus();
+		bus.register(itemEventStore);
+		bus.register(journalEventStore);
 
 		ItemList list = new ItemList(itemEventStore.getAllEvents());
-		list.subscribeTo(bus);
+		bus.register(list);
 
 		JournalProjection journalProjection = new JournalProjection(journalEventStore.getAllEvents());
-		journalProjection.subscribeTo(bus);
+		bus.register(journalProjection);
 
 		new WebServer().configure(routes -> {
 			routes.add(new ItemController(list, bus, itemEventStore));

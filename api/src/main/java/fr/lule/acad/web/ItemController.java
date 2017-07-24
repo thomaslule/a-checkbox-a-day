@@ -7,12 +7,13 @@ import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.google.common.eventbus.EventBus;
+
 import fr.lule.acad.aggregate.Item;
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.IEventStore;
-import fr.lule.acad.stream.IEventPublisher;
 import fr.lule.acad.web.validation.CommandRunner;
 import fr.lule.acad.web.validation.Month;
 import net.codestory.http.annotations.Get;
@@ -25,13 +26,13 @@ import net.codestory.http.payload.Payload;
 public class ItemController {
 
 	private ItemList list;
-	private IEventPublisher publisher;
+	private EventBus bus;
 	private IEventStore<IItemEvent> itemEventStore;
 	private Validator validator;
 
-	public ItemController(ItemList list, IEventPublisher publisher, IEventStore<IItemEvent> itemEventStore) {
+	public ItemController(ItemList list, EventBus bus, IEventStore<IItemEvent> itemEventStore) {
 		this.list = list;
-		this.publisher = publisher;
+		this.bus = bus;
 		this.itemEventStore = itemEventStore;
 		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
 	}
@@ -46,7 +47,7 @@ public class ItemController {
 	@Post("/AddItem")
 	public Payload addItem(AddItemCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			UUID id = Item.add(publisher, c.text, c.month, c.itemType);
+			UUID id = Item.add(bus, c.text, c.month, c.itemType);
 			// TODO use a repository instead of getting the item from the list
 			return new Payload(null, list.getItem(id), HttpStatus.CREATED);
 		});
@@ -56,7 +57,7 @@ public class ItemController {
 	public Payload cancelItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item item = new Item(itemEventStore.getEventsFor(command.id));
-			if (item.cancel(publisher)) {
+			if (item.cancel(bus)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -68,7 +69,7 @@ public class ItemController {
 	public Payload restoreItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item item = new Item(itemEventStore.getEventsFor(command.id));
-			if (item.restore(publisher)) {
+			if (item.restore(bus)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -80,7 +81,7 @@ public class ItemController {
 	public Payload deleteItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item item = new Item(itemEventStore.getEventsFor(command.id));
-			if (item.delete(publisher)) {
+			if (item.delete(bus)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -92,7 +93,7 @@ public class ItemController {
 	public Payload completeTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
-			if (task.completeTask(publisher)) {
+			if (task.completeTask(bus)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -104,7 +105,7 @@ public class ItemController {
 	public Payload uncompleteTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
-			if (task.uncompleteTask(publisher)) {
+			if (task.uncompleteTask(bus)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();
@@ -116,7 +117,7 @@ public class ItemController {
 	public Payload changeItemText(ChangeItemTextCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
-			if (task.changeItemText(command.newText, publisher)) {
+			if (task.changeItemText(command.newText, bus)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();

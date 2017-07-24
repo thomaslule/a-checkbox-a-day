@@ -8,15 +8,15 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
-import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.InMemoryEventStore;
-import fr.lule.acad.stream.EventsBus;
 import fr.lule.acad.web.ItemController.AddItemCommand;
 import fr.lule.acad.web.ItemController.GetMonthItemsCommand;
 import fr.lule.acad.web.ItemController.IdCommand;
@@ -27,7 +27,7 @@ public class ItemControllerShould {
 
 	private InMemoryEventStore<IItemEvent> itemEventStore;
 	private ItemList list;
-	private EventsBus bus;
+	private EventBus bus;
 	private ItemController controller;
 	UUID eventId;
 
@@ -36,9 +36,10 @@ public class ItemControllerShould {
 		itemEventStore = new InMemoryEventStore<IItemEvent>();
 		eventId = UUID.randomUUID();
 		itemEventStore.add(new ItemAdded(eventId, "todo", "2017-01", ItemType.TASK));
-		bus = new EventsBus(itemEventStore, new InMemoryEventStore<IJournalEvent>());
+		bus = new EventBus();
+		bus.register(itemEventStore);
 		list = new ItemList(itemEventStore.getAllEvents());
-		list.subscribeTo(bus);
+		bus.register(list);
 		controller = new ItemController(list, bus, itemEventStore);
 	}
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.google.common.eventbus.Subscribe;
+
 import fr.lule.acad.event.IEvent;
 
 public class InMemoryEventStore<TAggregateEvent extends IEvent<?>> implements IEventStore<TAggregateEvent> {
@@ -12,6 +14,7 @@ public class InMemoryEventStore<TAggregateEvent extends IEvent<?>> implements IE
 	private List<TAggregateEvent> events = new ArrayList<TAggregateEvent>();
 
 	@Override
+	@Subscribe
 	public void add(TAggregateEvent event) {
 		events.add(event);
 	}

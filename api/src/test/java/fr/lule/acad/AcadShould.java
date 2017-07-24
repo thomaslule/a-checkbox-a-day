@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 import fr.lule.acad.aggregate.Item;
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.aggregate.Journal;
@@ -16,16 +18,14 @@ import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.projection.JournalEntry;
 import fr.lule.acad.projection.JournalProjection;
-import fr.lule.acad.store.InMemoryEventStore;
-import fr.lule.acad.stream.EventsBus;
 
 public class AcadShould {
 
 	@Test
 	public void displayItemInItemListWhenAddItem() {
-		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
+		EventBus bus = new EventBus();
 		ItemList list = new ItemList(new ArrayList<IItemEvent>());
-		list.subscribeTo(bus);
+		bus.register(list);
 
 		UUID id = Item.add(bus, "buy bread", "2017-05", ItemType.TASK);
 
@@ -35,9 +35,9 @@ public class AcadShould {
 
 	@Test
 	public void displayJournalEntryWhenEditDay() {
-		EventsBus bus = new EventsBus(new InMemoryEventStore<IItemEvent>(), new InMemoryEventStore<IJournalEvent>());
+		EventBus bus = new EventBus();
 		JournalProjection journal = new JournalProjection(new ArrayList<IJournalEvent>());
-		journal.subscribeTo(bus);
+		bus.register(journal);
 
 		Journal.editJournalEntry(bus, "2017-07-19", "test");
 

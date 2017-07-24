@@ -7,8 +7,9 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 import fr.lule.acad.event.IItemEvent;
-import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
@@ -17,18 +18,18 @@ import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.store.InMemoryEventStore;
-import fr.lule.acad.stream.EventsBus;
 
 public class ItemShould {
 
 	InMemoryEventStore<IItemEvent> store;
-	EventsBus bus;
+	EventBus bus;
 	UUID id;
 
 	@Before
 	public void before() {
 		store = new InMemoryEventStore<IItemEvent>();
-		bus = new EventsBus(store, new InMemoryEventStore<IJournalEvent>());
+		bus = new EventBus();
+		bus.register(store);
 		id = UUID.randomUUID();
 		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 	}
