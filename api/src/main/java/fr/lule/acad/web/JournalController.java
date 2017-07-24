@@ -17,7 +17,7 @@ import net.codestory.http.annotations.Post;
 import net.codestory.http.annotations.Prefix;
 import net.codestory.http.payload.Payload;
 
-@Prefix("/api")
+@Prefix("/api/Journal")
 public class JournalController {
 
 	private IEventPublisher publisher;
@@ -31,15 +31,15 @@ public class JournalController {
 		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
-	@Get("/Journal/:month")
-	public Payload GetJournal(GetJournalCommand command) {
+	@Get("/GetMonthJournal/:month")
+	public Payload getMonthJournal(GetMonthJournalCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			return new Payload(null, journalProjection.getJournal(command.month));
 		});
 	}
 
 	@Post("/EditJournalEntry")
-	public Payload EditJournalEntry(EditJournalEntryCommand command) {
+	public Payload editJournalEntry(EditJournalEntryCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			if (Journal.editJournalEntry(publisher, command.day, command.text)) {
 				return Payload.ok();
@@ -49,12 +49,12 @@ public class JournalController {
 		});
 	}
 
-	public static class GetJournalCommand {
+	public static class GetMonthJournalCommand {
 		@NotNull
 		@Month
 		public String month;
 
-		public GetJournalCommand(String month) {
+		public GetMonthJournalCommand(String month) {
 			this.month = month;
 		}
 

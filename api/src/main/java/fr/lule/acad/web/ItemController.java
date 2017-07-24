@@ -21,7 +21,7 @@ import net.codestory.http.annotations.Prefix;
 import net.codestory.http.constants.HttpStatus;
 import net.codestory.http.payload.Payload;
 
-@Prefix("/api")
+@Prefix("/api/Item")
 public class ItemController {
 
 	private ItemList list;
@@ -36,8 +36,8 @@ public class ItemController {
 		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
-	@Get("/Items/:month")
-	public Payload getItems(GetMonthItemsCommand month) {
+	@Get("/GetMonthItems/:month")
+	public Payload getMonthItems(GetMonthItemsCommand month) {
 		return CommandRunner.ifValid(month, validator, (c) -> {
 			return new Payload(null, list.getList(month.month));
 		});

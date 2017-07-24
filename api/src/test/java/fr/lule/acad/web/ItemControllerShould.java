@@ -44,14 +44,14 @@ public class ItemControllerShould {
 
 	@Test
 	public void getItemsReturnsList() {
-		Payload res = controller.getItems(new GetMonthItemsCommand("2017-01"));
+		Payload res = controller.getMonthItems(new GetMonthItemsCommand("2017-01"));
 		assertThat(res.isSuccess()).isTrue();
 		assertThat(((List<ItemDisplayed>) res.rawContent()).get(0).getText()).isEqualTo("todo");
 	}
 
 	@Test
 	public void getItemsFailsForInvalidCommand() {
-		Payload res = controller.getItems(new GetMonthItemsCommand("2017-1"));
+		Payload res = controller.getMonthItems(new GetMonthItemsCommand("2017-1"));
 		assertThat(res.isError()).isTrue();
 	}
 

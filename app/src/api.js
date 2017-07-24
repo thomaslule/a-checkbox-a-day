@@ -8,13 +8,13 @@ function handleErrors(response) {
 }
 
 api.fetchItems = function( month ) {
-    return fetch( "/api/Items/" + month )
+    return fetch( "/api/Item/GetMonthItems/" + month )
         .then( handleErrors )
         .then( response => response.json() );
 }
 
 api.addItem = function( item ) {
-    return fetch( "/api/AddItem",
+    return fetch( "/api/Item/AddItem",
         {
             method: "POST",
             body: JSON.stringify( item )
@@ -24,7 +24,7 @@ api.addItem = function( item ) {
 }
 
 api.cancelItem = function( id ) {
-    return fetch( "/api/CancelItem",
+    return fetch( "/api/Item/CancelItem",
         {
             method: "POST",
             body: JSON.stringify( { id } )
@@ -33,7 +33,7 @@ api.cancelItem = function( id ) {
 }
 
 api.restoreItem = function( id ) {
-    return fetch( "/api/RestoreItem",
+    return fetch( "/api/Item/RestoreItem",
         {
             method: "POST",
             body: JSON.stringify( { id } )
@@ -42,7 +42,7 @@ api.restoreItem = function( id ) {
 }
 
 api.deleteItem = function( id ) {
-    return fetch( "/api/DeleteItem",
+    return fetch( "/api/Item/DeleteItem",
         {
             method: "POST",
             body: JSON.stringify( { id } )
@@ -51,7 +51,7 @@ api.deleteItem = function( id ) {
 }
 
 api.completeTask = function( id ) {
-    return fetch( "/api/CompleteTask",
+    return fetch( "/api/Item/CompleteTask",
         {
             method: "POST",
             body: JSON.stringify( { id } )
@@ -60,7 +60,7 @@ api.completeTask = function( id ) {
 }
 
 api.uncompleteTask = function( id ) {
-    return fetch( "/api/UncompleteTask",
+    return fetch( "/api/Item/UncompleteTask",
         {
             method: "POST",
             body: JSON.stringify( { id } )
@@ -69,7 +69,7 @@ api.uncompleteTask = function( id ) {
 }
 
 api.changeItemText = function( id, newText ) {
-    return fetch( "/api/ChangeItemText",
+    return fetch( "/api/Item/ChangeItemText",
         {
             method: "POST",
             body: JSON.stringify( { id, newText } )
