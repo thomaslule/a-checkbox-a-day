@@ -34,7 +34,7 @@ public class Item {
 			return false;
 		}
 		ItemCancelled event = new ItemCancelled(projection.id);
-		publisher.post(event);
+		applyAndPublish(publisher, event);
 		return true;
 	}
 
@@ -43,7 +43,7 @@ public class Item {
 			return false;
 		}
 		ItemRestored event = new ItemRestored(projection.id);
-		publisher.post(event);
+		applyAndPublish(publisher, event);
 		return true;
 	}
 
@@ -52,7 +52,7 @@ public class Item {
 			return false;
 		}
 		ItemDeleted event = new ItemDeleted(projection.id);
-		publisher.post(event);
+		applyAndPublish(publisher, event);
 		return true;
 	}
 
@@ -61,8 +61,7 @@ public class Item {
 			return false;
 		}
 		TaskCompleted event = new TaskCompleted(projection.id);
-		projection.apply(event);
-		publisher.post(event);
+		applyAndPublish(publisher, event);
 		return true;
 	}
 
@@ -71,8 +70,7 @@ public class Item {
 			return false;
 		}
 		TaskUncompleted event = new TaskUncompleted(projection.id);
-		projection.apply(event);
-		publisher.post(event);
+		applyAndPublish(publisher, event);
 		return true;
 	}
 
@@ -81,8 +79,7 @@ public class Item {
 			return false;
 		}
 		ItemTextChanged event = new ItemTextChanged(projection.id, newText);
-		projection.apply(event);
-		publisher.post(event);
+		applyAndPublish(publisher, event);
 		return true;
 	}
 
@@ -92,9 +89,13 @@ public class Item {
 		}
 		UUID newId = add(publisher, projection.text, moveToMonth, projection.type);
 		ItemMoved event = new ItemMoved(projection.id, newId, moveToMonth);
+		applyAndPublish(publisher, event);
+		return true;
+	}
+
+	public void applyAndPublish(EventBus publisher, IItemEvent event) {
 		projection.apply(event);
 		publisher.post(event);
-		return true;
 	}
 
 	private class DecisionProjection {

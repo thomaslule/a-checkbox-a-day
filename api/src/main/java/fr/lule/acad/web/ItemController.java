@@ -12,6 +12,7 @@ import com.google.common.eventbus.EventBus;
 import fr.lule.acad.aggregate.Item;
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.IItemEvent;
+import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.IEventStore;
 import fr.lule.acad.web.validation.CommandRunner;
@@ -48,8 +49,8 @@ public class ItemController {
 	public Payload addItem(AddItemCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			UUID id = Item.add(bus, c.text, c.month, c.itemType);
-			// TODO use a repository instead of getting the item from the list
-			return new Payload(null, list.getItem(id), HttpStatus.CREATED);
+			return new Payload(null, new ItemDisplayed(id, c.itemType, c.text, c.month, false, false, false),
+					HttpStatus.CREATED);
 		});
 	}
 

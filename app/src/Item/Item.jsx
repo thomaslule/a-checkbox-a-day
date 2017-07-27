@@ -32,6 +32,7 @@ class Item extends React.Component {
         <input
           type="checkbox"
           checked={this.props.item.completed}
+          disabled={this.props.item.cancelled}
           onChange={() => this.props.onChangeCompleteTask()}
         />
       </div>) : null;
