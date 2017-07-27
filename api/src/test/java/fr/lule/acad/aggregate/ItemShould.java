@@ -13,6 +13,7 @@ import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
+import fr.lule.acad.event.ItemMoved;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
@@ -255,10 +256,24 @@ public class ItemShould {
 	public void raiseItemTextChangedWhenChangeItemText() {
 		Item item = new Item(store.getEventsFor(id));
 
-		boolean res = item.changeItemText("new text", bus);
+		boolean res = item.changeItemText(bus, "new text");
 
 		assertThat(res).isTrue();
 		assertThat(store.getAllEvents()).contains(new ItemTextChanged(id, "new text"));
+	}
+
+	@Test
+	public void raiseItemMovedAndItemAddedWhenMoveItem() {
+		Item item = new Item(store.getEventsFor(id));
+
+		boolean res = item.moveItem(bus, "2017-06");
+
+		assertThat(res).isTrue();
+		ItemAdded created = (ItemAdded) store.getAllEvents().stream().filter(e -> e instanceof ItemAdded)
+				.reduce((f, s) -> s).get();
+		assertThat(created.getMonth()).isEqualTo("2017-06");
+		assertThat(created.getText()).isEqualTo("buy baguette");
+		assertThat(store.getAllEvents()).contains(new ItemMoved(id, created.getAggregateId(), "2017-06"));
 	}
 
 }

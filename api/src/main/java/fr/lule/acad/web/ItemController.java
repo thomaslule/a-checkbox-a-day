@@ -117,7 +117,7 @@ public class ItemController {
 	public Payload changeItemText(ChangeItemTextCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
 			Item task = new Item(itemEventStore.getEventsFor(command.id));
-			if (task.changeItemText(command.newText, bus)) {
+			if (task.changeItemText(bus, command.newText)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();

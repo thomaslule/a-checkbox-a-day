@@ -45,7 +45,7 @@ public class ItemListShould {
 		list.handleItemAdded(new ItemAdded(id, "something", "2017-05", ItemType.TASK));
 
 		assertThat(list.getList("2017-05"))
-				.contains(new ItemDisplayed(id, ItemType.TASK, "something", "2017-05", false, false));
+				.contains(new ItemDisplayed(id, ItemType.TASK, "something", "2017-05", false, false, false));
 		assertThat(list.getList("2017-06")).isEmpty();
 	}
 
@@ -53,7 +53,7 @@ public class ItemListShould {
 	public void haveItemInListWhenHistoryContainsItemAdded() {
 		list = new ItemList(history);
 		assertThat(list.getList("2017-05"))
-				.contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false));
+				.contains(new ItemDisplayed(id, ItemType.TASK, "buy bread", "2017-05", false, false, false));
 		assertThat(list.getList("2017-06")).isEmpty();
 	}
 

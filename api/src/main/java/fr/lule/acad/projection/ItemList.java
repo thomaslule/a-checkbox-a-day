@@ -13,6 +13,7 @@ import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
+import fr.lule.acad.event.ItemMoved;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
@@ -33,7 +34,7 @@ public class ItemList {
 	@Subscribe
 	public void handleItemAdded(ItemAdded event) {
 		list.add(new ItemDisplayed(event.getAggregateId(), event.getType(), event.getText(), event.getMonth(), false,
-				false));
+				false, false));
 	}
 
 	@Subscribe
@@ -73,6 +74,13 @@ public class ItemList {
 	public void handleItemTextChanged(ItemTextChanged event) {
 		findInList(event.getAggregateId()).ifPresent(item -> {
 			item.setText(event.getNewText());
+		});
+	}
+
+	@Subscribe
+	public void handleItemMoved(ItemMoved event) {
+		findInList(event.getAggregateId()).ifPresent(item -> {
+			item.setMoved(true);
 		});
 	}
 

@@ -9,6 +9,7 @@ import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
+import fr.lule.acad.event.ItemMoved;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
@@ -75,11 +76,22 @@ public class Item {
 		return true;
 	}
 
-	public boolean changeItemText(String newText, EventBus publisher) {
+	public boolean changeItemText(EventBus publisher, String newText) {
 		if (!projection.exists || projection.deleted) {
 			return false;
 		}
 		ItemTextChanged event = new ItemTextChanged(projection.id, newText);
+		projection.apply(event);
+		publisher.post(event);
+		return true;
+	}
+
+	public boolean moveItem(EventBus publisher, String moveToMonth) {
+		if (!projection.exists || projection.deleted || projection.cancelled) {
+			return false;
+		}
+		UUID newId = add(publisher, projection.text, moveToMonth, projection.type);
+		ItemMoved event = new ItemMoved(projection.id, newId, moveToMonth);
 		projection.apply(event);
 		publisher.post(event);
 		return true;
@@ -93,6 +105,7 @@ public class Item {
 		private boolean done = false;
 		private boolean cancelled = false;
 		private boolean deleted = false;
+		private String text;
 
 		public DecisionProjection(List<IItemEvent> history) {
 			history.forEach(this::apply);
@@ -104,6 +117,7 @@ public class Item {
 				id = ((ItemAdded) event).getAggregateId();
 				type = ((ItemAdded) event).getType();
 				done = false;
+				text = ((ItemAdded) event).getText();
 			} else if (event instanceof ItemCancelled) {
 				cancelled = true;
 			} else if (event instanceof ItemRestored) {
@@ -114,6 +128,8 @@ public class Item {
 				done = true;
 			} else if (event instanceof TaskUncompleted) {
 				done = false;
+			} else if (event instanceof ItemTextChanged) {
+				text = ((ItemTextChanged) event).getNewText();
 			}
 		}
 

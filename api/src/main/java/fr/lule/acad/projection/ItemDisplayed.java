@@ -5,21 +5,24 @@ import java.util.UUID;
 import fr.lule.acad.aggregate.ItemType;
 
 public class ItemDisplayed {
-	
+
 	private UUID id;
 	private ItemType itemType;
 	private String text;
 	private String month;
 	private boolean cancelled;
 	private boolean completed;
+	private boolean moved;
 
-	public ItemDisplayed(UUID id, ItemType type, String text, String month, boolean cancelled, boolean completed) {
+	public ItemDisplayed(UUID id, ItemType type, String text, String month, boolean cancelled, boolean completed,
+			boolean moved) {
 		this.id = id;
 		this.itemType = type;
 		this.text = text;
 		this.month = month;
 		this.cancelled = cancelled;
 		this.completed = completed;
+		this.moved = moved;
 	}
 
 	/**
@@ -30,7 +33,8 @@ public class ItemDisplayed {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(UUID id) {
 		this.id = id;
@@ -44,7 +48,8 @@ public class ItemDisplayed {
 	}
 
 	/**
-	 * @param itemType the type to set
+	 * @param itemType
+	 *            the type to set
 	 */
 	public void setItemType(ItemType itemType) {
 		this.itemType = itemType;
@@ -58,7 +63,8 @@ public class ItemDisplayed {
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param text
+	 *            the text to set
 	 */
 	public void setText(String text) {
 		this.text = text;
@@ -80,7 +86,8 @@ public class ItemDisplayed {
 	}
 
 	/**
-	 * @param cancelled the cancelled to set
+	 * @param cancelled
+	 *            the cancelled to set
 	 */
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
@@ -94,7 +101,24 @@ public class ItemDisplayed {
 		this.completed = completed;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * @return the moved
+	 */
+	public boolean isMoved() {
+		return moved;
+	}
+
+	/**
+	 * @param moved
+	 *            the moved to set
+	 */
+	public void setMoved(boolean moved) {
+		this.moved = moved;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -106,11 +130,14 @@ public class ItemDisplayed {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((itemType == null) ? 0 : itemType.hashCode());
 		result = prime * result + ((month == null) ? 0 : month.hashCode());
+		result = prime * result + (moved ? 1231 : 1237);
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -137,6 +164,8 @@ public class ItemDisplayed {
 			if (other.month != null)
 				return false;
 		} else if (!month.equals(other.month))
+			return false;
+		if (moved != other.moved)
 			return false;
 		if (text == null) {
 			if (other.text != null)
