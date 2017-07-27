@@ -5,7 +5,8 @@ import java.util.UUID;
 import fr.lule.acad.aggregate.ItemType;
 
 public class ItemAdded implements IItemEvent {
-	
+
+	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 	private String text;
 	private String month;
@@ -21,11 +22,11 @@ public class ItemAdded implements IItemEvent {
 	public String getText() {
 		return text;
 	}
-	
+
 	public String getMonth() {
 		return month;
 	}
-	
+
 	public ItemType getType() {
 		return type;
 	}
@@ -35,7 +36,9 @@ public class ItemAdded implements IItemEvent {
 		return this.aggregateId;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -49,7 +52,9 @@ public class ItemAdded implements IItemEvent {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

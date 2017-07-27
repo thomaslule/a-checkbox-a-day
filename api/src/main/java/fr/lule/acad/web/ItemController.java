@@ -27,10 +27,10 @@ public class ItemController {
 
 	private ItemList list;
 	private EventBus bus;
-	private IEventStore<IItemEvent> itemEventStore;
+	private IEventStore<IItemEvent, UUID> itemEventStore;
 	private Validator validator;
 
-	public ItemController(ItemList list, EventBus bus, IEventStore<IItemEvent> itemEventStore) {
+	public ItemController(ItemList list, EventBus bus, IEventStore<IItemEvent, UUID> itemEventStore) {
 		this.list = list;
 		this.bus = bus;
 		this.itemEventStore = itemEventStore;

@@ -25,7 +25,7 @@ import net.codestory.http.payload.Payload;
 @SuppressWarnings("unchecked")
 public class ItemControllerShould {
 
-	private InMemoryEventStore<IItemEvent> itemEventStore;
+	private InMemoryEventStore<IItemEvent, UUID> itemEventStore;
 	private ItemList list;
 	private EventBus bus;
 	private ItemController controller;
@@ -33,7 +33,7 @@ public class ItemControllerShould {
 
 	@Before
 	public void before() {
-		itemEventStore = new InMemoryEventStore<IItemEvent>();
+		itemEventStore = new InMemoryEventStore<IItemEvent, UUID>();
 		eventId = UUID.randomUUID();
 		itemEventStore.add(new ItemAdded(eventId, "todo", "2017-01", ItemType.TASK));
 		bus = new EventBus();

@@ -14,25 +14,25 @@ import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.TaskCompleted;
 
 public class InMemoryEventStoreShould {
-	
-	private IEventStore<IItemEvent> store;
+
+	private IEventStore<IItemEvent, UUID> store;
 	private UUID id1;
 	private UUID id2;
-	
+
 	@Before
 	public void before() {
-		store = new InMemoryEventStore<IItemEvent>();
+		store = new InMemoryEventStore<IItemEvent, UUID>();
 		id1 = UUID.randomUUID();
 		ItemAdded item1 = new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK);
 		id2 = UUID.randomUUID();
 		ItemAdded item2 = new ItemAdded(id2, "task 2", "2017-05", ItemType.TASK);
 		TaskCompleted item3 = new TaskCompleted(id1);
-		
+
 		store.add(item1);
 		store.add(item2);
 		store.add(item3);
 	}
-	
+
 	@Test
 	public void getAllEventsRestituteEventsInSameOrder() {
 		List<IItemEvent> events = store.getAllEvents();
@@ -41,7 +41,7 @@ public class InMemoryEventStoreShould {
 		assertThat(events.get(1)).isEqualTo(new ItemAdded(id2, "task 2", "2017-05", ItemType.TASK));
 		assertThat(events.get(2)).isEqualTo(new TaskCompleted(id1));
 	}
-	
+
 	@Test
 	public void getEventsForRestituteEventsForAggregate() {
 		List<IItemEvent> events = store.getEventsFor(id1);
@@ -49,7 +49,5 @@ public class InMemoryEventStoreShould {
 		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK));
 		assertThat(events.get(1)).isEqualTo(new TaskCompleted(id1));
 	}
-	
-	
 
 }

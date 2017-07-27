@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public class ItemTextChanged implements IItemEvent {
 
+	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 	private final String newText;
 

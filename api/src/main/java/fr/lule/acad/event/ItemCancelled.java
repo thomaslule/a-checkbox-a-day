@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public class ItemCancelled implements IItemEvent {
 
+	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 
 	public ItemCancelled(UUID aggregateId) {
@@ -15,7 +16,9 @@ public class ItemCancelled implements IItemEvent {
 		return aggregateId;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -26,7 +29,9 @@ public class ItemCancelled implements IItemEvent {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

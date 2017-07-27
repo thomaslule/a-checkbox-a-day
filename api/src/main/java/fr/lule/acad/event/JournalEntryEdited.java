@@ -2,6 +2,7 @@ package fr.lule.acad.event;
 
 public class JournalEntryEdited implements IJournalEvent {
 
+	private static final long serialVersionUID = 1L;
 	public String day;
 	public String text;
 

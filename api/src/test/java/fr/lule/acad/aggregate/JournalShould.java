@@ -8,15 +8,17 @@ import com.google.common.eventbus.EventBus;
 
 import fr.lule.acad.event.IJournalEvent;
 import fr.lule.acad.event.JournalEntryEdited;
+import fr.lule.acad.store.IEventStore;
 import fr.lule.acad.store.InMemoryEventStore;
+import fr.lule.acad.store.JournalEventSaver;
 
 public class JournalShould {
 
 	@Test
 	public void raiseJournalEntryEditedWhenEditJournalEntry() {
-		InMemoryEventStore<IJournalEvent> store = new InMemoryEventStore<IJournalEvent>();
+		IEventStore<IJournalEvent, String> store = new InMemoryEventStore<IJournalEvent, String>();
 		EventBus bus = new EventBus();
-		bus.register(store);
+		bus.register(new JournalEventSaver(store));
 
 		boolean res = Journal.editJournalEntry(bus, "2017-07-19", "some text");
 

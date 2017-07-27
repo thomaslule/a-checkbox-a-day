@@ -25,7 +25,7 @@ public class JournalController {
 	private Validator validator;
 	private JournalProjection journalProjection;
 
-	public JournalController(EventBus bus, IEventStore<IJournalEvent> journalEventStore,
+	public JournalController(EventBus bus, IEventStore<IJournalEvent, String> journalEventStore,
 			JournalProjection journalProjection) {
 		this.bus = bus;
 		this.journalProjection = journalProjection;

@@ -4,6 +4,8 @@ api/target/
 api/.classpath
 api/.project
 api/.settings
+api/src/test/resources/itemstore_temp
+api/src/test/resources/store
 
 # app
 

@@ -1,6 +1,8 @@
 package fr.lule.acad.event;
 
-public interface IEvent<ID> {
+import java.io.Serializable;
+
+public interface IEvent<ID> extends Serializable {
 
 	public ID getAggregateId();
 

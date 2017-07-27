@@ -17,19 +17,21 @@ import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
+import fr.lule.acad.store.IEventStore;
 import fr.lule.acad.store.InMemoryEventStore;
+import fr.lule.acad.store.ItemEventSaver;
 
 public class ItemShould {
 
-	InMemoryEventStore<IItemEvent> store;
-	EventBus bus;
-	UUID id;
+	private IEventStore<IItemEvent, UUID> store;
+	private EventBus bus;
+	private UUID id;
 
 	@Before
 	public void before() {
-		store = new InMemoryEventStore<IItemEvent>();
+		store = new InMemoryEventStore<IItemEvent, UUID>();
 		bus = new EventBus();
-		bus.register(store);
+		bus.register(new ItemEventSaver(store));
 		id = UUID.randomUUID();
 		store.add(new ItemAdded(id, "buy baguette", "2017-05", ItemType.TASK));
 	}
