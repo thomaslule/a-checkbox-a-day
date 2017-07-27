@@ -83,4 +83,13 @@ api.fetchJournal = function (month) {
         .then(response => response.json());
 }
 
+api.editJournalEntry = function (day, newText) {
+    return fetch("/api/Journal/EditJournalEntry",
+        {
+            method: "POST",
+            body: JSON.stringify({ day, text: newText })
+        })
+        .then(handleErrors);
+}
+
 export default api;

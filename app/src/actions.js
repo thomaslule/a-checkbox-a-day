@@ -61,6 +61,12 @@ actions.fetchJournalSuccess = (journal) => ({
     journal
 });
 
+actions.editJournalEntry = (day, newText) => ({
+    type: "EDIT_JOURNAL_ENTRY",
+    day,
+    newText
+});
+
 actions.error = (error) => ({
     type: "ERROR",
     error

@@ -104,6 +104,17 @@ function* watchFetchJournal() {
         });
 }
 
+function* watchEditJournalEntry() {
+    yield takeEvery("EDIT_JOURNAL_ENTRY",
+        function* (action) {
+            try {
+                yield call(api.editJournalEntry, action.day, action.newText);
+            } catch (e) {
+                yield put(actions.error(e));
+            }
+        });
+}
+
 export default function* () {
     yield fork(watchFetchItems);
     yield fork(watchAddItem);
@@ -114,4 +125,5 @@ export default function* () {
     yield fork(watchUncompleteTask);
     yield fork(watchChanteItemText);
     yield fork(watchFetchJournal);
+    yield fork(watchEditJournalEntry);
 };
