@@ -1,14 +1,12 @@
-import { connect } from "react-redux";
-import NewItem from "../components/NewItem";
-import actions from "../actions";
+import { connect } from 'react-redux';
+import NewItem from '../components/NewItem';
+import actions from '../actions';
 
-const mapStateToProps = ( state, ownProps ) => ( {
-} );
+const mapStateToProps = (state, ownProps) => ({
+});
 
-const mapDispatchToProps = ( dispatch, props ) => {
-    return {
-        onAddItem: ( itemType, text ) => dispatch( actions.addItem( { itemType, text, month: props.month } ) )
-    }
-}
+const mapDispatchToProps = (dispatch, props) => ({
+  onAddItem: (itemType, text) => dispatch(actions.addItem({ itemType, text, month: props.month })),
+});
 
-export default connect( mapStateToProps, mapDispatchToProps )( NewItem );
+export default connect(mapStateToProps, mapDispatchToProps)(NewItem);

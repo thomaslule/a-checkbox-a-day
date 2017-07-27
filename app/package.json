@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "eslint": "^4.3.0",
     "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-contenteditable": "^2.0.4",
@@ -14,6 +15,10 @@
     "redux-saga": "^0.15.4"
   },
   "devDependencies": {
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
     "react-scripts": "1.0.0"
   },
   "scripts": {

@@ -1,8 +1,8 @@
-import { connect } from "react-redux";
-import Error from "../components/Error";
+import { connect } from 'react-redux';
+import Error from '../components/Error';
 
-const mapStateToProps = ( state ) => ( {
-    error: state.error
-} );
+const mapStateToProps = state => ({
+  error: state.error,
+});
 
-export default connect( mapStateToProps )( Error );
+export default connect(mapStateToProps)(Error);

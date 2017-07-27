@@ -1,95 +1,85 @@
-let api = {};
+const api = {};
 
 function handleErrors(response) {
-    if (!response.ok) {
-        throw Error(response.statusText);
-    }
-    return response;
+  if (!response.ok) {
+    throw response.statusText;
+  }
+  return response;
 }
 
-api.fetchItems = function (month) {
-    return fetch("/api/Item/GetMonthItems/" + month)
-        .then(handleErrors)
-        .then(response => response.json());
-}
+api.fetchItems = month =>
+  fetch(`/api/Item/GetMonthItems/${month}`)
+    .then(handleErrors)
+    .then(response => response.json());
 
-api.addItem = function (item) {
-    return fetch("/api/Item/AddItem",
-        {
-            method: "POST",
-            body: JSON.stringify(item)
-        })
-        .then(handleErrors)
-        .then(response => response.json());
-}
+api.addItem = item =>
+  fetch('/api/Item/AddItem',
+    {
+      method: 'POST',
+      body: JSON.stringify(item),
+    })
+    .then(handleErrors)
+    .then(response => response.json());
 
-api.cancelItem = function (id) {
-    return fetch("/api/Item/CancelItem",
-        {
-            method: "POST",
-            body: JSON.stringify({ id })
-        })
-        .then(handleErrors);
-}
+api.cancelItem = id =>
+  fetch('/api/Item/CancelItem',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id }),
+    })
+    .then(handleErrors);
 
-api.restoreItem = function (id) {
-    return fetch("/api/Item/RestoreItem",
-        {
-            method: "POST",
-            body: JSON.stringify({ id })
-        })
-        .then(handleErrors);
-}
+api.restoreItem = id =>
+  fetch('/api/Item/RestoreItem',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id }),
+    })
+    .then(handleErrors);
 
-api.deleteItem = function (id) {
-    return fetch("/api/Item/DeleteItem",
-        {
-            method: "POST",
-            body: JSON.stringify({ id })
-        })
-        .then(handleErrors);
-}
+api.deleteItem = id =>
+  fetch('/api/Item/DeleteItem',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id }),
+    })
+    .then(handleErrors);
 
-api.completeTask = function (id) {
-    return fetch("/api/Item/CompleteTask",
-        {
-            method: "POST",
-            body: JSON.stringify({ id })
-        })
-        .then(handleErrors);
-}
+api.completeTask = id =>
+  fetch('/api/Item/CompleteTask',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id }),
+    })
+    .then(handleErrors);
 
-api.uncompleteTask = function (id) {
-    return fetch("/api/Item/UncompleteTask",
-        {
-            method: "POST",
-            body: JSON.stringify({ id })
-        })
-        .then(handleErrors);
-}
+api.uncompleteTask = id =>
+  fetch('/api/Item/UncompleteTask',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id }),
+    })
+    .then(handleErrors);
 
-api.changeItemText = function (id, newText) {
-    return fetch("/api/Item/ChangeItemText",
-        {
-            method: "POST",
-            body: JSON.stringify({ id, newText })
-        })
-        .then(handleErrors);
-}
+api.changeItemText = (id, newText) =>
+  fetch('/api/Item/ChangeItemText',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id, newText }),
+    })
+    .then(handleErrors);
 
-api.fetchJournal = function (month) {
-    return fetch("/api/Journal/GetMonthJournal/" + month)
-        .then(handleErrors)
-        .then(response => response.json());
-}
+api.fetchJournal = month =>
+  fetch(`/api/Journal/GetMonthJournal/${month}`)
+    .then(handleErrors)
+    .then(response => response.json());
 
-api.editJournalEntry = function (day, newText) {
-    return fetch("/api/Journal/EditJournalEntry",
-        {
-            method: "POST",
-            body: JSON.stringify({ day, text: newText })
-        })
-        .then(handleErrors);
-}
+api.editJournalEntry = (day, newText) =>
+  fetch('/api/Journal/EditJournalEntry',
+    {
+      method: 'POST',
+      body: JSON.stringify({ day, text: newText }),
+    })
+    .then(handleErrors);
 
 export default api;
