@@ -30,7 +30,7 @@ public class Item {
 	}
 
 	public boolean cancel(EventBus publisher) {
-		if (!projection.exists || projection.deleted || projection.cancelled) {
+		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
 		ItemCancelled event = new ItemCancelled(projection.id);
@@ -39,7 +39,7 @@ public class Item {
 	}
 
 	public boolean restore(EventBus publisher) {
-		if (!projection.exists || projection.deleted || !projection.cancelled) {
+		if (!projection.exists || !projection.cancelled) {
 			return false;
 		}
 		ItemRestored event = new ItemRestored(projection.id);
@@ -48,7 +48,7 @@ public class Item {
 	}
 
 	public boolean delete(EventBus publisher) {
-		if (!projection.exists || projection.deleted) {
+		if (!projection.exists || !projection.cancelled) {
 			return false;
 		}
 		ItemDeleted event = new ItemDeleted(projection.id);
@@ -57,7 +57,7 @@ public class Item {
 	}
 
 	public boolean completeTask(EventBus publisher) {
-		if (!projection.exists || projection.deleted || projection.type != ItemType.TASK || projection.done) {
+		if (!projection.exists || projection.cancelled || projection.type != ItemType.TASK || projection.done) {
 			return false;
 		}
 		TaskCompleted event = new TaskCompleted(projection.id);
@@ -67,7 +67,7 @@ public class Item {
 	}
 
 	public boolean uncompleteTask(EventBus publisher) {
-		if (!projection.exists || projection.deleted || projection.type != ItemType.TASK || !projection.done) {
+		if (!projection.exists || projection.cancelled || projection.type != ItemType.TASK || !projection.done) {
 			return false;
 		}
 		TaskUncompleted event = new TaskUncompleted(projection.id);
@@ -77,7 +77,7 @@ public class Item {
 	}
 
 	public boolean changeItemText(EventBus publisher, String newText) {
-		if (!projection.exists || projection.deleted) {
+		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
 		ItemTextChanged event = new ItemTextChanged(projection.id, newText);
@@ -87,7 +87,7 @@ public class Item {
 	}
 
 	public boolean moveItem(EventBus publisher, String moveToMonth) {
-		if (!projection.exists || projection.deleted || projection.cancelled) {
+		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
 		UUID newId = add(publisher, projection.text, moveToMonth, projection.type);
@@ -104,7 +104,6 @@ public class Item {
 		private ItemType type;
 		private boolean done = false;
 		private boolean cancelled = false;
-		private boolean deleted = false;
 		private String text;
 
 		public DecisionProjection(List<IItemEvent> history) {
@@ -123,7 +122,7 @@ public class Item {
 			} else if (event instanceof ItemRestored) {
 				cancelled = false;
 			} else if (event instanceof ItemDeleted) {
-				deleted = true;
+				exists = false;
 			} else if (event instanceof TaskCompleted) {
 				done = true;
 			} else if (event instanceof TaskUncompleted) {

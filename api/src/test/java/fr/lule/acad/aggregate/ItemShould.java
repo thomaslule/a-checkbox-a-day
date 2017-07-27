@@ -110,6 +110,7 @@ public class ItemShould {
 
 	@Test
 	public void raiseItemDeletedWhenDeleteItem() {
+		store.add(new ItemCancelled(id));
 		Item item = new Item(store.getEventsFor(id));
 
 		boolean res = item.delete(bus);
