@@ -8,9 +8,8 @@ import {
 import moment from 'moment';
 import 'bootstrap/dist/css/bootstrap.css';
 
-import MonthPage from './components/MonthPage';
-import ErrorContainer from './containers/ErrorContainer';
-import './App.css';
+import MonthPage from '../MonthPage/MonthPage';
+import ErrorContainer from '../Error/ErrorContainer';
 
 function defaultPage() {
   return `/month/${moment().format('YYYY-MM')}`;

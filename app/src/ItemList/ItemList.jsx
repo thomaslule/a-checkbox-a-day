@@ -1,6 +1,6 @@
 import React from 'react';
-import ItemContainer from '../containers/ItemContainer';
-import NewItemContainer from '../containers/NewItemContainer';
+import ItemContainer from '../Item/ItemContainer';
+import NewItemContainer from '../NewItem/NewItemContainer';
 
 class ItemList extends React.Component {
   componentDidMount() {

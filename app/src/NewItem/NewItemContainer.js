@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import NewItem from '../components/NewItem';
+import NewItem from './NewItem';
 import actions from '../actions';
 
 const mapStateToProps = (state, ownProps) => ({

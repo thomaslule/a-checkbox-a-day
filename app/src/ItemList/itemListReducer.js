@@ -1,4 +1,4 @@
-const items = (state = [], action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case 'FETCH_ITEMS_SUCCESS':
       return action.items;
@@ -43,5 +43,3 @@ const items = (state = [], action) => {
       return state;
   }
 };
-
-export default items;

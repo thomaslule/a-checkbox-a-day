@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
-import Journal from '../components/Journal';
+import ItemList from './ItemList';
 import actions from '../actions';
 
 const mapStateToProps = (state, ownProps) => ({
-  journal: state.journal,
+  items: state.itemList,
   month: ownProps.month,
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onChangeMonth: month => dispatch(actions.fetchJournal(month)),
+  onChangeMonth: month => dispatch(actions.fetchItems(month)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Journal);
+export default connect(mapStateToProps, mapDispatchToProps)(ItemList);

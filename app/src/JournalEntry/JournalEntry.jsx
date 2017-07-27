@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import EditableText from './EditableText';
+import EditableText from '../EditableText/EditableText';
 
 export default props => (
   <li className="journal-entry">

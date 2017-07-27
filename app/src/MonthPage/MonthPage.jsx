@@ -3,9 +3,9 @@ import moment from 'moment';
 import {
   Redirect,
 } from 'react-router-dom';
-import JournalContainer from '../containers/JournalContainer';
-import ItemListContainer from '../containers/ItemListContainer';
-import MonthPicker from './MonthPicker';
+import JournalContainer from '../Journal/JournalContainer';
+import ItemListContainer from '../ItemList/ItemListContainer';
+import MonthPicker from '../MonthPicker/MonthPicker';
 
 function isMonthValid(month) {
   return moment(month, 'YYYY-MM', true).isValid();

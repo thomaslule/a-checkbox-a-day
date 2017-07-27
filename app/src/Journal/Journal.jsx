@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-import JournalEntryContainer from '../containers/JournalEntryContainer';
+import JournalEntryContainer from '../JournalEntry/JournalEntryContainer';
 
 import './Journal.css';
 
