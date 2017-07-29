@@ -11,8 +11,8 @@ public class ItemTextChanged extends ItemEvent {
 
 	@JsonCreator
 	public ItemTextChanged(@JsonProperty("newText") String newText, @JsonProperty("aggregateId") ItemId aggregateId,
-			@JsonProperty("date") Date date) {
-		super(aggregateId, date);
+			@JsonProperty("timestamp") Date timestamp) {
+		super(aggregateId, timestamp);
 		this.newText = newText;
 	}
 

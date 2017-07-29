@@ -4,22 +4,22 @@ import java.util.Date;
 
 public abstract class Event implements IEvent {
 
-	private final Date date;
+	private final Date timestamp;
 
-	public Event(Date date) {
-		this.date = date;
+	public Event(Date timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	@Override
-	public Date getDate() {
-		return date;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
 		return result;
 	}
 
@@ -32,10 +32,10 @@ public abstract class Event implements IEvent {
 		if (getClass() != obj.getClass())
 			return false;
 		Event other = (Event) obj;
-		if (date == null) {
-			if (other.date != null)
+		if (timestamp == null) {
+			if (other.timestamp != null)
 				return false;
-		} else if (!date.equals(other.date))
+		} else if (!timestamp.equals(other.timestamp))
 			return false;
 		return true;
 	}

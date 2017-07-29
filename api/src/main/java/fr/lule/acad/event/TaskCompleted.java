@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TaskCompleted extends ItemEvent {
 
 	@JsonCreator
-	public TaskCompleted(@JsonProperty("aggregateId") ItemId aggregateId, @JsonProperty("date") Date date) {
-		super(aggregateId, date);
+	public TaskCompleted(@JsonProperty("aggregateId") ItemId aggregateId, @JsonProperty("timestamp") Date timestamp) {
+		super(aggregateId, timestamp);
 	}
 
 }

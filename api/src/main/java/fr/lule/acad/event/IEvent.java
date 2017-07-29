@@ -6,6 +6,6 @@ public interface IEvent {
 
 	public IEventId getAggregateId();
 
-	public Date getDate();
+	public Date getTimestamp();
 
 }

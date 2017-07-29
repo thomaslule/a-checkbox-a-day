@@ -16,8 +16,8 @@ public class ItemAdded extends ItemEvent {
 	@JsonCreator
 	public ItemAdded(@JsonProperty("text") String text, @JsonProperty("month") String month,
 			@JsonProperty("type") ItemType type, @JsonProperty("aggregateId") ItemId aggregateId,
-			@JsonProperty("date") Date date) {
-		super(aggregateId, date);
+			@JsonProperty("timestamp") Date timestamp) {
+		super(aggregateId, timestamp);
 		this.text = text;
 		this.month = month;
 		this.type = type;

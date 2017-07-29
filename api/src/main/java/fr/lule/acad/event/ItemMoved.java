@@ -13,8 +13,8 @@ public class ItemMoved extends ItemEvent {
 	@JsonCreator
 	public ItemMoved(@JsonProperty("childItemAddedId") ItemId childItemAddedId,
 			@JsonProperty("movedToMonth") String movedToMonth, @JsonProperty("aggregateId") ItemId aggregateId,
-			@JsonProperty("date") Date date) {
-		super(aggregateId, date);
+			@JsonProperty("timestamp") Date timestamp) {
+		super(aggregateId, timestamp);
 		this.childItemAddedId = childItemAddedId;
 		this.movedToMonth = movedToMonth;
 	}

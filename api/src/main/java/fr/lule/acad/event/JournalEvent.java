@@ -8,8 +8,8 @@ public abstract class JournalEvent extends Event {
 
 	private final JournalDay aggregateId;
 
-	public JournalEvent(JournalDay aggregateId, Date date) {
-		super(date);
+	public JournalEvent(JournalDay aggregateId, Date timestamp) {
+		super(timestamp);
 		this.aggregateId = aggregateId;
 	}
 

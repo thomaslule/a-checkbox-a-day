@@ -6,8 +6,8 @@ public abstract class ItemEvent extends Event {
 
 	private final ItemId aggregateId;
 
-	public ItemEvent(ItemId aggregateId, Date date) {
-		super(date);
+	public ItemEvent(ItemId aggregateId, Date timestamp) {
+		super(timestamp);
 		this.aggregateId = aggregateId;
 	}
 

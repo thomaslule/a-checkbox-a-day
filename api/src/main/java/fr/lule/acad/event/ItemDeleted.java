@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ItemDeleted extends ItemEvent {
 
 	@JsonCreator
-	public ItemDeleted(@JsonProperty("aggregateId") ItemId aggregateId, @JsonProperty("date") Date date) {
-		super(aggregateId, date);
+	public ItemDeleted(@JsonProperty("aggregateId") ItemId aggregateId, @JsonProperty("timestamp") Date timestamp) {
+		super(aggregateId, timestamp);
 	}
 
 }

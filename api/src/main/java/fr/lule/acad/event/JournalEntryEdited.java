@@ -11,8 +11,8 @@ public class JournalEntryEdited extends JournalEvent {
 
 	@JsonCreator
 	public JournalEntryEdited(@JsonProperty("text") String text, @JsonProperty("aggregateId") JournalDay aggregateId,
-			@JsonProperty("date") Date date) {
-		super(aggregateId, date);
+			@JsonProperty("timestamp") Date timestamp) {
+		super(aggregateId, timestamp);
 		this.text = text;
 	}
 
