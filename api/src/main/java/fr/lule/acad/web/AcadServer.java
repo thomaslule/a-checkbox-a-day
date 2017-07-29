@@ -1,7 +1,6 @@
 package fr.lule.acad.web;
 
 import java.io.File;
-import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -10,8 +9,10 @@ import org.apache.commons.cli.ParseException;
 
 import com.google.common.eventbus.EventBus;
 
-import fr.lule.acad.event.IItemEvent;
-import fr.lule.acad.event.IJournalEvent;
+import fr.lule.acad.event.ItemEvent;
+import fr.lule.acad.event.ItemId;
+import fr.lule.acad.event.JournalDay;
+import fr.lule.acad.event.JournalEvent;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.projection.JournalProjection;
 import fr.lule.acad.store.FileEventStore;
@@ -30,17 +31,17 @@ public class AcadServer {
 
 		CommandLine cmd = new DefaultParser().parse(options, args);
 
-		IEventStore<IItemEvent, UUID> itemEventStore;
-		IEventStore<IJournalEvent, String> journalEventStore;
+		IEventStore<ItemEvent, ItemId> itemEventStore;
+		IEventStore<JournalEvent, JournalDay> journalEventStore;
 
 		if (cmd.hasOption("store")) {
-			itemEventStore = new FileEventStore<IItemEvent, UUID>(
+			itemEventStore = new FileEventStore<ItemEvent, ItemId>(
 					cmd.getOptionValue("store") + File.separator + "items.json");
-			journalEventStore = new FileEventStore<IJournalEvent, String>(
+			journalEventStore = new FileEventStore<JournalEvent, JournalDay>(
 					cmd.getOptionValue("store") + File.separator + "journal.json");
 		} else {
-			itemEventStore = new InMemoryEventStore<IItemEvent, UUID>();
-			journalEventStore = new InMemoryEventStore<IJournalEvent, String>();
+			itemEventStore = new InMemoryEventStore<ItemEvent, ItemId>();
+			journalEventStore = new InMemoryEventStore<JournalEvent, JournalDay>();
 		}
 
 		EventBus bus = new EventBus();

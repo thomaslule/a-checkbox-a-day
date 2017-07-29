@@ -1,67 +1,42 @@
 package fr.lule.acad.event;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JournalEntryEdited implements IJournalEvent {
+public class JournalEntryEdited extends JournalEvent {
 
-	public String day;
-	public String text;
+	private final String text;
 
 	@JsonCreator
-	public JournalEntryEdited(@JsonProperty("day") String day, @JsonProperty("text") String text) {
-		this.day = day;
+	public JournalEntryEdited(@JsonProperty("text") String text, @JsonProperty("aggregateId") JournalDay aggregateId,
+			@JsonProperty("date") Date date) {
+		super(aggregateId, date);
 		this.text = text;
 	}
 
-	@Override
-	@JsonIgnore
-	public String getAggregateId() {
-		return this.day;
-	}
-
-	public String getDay() {
-		return this.day;
-	}
-
 	public String getText() {
-		return this.text;
+		return text;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((day == null) ? 0 : day.hashCode());
+		int result = super.hashCode();
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		JournalEntryEdited other = (JournalEntryEdited) obj;
-		if (day == null) {
-			if (other.day != null)
-				return false;
-		} else if (!day.equals(other.day))
-			return false;
 		if (text == null) {
 			if (other.text != null)
 				return false;

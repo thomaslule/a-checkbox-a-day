@@ -1,73 +1,46 @@
 package fr.lule.acad.event;
 
-import java.util.UUID;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ItemMoved implements IItemEvent {
+public class ItemMoved extends ItemEvent {
 
-	private final UUID aggregateId;
-	private final UUID childItem;
+	private final ItemId childItemAddedId;
 	private final String movedToMonth;
 
-	public ItemMoved(@JsonProperty("aggregateId") UUID aggregateId, @JsonProperty("childItem") UUID childItem,
-			@JsonProperty("movedToMonth") String movedToMonth) {
-		this.aggregateId = aggregateId;
-		this.childItem = childItem;
+	@JsonCreator
+	public ItemMoved(@JsonProperty("childItemAddedId") ItemId childItemAddedId,
+			@JsonProperty("movedToMonth") String movedToMonth, @JsonProperty("aggregateId") ItemId aggregateId,
+			@JsonProperty("date") Date date) {
+		super(aggregateId, date);
+		this.childItemAddedId = childItemAddedId;
 		this.movedToMonth = movedToMonth;
 	}
 
 	@Override
-	public UUID getAggregateId() {
-		return aggregateId;
-	}
-
-	public UUID getChildItem() {
-		return childItem;
-	}
-
-	public String getMovedToMonth() {
-		return movedToMonth;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((aggregateId == null) ? 0 : aggregateId.hashCode());
-		result = prime * result + ((childItem == null) ? 0 : childItem.hashCode());
+		int result = super.hashCode();
+		result = prime * result + ((childItemAddedId == null) ? 0 : childItemAddedId.hashCode());
 		result = prime * result + ((movedToMonth == null) ? 0 : movedToMonth.hashCode());
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		ItemMoved other = (ItemMoved) obj;
-		if (aggregateId == null) {
-			if (other.aggregateId != null)
+		if (childItemAddedId == null) {
+			if (other.childItemAddedId != null)
 				return false;
-		} else if (!aggregateId.equals(other.aggregateId))
-			return false;
-		if (childItem == null) {
-			if (other.childItem != null)
-				return false;
-		} else if (!childItem.equals(other.childItem))
+		} else if (!childItemAddedId.equals(other.childItemAddedId))
 			return false;
 		if (movedToMonth == null) {
 			if (other.movedToMonth != null)

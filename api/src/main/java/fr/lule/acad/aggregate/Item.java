@@ -5,27 +5,31 @@ import java.util.UUID;
 
 import com.google.common.eventbus.EventBus;
 
-import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemCancelled;
 import fr.lule.acad.event.ItemDeleted;
+import fr.lule.acad.event.ItemEvent;
+import fr.lule.acad.event.ItemId;
 import fr.lule.acad.event.ItemMoved;
 import fr.lule.acad.event.ItemRestored;
 import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
+import fr.lule.acad.util.IDateFactory;
 
 public class Item {
 
+	private final IDateFactory dateFactory;
 	private DecisionProjection projection;
 
-	public static UUID add(EventBus publisher, String text, String month, ItemType type) {
-		UUID id = UUID.randomUUID();
-		publisher.post(new ItemAdded(id, text, month, type));
-		return id;
+	public static ItemId add(EventBus publisher, String text, String month, ItemType type, IDateFactory dateFactory) {
+		ItemAdded event = new ItemAdded(text, month, type, new ItemId(UUID.randomUUID()), dateFactory.now());
+		publisher.post(event);
+		return event.getAggregateId();
 	}
 
-	public Item(List<IItemEvent> history) {
+	public Item(List<ItemEvent> history, IDateFactory dateFactory) {
+		this.dateFactory = dateFactory;
 		projection = new DecisionProjection(history);
 	}
 
@@ -33,7 +37,7 @@ public class Item {
 		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
-		ItemCancelled event = new ItemCancelled(projection.id);
+		ItemCancelled event = new ItemCancelled(projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
@@ -42,7 +46,7 @@ public class Item {
 		if (!projection.exists || !projection.cancelled) {
 			return false;
 		}
-		ItemRestored event = new ItemRestored(projection.id);
+		ItemRestored event = new ItemRestored(projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
@@ -51,7 +55,7 @@ public class Item {
 		if (!projection.exists || !projection.cancelled) {
 			return false;
 		}
-		ItemDeleted event = new ItemDeleted(projection.id);
+		ItemDeleted event = new ItemDeleted(projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
@@ -60,7 +64,7 @@ public class Item {
 		if (!projection.exists || projection.cancelled || projection.type != ItemType.TASK || projection.done) {
 			return false;
 		}
-		TaskCompleted event = new TaskCompleted(projection.id);
+		TaskCompleted event = new TaskCompleted(projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
@@ -69,7 +73,7 @@ public class Item {
 		if (!projection.exists || projection.cancelled || projection.type != ItemType.TASK || !projection.done) {
 			return false;
 		}
-		TaskUncompleted event = new TaskUncompleted(projection.id);
+		TaskUncompleted event = new TaskUncompleted(projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
@@ -78,7 +82,7 @@ public class Item {
 		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
-		ItemTextChanged event = new ItemTextChanged(projection.id, newText);
+		ItemTextChanged event = new ItemTextChanged(newText, projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
@@ -87,13 +91,13 @@ public class Item {
 		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
-		UUID newId = add(publisher, projection.text, moveToMonth, projection.type);
-		ItemMoved event = new ItemMoved(projection.id, newId, moveToMonth);
+		ItemId newId = add(publisher, projection.text, moveToMonth, projection.type, dateFactory);
+		ItemMoved event = new ItemMoved(newId, moveToMonth, projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;
 	}
 
-	public void applyAndPublish(EventBus publisher, IItemEvent event) {
+	public void applyAndPublish(EventBus publisher, ItemEvent event) {
 		projection.apply(event);
 		publisher.post(event);
 	}
@@ -101,17 +105,17 @@ public class Item {
 	private class DecisionProjection {
 
 		private boolean exists = false;
-		private UUID id;
+		private ItemId id;
 		private ItemType type;
 		private boolean done = false;
 		private boolean cancelled = false;
 		private String text;
 
-		public DecisionProjection(List<IItemEvent> history) {
+		public DecisionProjection(List<ItemEvent> history) {
 			history.forEach(this::apply);
 		}
 
-		public void apply(IItemEvent event) {
+		public void apply(ItemEvent event) {
 			if (event instanceof ItemAdded) {
 				exists = true;
 				id = ((ItemAdded) event).getAggregateId();

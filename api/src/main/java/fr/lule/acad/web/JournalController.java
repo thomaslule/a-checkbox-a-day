@@ -7,9 +7,12 @@ import javax.validation.constraints.NotNull;
 import com.google.common.eventbus.EventBus;
 
 import fr.lule.acad.aggregate.Journal;
-import fr.lule.acad.event.IJournalEvent;
+import fr.lule.acad.event.JournalDay;
+import fr.lule.acad.event.JournalEvent;
 import fr.lule.acad.projection.JournalProjection;
 import fr.lule.acad.store.IEventStore;
+import fr.lule.acad.util.DateFactory;
+import fr.lule.acad.util.IDateFactory;
 import fr.lule.acad.web.validation.CommandRunner;
 import fr.lule.acad.web.validation.Day;
 import fr.lule.acad.web.validation.Month;
@@ -21,11 +24,13 @@ import net.codestory.http.payload.Payload;
 @Prefix("/api/Journal")
 public class JournalController {
 
+	private final IDateFactory dateFactory = new DateFactory();
+
 	private EventBus bus;
 	private Validator validator;
 	private JournalProjection journalProjection;
 
-	public JournalController(EventBus bus, IEventStore<IJournalEvent, String> journalEventStore,
+	public JournalController(EventBus bus, IEventStore<JournalEvent, JournalDay> journalEventStore,
 			JournalProjection journalProjection) {
 		this.bus = bus;
 		this.journalProjection = journalProjection;
@@ -42,7 +47,7 @@ public class JournalController {
 	@Post("/EditJournalEntry")
 	public Payload editJournalEntry(EditJournalEntryCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			if (Journal.editJournalEntry(bus, command.day, command.text)) {
+			if (Journal.editJournalEntry(bus, command.day, command.text, dateFactory)) {
 				return Payload.ok();
 			} else {
 				return Payload.badRequest();

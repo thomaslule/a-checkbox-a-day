@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import fr.lule.acad.event.IEvent;
 
-public class InMemoryEventStore<TAggregateEvent extends IEvent<?>, TID> implements IEventStore<TAggregateEvent, TID> {
+public class InMemoryEventStore<TAggregateEvent extends IEvent, TID> implements IEventStore<TAggregateEvent, TID> {
 
 	private List<TAggregateEvent> events = new ArrayList<TAggregateEvent>();
 

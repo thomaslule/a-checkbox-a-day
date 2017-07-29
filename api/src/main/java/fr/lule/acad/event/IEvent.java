@@ -1,7 +1,11 @@
 package fr.lule.acad.event;
 
-public interface IEvent<ID> {
+import java.util.Date;
 
-	public ID getAggregateId();
+public interface IEvent {
+
+	public IEventId getAggregateId();
+
+	public Date getDate();
 
 }

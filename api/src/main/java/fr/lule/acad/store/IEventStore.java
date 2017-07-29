@@ -4,7 +4,7 @@ import java.util.List;
 
 import fr.lule.acad.event.IEvent;
 
-public interface IEventStore<TAggregateEvent extends IEvent<?>, TID> {
+public interface IEventStore<TAggregateEvent extends IEvent, TID> {
 
 	void add(TAggregateEvent event);
 

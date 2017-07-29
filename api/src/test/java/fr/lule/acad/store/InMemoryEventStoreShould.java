@@ -2,6 +2,7 @@ package fr.lule.acad.store;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,24 +10,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.lule.acad.aggregate.ItemType;
-import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.ItemEvent;
+import fr.lule.acad.event.ItemId;
 import fr.lule.acad.event.TaskCompleted;
 
 public class InMemoryEventStoreShould {
 
-	private IEventStore<IItemEvent, UUID> store;
-	private UUID id1;
-	private UUID id2;
+	private final Date DATE_ZERO = new Date(0);
+
+	private IEventStore<ItemEvent, ItemId> store;
+	private ItemId id1;
+	private ItemId id2;
 
 	@Before
 	public void before() {
-		store = new InMemoryEventStore<IItemEvent, UUID>();
-		id1 = UUID.randomUUID();
-		ItemAdded item1 = new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK);
-		id2 = UUID.randomUUID();
-		ItemAdded item2 = new ItemAdded(id2, "task 2", "2017-05", ItemType.TASK);
-		TaskCompleted item3 = new TaskCompleted(id1);
+		store = new InMemoryEventStore<ItemEvent, ItemId>();
+		id1 = new ItemId(UUID.randomUUID());
+		ItemAdded item1 = new ItemAdded("task 1", "2017-05", ItemType.TASK, id1, DATE_ZERO);
+		id2 = new ItemId(UUID.randomUUID());
+		ItemAdded item2 = new ItemAdded("task 2", "2017-05", ItemType.TASK, id2, DATE_ZERO);
+		TaskCompleted item3 = new TaskCompleted(id1, DATE_ZERO);
 
 		store.add(item1);
 		store.add(item2);
@@ -35,19 +39,19 @@ public class InMemoryEventStoreShould {
 
 	@Test
 	public void getAllEventsRestituteEventsInSameOrder() {
-		List<IItemEvent> events = store.getAllEvents();
+		List<ItemEvent> events = store.getAllEvents();
 
-		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK));
-		assertThat(events.get(1)).isEqualTo(new ItemAdded(id2, "task 2", "2017-05", ItemType.TASK));
-		assertThat(events.get(2)).isEqualTo(new TaskCompleted(id1));
+		assertThat(events.get(0)).isEqualTo(new ItemAdded("task 1", "2017-05", ItemType.TASK, id1, DATE_ZERO));
+		assertThat(events.get(1)).isEqualTo(new ItemAdded("task 2", "2017-05", ItemType.TASK, id2, DATE_ZERO));
+		assertThat(events.get(2)).isEqualTo(new TaskCompleted(id1, DATE_ZERO));
 	}
 
 	@Test
 	public void getEventsForRestituteEventsForAggregate() {
-		List<IItemEvent> events = store.getEventsFor(id1);
+		List<ItemEvent> events = store.getEventsFor(id1);
 
-		assertThat(events.get(0)).isEqualTo(new ItemAdded(id1, "task 1", "2017-05", ItemType.TASK));
-		assertThat(events.get(1)).isEqualTo(new TaskCompleted(id1));
+		assertThat(events.get(0)).isEqualTo(new ItemAdded("task 1", "2017-05", ItemType.TASK, id1, DATE_ZERO));
+		assertThat(events.get(1)).isEqualTo(new TaskCompleted(id1, DATE_ZERO));
 	}
 
 }

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.lule.acad.event.IEvent;
 
-public class FileEventStore<TAggregateEvent extends IEvent<?>, TID> implements IEventStore<TAggregateEvent, TID> {
+public class FileEventStore<TAggregateEvent extends IEvent, TID> implements IEventStore<TAggregateEvent, TID> {
 
 	private static final Logger logger = LogManager.getLogger(FileEventStore.class);
 

@@ -5,25 +5,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.junit.Test;
 
 import fr.lule.acad.aggregate.ItemType;
-import fr.lule.acad.event.IItemEvent;
 import fr.lule.acad.event.ItemAdded;
+import fr.lule.acad.event.ItemEvent;
+import fr.lule.acad.event.ItemId;
 import fr.lule.acad.event.TaskCompleted;
 
 public class FileEventStoreShould {
 
-	private FileEventStore<IItemEvent, UUID> store;
+	private FileEventStore<ItemEvent, ItemId> store;
 
 	@Test
 	public void getAllEventsRestituteEventsFromFile() {
-		store = new FileEventStore<IItemEvent, UUID>("src/test/resources/itemstore_saved.json");
+		store = new FileEventStore<ItemEvent, ItemId>("src/test/resources/itemstore_saved.json");
 
-		List<IItemEvent> events = store.getAllEvents();
+		List<ItemEvent> events = store.getAllEvents();
 
 		assertThat(events.get(0)).isInstanceOf(ItemAdded.class);
 		assertThat(((ItemAdded) events.get(0)).getText()).isEqualTo("task 1");
@@ -34,13 +36,13 @@ public class FileEventStoreShould {
 
 	@Test
 	public void addStoreEventsToFile() throws IOException {
-		store = new FileEventStore<IItemEvent, UUID>("src/test/resources/itemstore_temp.json");
+		store = new FileEventStore<ItemEvent, ItemId>("src/test/resources/itemstore_temp.json");
 		store.emptyStore();
-		store.add(new ItemAdded(UUID.fromString("391dfb2e-2248-4ef6-b322-e9200496def0"), "task 1", "2017-05",
-				ItemType.TASK));
-		store.add(new ItemAdded(UUID.fromString("cfdb4cd7-7c33-47ac-9686-3400876ee30e"), "task 2", "2017-05",
-				ItemType.TASK));
-		store.add(new TaskCompleted(UUID.fromString("391dfb2e-2248-4ef6-b322-e9200496def0")));
+		store.add(new ItemAdded("task 1", "2017-05", ItemType.TASK,
+				new ItemId(UUID.fromString("391dfb2e-2248-4ef6-b322-e9200496def0")), new Date(0)));
+		store.add(new ItemAdded("task 2", "2017-05", ItemType.TASK,
+				new ItemId(UUID.fromString("cfdb4cd7-7c33-47ac-9686-3400876ee30e")), new Date(0)));
+		store.add(new TaskCompleted(new ItemId(UUID.fromString("391dfb2e-2248-4ef6-b322-e9200496def0")), new Date(0)));
 
 		assertThat(readFile("./src/test/resources/itemstore_temp.json"))
 				.isEqualTo(readFile("./src/test/resources/itemstore_saved.json"));
