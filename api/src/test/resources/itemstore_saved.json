@@ -1,0 +1,13 @@
+[ "java.util.ArrayList", [ [ "fr.lule.acad.event.ItemAdded", {
+  "aggregateId" : "391dfb2e-2248-4ef6-b322-e9200496def0",
+  "text" : "task 1",
+  "month" : "2017-05",
+  "type" : "TASK"
+} ], [ "fr.lule.acad.event.ItemAdded", {
+  "aggregateId" : "cfdb4cd7-7c33-47ac-9686-3400876ee30e",
+  "text" : "task 2",
+  "month" : "2017-05",
+  "type" : "TASK"
+} ], [ "fr.lule.acad.event.TaskCompleted", {
+  "aggregateId" : "391dfb2e-2248-4ef6-b322-e9200496def0"
+} ] ] ]

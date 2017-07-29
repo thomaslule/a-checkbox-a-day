@@ -35,9 +35,9 @@ public class AcadServer {
 
 		if (cmd.hasOption("store")) {
 			itemEventStore = new FileEventStore<IItemEvent, UUID>(
-					cmd.getOptionValue("store") + File.separator + "items");
+					cmd.getOptionValue("store") + File.separator + "items.json");
 			journalEventStore = new FileEventStore<IJournalEvent, String>(
-					cmd.getOptionValue("store") + File.separator + "journal");
+					cmd.getOptionValue("store") + File.separator + "journal.json");
 		} else {
 			itemEventStore = new InMemoryEventStore<IItemEvent, UUID>();
 			journalEventStore = new InMemoryEventStore<IJournalEvent, String>();

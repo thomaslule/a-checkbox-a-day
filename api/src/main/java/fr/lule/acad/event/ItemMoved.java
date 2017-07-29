@@ -2,14 +2,16 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ItemMoved implements IItemEvent {
 
-	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 	private final UUID childItem;
 	private final String movedToMonth;
 
-	public ItemMoved(UUID aggregateId, UUID childItem, String movedToMonth) {
+	public ItemMoved(@JsonProperty("aggregateId") UUID aggregateId, @JsonProperty("childItem") UUID childItem,
+			@JsonProperty("movedToMonth") String movedToMonth) {
 		this.aggregateId = aggregateId;
 		this.childItem = childItem;
 		this.movedToMonth = movedToMonth;

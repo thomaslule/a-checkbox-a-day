@@ -2,15 +2,21 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ItemDeleted implements IItemEvent {
 
-	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 
-	public ItemDeleted(UUID aggregateId) {
+	@JsonCreator
+	public ItemDeleted(@JsonProperty("aggregateId") UUID aggregateId) {
 		this.aggregateId = aggregateId;
 	}
 
+	/**
+	 * @return the aggregateId
+	 */
 	@Override
 	public UUID getAggregateId() {
 		return aggregateId;

@@ -2,18 +2,24 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TaskCompleted implements IItemEvent {
 
-	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 
-	public TaskCompleted(UUID aggregateId) {
+	@JsonCreator
+	public TaskCompleted(@JsonProperty("aggregateId") UUID aggregateId) {
 		this.aggregateId = aggregateId;
 	}
 
+	/**
+	 * @return the aggregateId
+	 */
 	@Override
 	public UUID getAggregateId() {
-		return this.aggregateId;
+		return aggregateId;
 	}
 
 	/*

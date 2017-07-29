@@ -21,7 +21,7 @@ public class FileEventStoreShould {
 
 	@Test
 	public void getAllEventsRestituteEventsFromFile() {
-		store = new FileEventStore<IItemEvent, UUID>("src/test/resources/itemstore_saved");
+		store = new FileEventStore<IItemEvent, UUID>("src/test/resources/itemstore_saved.json");
 
 		List<IItemEvent> events = store.getAllEvents();
 
@@ -34,7 +34,7 @@ public class FileEventStoreShould {
 
 	@Test
 	public void addStoreEventsToFile() throws IOException {
-		store = new FileEventStore<IItemEvent, UUID>("src/test/resources/itemstore_temp");
+		store = new FileEventStore<IItemEvent, UUID>("src/test/resources/itemstore_temp.json");
 		store.emptyStore();
 		store.add(new ItemAdded(UUID.fromString("391dfb2e-2248-4ef6-b322-e9200496def0"), "task 1", "2017-05",
 				ItemType.TASK));
@@ -42,8 +42,8 @@ public class FileEventStoreShould {
 				ItemType.TASK));
 		store.add(new TaskCompleted(UUID.fromString("391dfb2e-2248-4ef6-b322-e9200496def0")));
 
-		assertThat(readFile("./src/test/resources/itemstore_temp"))
-				.isEqualTo(readFile("./src/test/resources/itemstore_saved"));
+		assertThat(readFile("./src/test/resources/itemstore_temp.json"))
+				.isEqualTo(readFile("./src/test/resources/itemstore_saved.json"));
 	}
 
 	private static String readFile(String path) throws IOException {

@@ -1,17 +1,22 @@
 package fr.lule.acad.event;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class JournalEntryEdited implements IJournalEvent {
 
-	private static final long serialVersionUID = 1L;
 	public String day;
 	public String text;
 
-	public JournalEntryEdited(String day, String text) {
+	@JsonCreator
+	public JournalEntryEdited(@JsonProperty("day") String day, @JsonProperty("text") String text) {
 		this.day = day;
 		this.text = text;
 	}
 
 	@Override
+	@JsonIgnore
 	public String getAggregateId() {
 		return this.day;
 	}

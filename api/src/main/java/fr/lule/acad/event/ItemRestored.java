@@ -2,12 +2,15 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ItemRestored implements IItemEvent {
 
-	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 
-	public ItemRestored(UUID aggregateId) {
+	@JsonCreator
+	public ItemRestored(@JsonProperty("aggregateId") UUID aggregateId) {
 		this.aggregateId = aggregateId;
 	}
 

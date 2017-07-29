@@ -2,38 +2,54 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import fr.lule.acad.aggregate.ItemType;
 
 public class ItemAdded implements IItemEvent {
 
-	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
-	private String text;
-	private String month;
-	private ItemType type;
+	private final String text;
+	private final String month;
+	private final ItemType type;
 
-	public ItemAdded(UUID aggregateId, String text, String month, ItemType type) {
+	@JsonCreator
+	public ItemAdded(@JsonProperty("aggregateId") UUID aggregateId, @JsonProperty("text") String text,
+			@JsonProperty("month") String month, @JsonProperty("type") ItemType type) {
 		this.aggregateId = aggregateId;
 		this.text = text;
 		this.month = month;
 		this.type = type;
 	}
 
+	/**
+	 * @return the aggregateId
+	 */
+	@Override
+	public UUID getAggregateId() {
+		return aggregateId;
+	}
+
+	/**
+	 * @return the text
+	 */
 	public String getText() {
 		return text;
 	}
 
+	/**
+	 * @return the month
+	 */
 	public String getMonth() {
 		return month;
 	}
 
+	/**
+	 * @return the type
+	 */
 	public ItemType getType() {
 		return type;
-	}
-
-	@Override
-	public UUID getAggregateId() {
-		return this.aggregateId;
 	}
 
 	/*

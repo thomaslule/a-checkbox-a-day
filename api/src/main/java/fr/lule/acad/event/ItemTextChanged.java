@@ -2,13 +2,16 @@ package fr.lule.acad.event;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ItemTextChanged implements IItemEvent {
 
-	private static final long serialVersionUID = 1L;
 	private final UUID aggregateId;
 	private final String newText;
 
-	public ItemTextChanged(UUID aggregateId, String newText) {
+	@JsonCreator
+	public ItemTextChanged(@JsonProperty("aggregateId") UUID aggregateId, @JsonProperty("newText") String newText) {
 		this.aggregateId = aggregateId;
 		this.newText = newText;
 	}
