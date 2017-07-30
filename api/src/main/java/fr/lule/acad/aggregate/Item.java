@@ -1,7 +1,6 @@
 package fr.lule.acad.aggregate;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.google.common.eventbus.EventBus;
 
@@ -16,20 +15,24 @@ import fr.lule.acad.event.ItemTextChanged;
 import fr.lule.acad.event.TaskCompleted;
 import fr.lule.acad.event.TaskUncompleted;
 import fr.lule.acad.util.IDateFactory;
+import fr.lule.acad.util.IIdFactory;
 
 public class Item {
 
 	private final IDateFactory dateFactory;
+	private final IIdFactory idFactory;
 	private DecisionProjection projection;
 
-	public static ItemId add(EventBus publisher, String text, String month, ItemType type, IDateFactory dateFactory) {
-		ItemAdded event = new ItemAdded(text, month, type, new ItemId(UUID.randomUUID()), dateFactory.now());
+	public static ItemId add(EventBus publisher, String text, String month, ItemType type, IDateFactory dateFactory,
+			IIdFactory idFactory) {
+		ItemAdded event = new ItemAdded(text, month, type, new ItemId(idFactory.newId()), dateFactory.now());
 		publisher.post(event);
 		return event.getAggregateId();
 	}
 
-	public Item(List<ItemEvent> history, IDateFactory dateFactory) {
+	public Item(List<ItemEvent> history, IDateFactory dateFactory, IIdFactory idFactory) {
 		this.dateFactory = dateFactory;
+		this.idFactory = idFactory;
 		projection = new DecisionProjection(history);
 	}
 
@@ -91,7 +94,7 @@ public class Item {
 		if (!projection.exists || projection.cancelled) {
 			return false;
 		}
-		ItemId newId = add(publisher, projection.text, moveToMonth, projection.type, dateFactory);
+		ItemId newId = add(publisher, projection.text, moveToMonth, projection.type, dateFactory, idFactory);
 		ItemMoved event = new ItemMoved(newId, moveToMonth, projection.id, dateFactory.now());
 		applyAndPublish(publisher, event);
 		return true;

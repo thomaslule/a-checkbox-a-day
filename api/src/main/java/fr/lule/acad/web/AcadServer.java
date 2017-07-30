@@ -20,11 +20,18 @@ import fr.lule.acad.store.IEventStore;
 import fr.lule.acad.store.InMemoryEventStore;
 import fr.lule.acad.store.ItemEventSaver;
 import fr.lule.acad.store.JournalEventSaver;
+import fr.lule.acad.util.DateFactory;
+import fr.lule.acad.util.IDateFactory;
+import fr.lule.acad.util.IIdFactory;
+import fr.lule.acad.util.IdFactory;
 import net.codestory.http.WebServer;
 
 public class AcadServer {
 
 	public static void main(String[] args) throws ParseException {
+
+		IDateFactory dateFactory = new DateFactory();
+		IIdFactory idFactory = new IdFactory();
 
 		Options options = new Options();
 		options.addOption("s", "store", true, "Path to store folder");
@@ -55,8 +62,8 @@ public class AcadServer {
 		bus.register(journalProjection);
 
 		new WebServer().configure(routes -> {
-			routes.add(new ItemController(list, bus, itemEventStore));
-			routes.add(new JournalController(bus, journalEventStore, journalProjection));
+			routes.add(new ItemController(list, bus, itemEventStore, dateFactory, idFactory));
+			routes.add(new JournalController(bus, journalEventStore, journalProjection, dateFactory));
 		}).start();
 	}
 

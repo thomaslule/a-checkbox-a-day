@@ -19,6 +19,7 @@ import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.projection.JournalEntry;
 import fr.lule.acad.projection.JournalProjection;
+import fr.lule.acad.util.IdFactory;
 
 public class AcadShould {
 
@@ -28,7 +29,7 @@ public class AcadShould {
 		ItemList list = new ItemList(new ArrayList<ItemEvent>());
 		bus.register(list);
 
-		ItemId id = Item.add(bus, "buy bread", "2017-05", ItemType.TASK, () -> new Date(0));
+		ItemId id = Item.add(bus, "buy bread", "2017-05", ItemType.TASK, TestUtils.DATE_ZERO_FACTORY, new IdFactory());
 
 		assertThat(list.getList("2017-05"))
 				.contains(new ItemDisplayed(id.getId(), ItemType.TASK, "buy bread", "2017-05", false, false, false));

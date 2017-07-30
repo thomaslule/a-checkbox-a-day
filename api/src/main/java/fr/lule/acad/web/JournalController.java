@@ -11,7 +11,6 @@ import fr.lule.acad.event.JournalDay;
 import fr.lule.acad.event.JournalEvent;
 import fr.lule.acad.projection.JournalProjection;
 import fr.lule.acad.store.IEventStore;
-import fr.lule.acad.util.DateFactory;
 import fr.lule.acad.util.IDateFactory;
 import fr.lule.acad.web.validation.CommandRunner;
 import fr.lule.acad.web.validation.Day;
@@ -24,16 +23,17 @@ import net.codestory.http.payload.Payload;
 @Prefix("/api/Journal")
 public class JournalController {
 
-	private final IDateFactory dateFactory = new DateFactory();
+	private final IDateFactory dateFactory;
 
 	private EventBus bus;
 	private Validator validator;
 	private JournalProjection journalProjection;
 
 	public JournalController(EventBus bus, IEventStore<JournalEvent, JournalDay> journalEventStore,
-			JournalProjection journalProjection) {
+			JournalProjection journalProjection, IDateFactory dateFactory) {
 		this.bus = bus;
 		this.journalProjection = journalProjection;
+		this.dateFactory = dateFactory;
 		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
 	}
 

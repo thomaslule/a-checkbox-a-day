@@ -16,8 +16,8 @@ import fr.lule.acad.event.ItemId;
 import fr.lule.acad.projection.ItemDisplayed;
 import fr.lule.acad.projection.ItemList;
 import fr.lule.acad.store.IEventStore;
-import fr.lule.acad.util.DateFactory;
 import fr.lule.acad.util.IDateFactory;
+import fr.lule.acad.util.IIdFactory;
 import fr.lule.acad.web.validation.CommandRunner;
 import fr.lule.acad.web.validation.Month;
 import net.codestory.http.annotations.Get;
@@ -29,17 +29,21 @@ import net.codestory.http.payload.Payload;
 @Prefix("/api/Item")
 public class ItemController {
 
-	private final IDateFactory dateFactory = new DateFactory();
+	private final IDateFactory dateFactory;
+	private final IIdFactory idFactory;
 
 	private ItemList list;
 	private EventBus bus;
 	private IEventStore<ItemEvent, ItemId> itemEventStore;
 	private Validator validator;
 
-	public ItemController(ItemList list, EventBus bus, IEventStore<ItemEvent, ItemId> itemEventStore) {
+	public ItemController(ItemList list, EventBus bus, IEventStore<ItemEvent, ItemId> itemEventStore,
+			IDateFactory dateFactory, IIdFactory idFactory) {
 		this.list = list;
 		this.bus = bus;
 		this.itemEventStore = itemEventStore;
+		this.dateFactory = dateFactory;
+		this.idFactory = idFactory;
 		this.validator = Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
@@ -53,7 +57,7 @@ public class ItemController {
 	@Post("/AddItem")
 	public Payload addItem(AddItemCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			ItemId id = Item.add(bus, c.text, c.month, c.itemType, dateFactory);
+			ItemId id = Item.add(bus, c.text, c.month, c.itemType, dateFactory, idFactory);
 			return new Payload(null, new ItemDisplayed(id.getId(), c.itemType, c.text, c.month, false, false, false),
 					HttpStatus.CREATED);
 		});
@@ -62,7 +66,7 @@ public class ItemController {
 	@Post("/CancelItem")
 	public Payload cancelItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory);
+			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
 			if (item.cancel(bus)) {
 				return Payload.ok();
 			} else {
@@ -74,7 +78,7 @@ public class ItemController {
 	@Post("/RestoreItem")
 	public Payload restoreItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory);
+			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
 			if (item.restore(bus)) {
 				return Payload.ok();
 			} else {
@@ -86,7 +90,7 @@ public class ItemController {
 	@Post("/DeleteItem")
 	public Payload deleteItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory);
+			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
 			if (item.delete(bus)) {
 				return Payload.ok();
 			} else {
@@ -98,7 +102,7 @@ public class ItemController {
 	@Post("/CompleteTask")
 	public Payload completeTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item task = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory);
+			Item task = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
 			if (task.completeTask(bus)) {
 				return Payload.ok();
 			} else {
@@ -110,7 +114,7 @@ public class ItemController {
 	@Post("/UncompleteTask")
 	public Payload uncompleteTask(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item task = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory);
+			Item task = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
 			if (task.uncompleteTask(bus)) {
 				return Payload.ok();
 			} else {
@@ -122,7 +126,7 @@ public class ItemController {
 	@Post("/ChangeItemText")
 	public Payload changeItemText(ChangeItemTextCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
-			Item task = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory);
+			Item task = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
 			if (task.changeItemText(bus, command.newText)) {
 				return Payload.ok();
 			} else {

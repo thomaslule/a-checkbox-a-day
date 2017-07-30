@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.google.common.eventbus.EventBus;
 
+import fr.lule.acad.TestUtils;
 import fr.lule.acad.aggregate.ItemType;
 import fr.lule.acad.event.ItemAdded;
 import fr.lule.acad.event.ItemEvent;
@@ -37,19 +38,21 @@ public class ItemControllerShould {
 	public void before() {
 		itemEventStore = new InMemoryEventStore<ItemEvent, ItemId>();
 		eventId = new ItemId(UUID.randomUUID());
-		itemEventStore.add(new ItemAdded("todo", "2017-01", ItemType.TASK, eventId, new Date(0)));
+		itemEventStore.add(new ItemAdded("todo", "2017-01", ItemType.TASK, eventId, TestUtils.DATE_ZERO));
 		bus = new EventBus();
 		bus.register(itemEventStore);
 		list = new ItemList(itemEventStore.getAllEvents());
 		bus.register(list);
-		controller = new ItemController(list, bus, itemEventStore);
+		controller = new ItemController(list, bus, itemEventStore, TestUtils.DATE_ZERO_FACTORY,
+				TestUtils.createIdFactory(new UUID(0, 0)));
 	}
 
 	@Test
 	public void getItemsReturnsList() {
 		Payload res = controller.getMonthItems(new GetMonthItemsCommand("2017-01"));
 		assertThat(res.isSuccess()).isTrue();
-		assertThat(((List<ItemDisplayed>) res.rawContent()).get(0).getText()).isEqualTo("todo");
+		assertThat(((List<ItemDisplayed>) res.rawContent()))
+				.contains(new ItemDisplayed(eventId.getId(), ItemType.TASK, "todo", "2017-01", false, false, false));
 	}
 
 	@Test
@@ -62,10 +65,12 @@ public class ItemControllerShould {
 	public void addItemReturnsItem() {
 		AddItemCommand command = new AddItemCommand();
 		command.month = "2017-01";
-		command.text = "todo";
+		command.text = "item added";
 		command.itemType = ItemType.TASK;
 		Payload res = controller.addItem(command);
 		assertThat(res.isSuccess()).isTrue();
+		assertThat((ItemDisplayed) res.rawContent()).isEqualTo(
+				new ItemDisplayed(new UUID(0, 0), ItemType.TASK, "item added", "2017-01", false, false, false));
 		assertThat(list.getList("2017-01").size()).isEqualTo(2);
 	}
 
