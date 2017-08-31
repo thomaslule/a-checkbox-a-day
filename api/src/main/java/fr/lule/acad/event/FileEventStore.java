@@ -1,40 +1,42 @@
 package fr.lule.acad.event;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Functions;
 
 public class FileEventStore<TAggregateEvent extends IEvent, TID> implements IEventStore<TAggregateEvent, TID> {
 
 	private static final Logger logger = LogManager.getLogger(FileEventStore.class);
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	private final File file;
 	private final List<TAggregateEvent> eventsCache;
-	private final static ObjectMapper MAPPER = new ObjectMapper();
-	{
-		MAPPER.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-	}
 
-	@SuppressWarnings("unchecked")
-	public FileEventStore(String filePath) {
-		this.file = new File(filePath);
-		if (file.exists() && file.length() > 0) {
-			try {
-				eventsCache = MAPPER.readValue(file, ArrayList.class);
-			} catch (IOException e) {
-				throw new RuntimeException("could not read the store at " + file.getAbsolutePath(), e);
-			}
+	public FileEventStore(String filePath, List<Class<? extends TAggregateEvent>> eventsList) {
+
+		file = new File(filePath);
+		if (file.exists()) {
+			eventsCache = getEventsFromFile(eventsList);
 		} else {
-			file.getParentFile().mkdirs();
+			try {
+				com.google.common.io.Files.createParentDirs(file);
+				com.google.common.io.Files.touch(file);
+			} catch (IOException e) {
+				throw new RuntimeException("could not create the store at " + file.getAbsolutePath(), e);
+			}
 			eventsCache = new ArrayList<TAggregateEvent>();
 		}
 
@@ -44,11 +46,7 @@ public class FileEventStore<TAggregateEvent extends IEvent, TID> implements IEve
 	@Override
 	public void add(TAggregateEvent event) {
 		eventsCache.add(event);
-		try {
-			MAPPER.writerWithDefaultPrettyPrinter().writeValue(file, eventsCache);
-		} catch (IOException e) {
-			throw new RuntimeException("could not save event to " + file.getAbsolutePath(), e);
-		}
+		addEventToFile(event);
 		logger.debug("Event {} stored to {}", event, file.getAbsolutePath());
 	}
 
@@ -65,11 +63,37 @@ public class FileEventStore<TAggregateEvent extends IEvent, TID> implements IEve
 
 	public void emptyStore() {
 		eventsCache.clear();
-		try {
-			PrintWriter writer = new PrintWriter(file);
-			writer.print("");
-			writer.close();
-		} catch (FileNotFoundException e) {
+		file.delete();
+	}
+
+	private List<TAggregateEvent> getEventsFromFile(List<Class<? extends TAggregateEvent>> eventsList) {
+		Map<String, Class<? extends TAggregateEvent>> eventNameToClass = listToMap(eventsList);
+
+		try (Stream<String> stream = Files.lines(file.toPath())) {
+			return stream.filter(line -> line.length() > 0).map(line -> line.split(" ", 2)).map(nameAndData -> {
+				Class<? extends TAggregateEvent> eventClass = eventNameToClass.get(nameAndData[0]);
+				try {
+					return MAPPER.readValue(nameAndData[1], eventClass);
+				} catch (IOException e) {
+					throw new RuntimeException("could not read the store at " + file.getAbsolutePath(), e);
+				}
+			}).collect(Collectors.toList());
+		} catch (IOException e) {
+			throw new RuntimeException("could not read the store at " + file.getAbsolutePath(), e);
+		}
+	}
+
+	private Map<String, Class<? extends TAggregateEvent>> listToMap(List<Class<? extends TAggregateEvent>> list) {
+		return list.stream().collect(Collectors.toMap(Class::getSimpleName, Functions.identity()));
+	}
+
+	private void addEventToFile(TAggregateEvent event) {
+		try (BufferedWriter output = new BufferedWriter(new FileWriter(file, true))) {
+			output.write(event.getClass().getSimpleName() + " " + MAPPER.writeValueAsString(event));
+			output.newLine();
+			output.flush();
+		} catch (IOException e) {
+			throw new RuntimeException("could not save event to " + file.getAbsolutePath(), e);
 		}
 	}
 

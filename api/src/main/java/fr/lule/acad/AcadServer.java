@@ -6,17 +6,18 @@ import org.apache.commons.cli.ParseException;
 
 import com.google.common.eventbus.EventBus;
 
-import fr.lule.acad.event.FileEventStore;
 import fr.lule.acad.event.IEventStore;
 import fr.lule.acad.event.InMemoryEventStore;
 import fr.lule.acad.item.ItemController;
 import fr.lule.acad.item.ItemEventSaver;
+import fr.lule.acad.item.ItemEventStore;
 import fr.lule.acad.item.ItemId;
 import fr.lule.acad.item.event.ItemEvent;
 import fr.lule.acad.item.projection.ItemListProjection;
 import fr.lule.acad.journal.JournalController;
 import fr.lule.acad.journal.JournalDay;
 import fr.lule.acad.journal.JournalEventSaver;
+import fr.lule.acad.journal.JournalEventStore;
 import fr.lule.acad.journal.event.JournalEvent;
 import fr.lule.acad.journal.projection.JournalProjection;
 import fr.lule.acad.util.DateFactory;
@@ -38,9 +39,8 @@ public class AcadServer {
 		IEventStore<JournalEvent, JournalDay> journalEventStore;
 
 		if (options.hasStore()) {
-			itemEventStore = new FileEventStore<ItemEvent, ItemId>(options.getStore() + File.separator + "items.json");
-			journalEventStore = new FileEventStore<JournalEvent, JournalDay>(
-					options.getStore() + File.separator + "journal.json");
+			itemEventStore = new ItemEventStore(options.getStore() + File.separator + "items.json");
+			journalEventStore = new JournalEventStore(options.getStore() + File.separator + "journal.json");
 		} else {
 			itemEventStore = new InMemoryEventStore<ItemEvent, ItemId>();
 			journalEventStore = new InMemoryEventStore<JournalEvent, JournalDay>();
