@@ -5,12 +5,18 @@
 }
 
 .item.completed,
-.item.cancelled {
+.item.cancelled,
+.item.moved {
     color:grey;
 }
 
-.item.cancelled .item-name {
+.item.cancelled .item-name,
+.item.moved .item-name {
     text-decoration: line-through;
+}
+
+.moved-label {
+    margin-left: 5px;
 }
 
 .note {

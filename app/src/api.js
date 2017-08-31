@@ -29,6 +29,14 @@ api.cancelItem = id =>
     })
     .then(handleErrors);
 
+api.moveItem = (id, newMonth) =>
+  fetch('/api/Item/MoveItem',
+    {
+      method: 'POST',
+      body: JSON.stringify({ id, newMonth }),
+    })
+    .then(handleErrors);
+
 api.restoreItem = id =>
   fetch('/api/Item/RestoreItem',
     {

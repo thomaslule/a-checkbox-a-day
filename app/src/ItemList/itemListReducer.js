@@ -13,6 +13,12 @@ export default (state = [], action) => {
           ? { ...item, cancelled: true }
           : item),
       );
+    case 'MOVE_ITEM':
+      return state.map(item =>
+        ((item.id === action.id)
+          ? { ...item, moved: true }
+          : item),
+      );
     case 'RESTORE_ITEM':
       return state.map(item =>
         ((item.id === action.id)

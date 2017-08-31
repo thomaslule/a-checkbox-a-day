@@ -25,6 +25,12 @@ actions.cancelItem = id => ({
   id,
 });
 
+actions.moveItem = (id, newMonth) => ({
+  type: 'MOVE_ITEM',
+  id,
+  newMonth,
+});
+
 actions.restoreItem = id => ({
   type: 'RESTORE_ITEM',
   id,

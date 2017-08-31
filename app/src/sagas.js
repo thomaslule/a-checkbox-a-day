@@ -37,6 +37,17 @@ function* watchCancelItem() {
     });
 }
 
+function* watchMoveItem() {
+  yield takeEvery('MOVE_ITEM',
+    function* (action) {
+      try {
+        yield call(api.moveItem, action.id, action.newMonth);
+      } catch (e) {
+        yield put(actions.error(e));
+      }
+    });
+}
+
 function* watchRestoreItem() {
   yield takeEvery('RESTORE_ITEM',
     function* (action) {
@@ -119,6 +130,7 @@ export default function* () {
   yield fork(watchFetchItems);
   yield fork(watchAddItem);
   yield fork(watchCancelItem);
+  yield fork(watchMoveItem);
   yield fork(watchRestoreItem);
   yield fork(watchDeleteItem);
   yield fork(watchCompleteTask);

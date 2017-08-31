@@ -72,6 +72,18 @@ public class ItemController {
 		});
 	}
 
+	@Post("/MoveItem")
+	public Payload moveItem(MoveItemCommand command) {
+		return CommandRunner.ifValid(command, validator, (c) -> {
+			Item item = new Item(itemEventStore.getEventsFor(new ItemId(command.id)), dateFactory, idFactory);
+			if (item.moveItem(bus, command.newMonth)) {
+				return Payload.ok();
+			} else {
+				return Payload.badRequest();
+			}
+		});
+	}
+
 	@Post("/RestoreItem")
 	public Payload restoreItem(IdCommand command) {
 		return CommandRunner.ifValid(command, validator, (c) -> {
@@ -159,6 +171,15 @@ public class ItemController {
 	public static class IdCommand {
 		@NotNull
 		public UUID id;
+	}
+
+	public static class MoveItemCommand {
+		@NotNull
+		public UUID id;
+
+		@NotNull
+		@Month
+		public String newMonth;
 	}
 
 	public static class ChangeItemTextCommand {

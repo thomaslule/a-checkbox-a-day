@@ -8,6 +8,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch, props) => ({
   onCancel: () => dispatch(actions.cancelItem(props.item.id)),
+  onMove: newMonth => dispatch(actions.moveItem(props.item.id, newMonth)),
   onRestore: () => dispatch(actions.restoreItem(props.item.id)),
   onDelete: () => dispatch(actions.deleteItem(props.item.id)),
   onChangeCompleteTask: () => {
