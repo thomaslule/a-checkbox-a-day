@@ -9,16 +9,16 @@ import org.junit.Test;
 
 import com.google.common.eventbus.EventBus;
 
-import fr.lule.acad.aggregate.Item;
-import fr.lule.acad.aggregate.ItemType;
-import fr.lule.acad.aggregate.Journal;
-import fr.lule.acad.event.ItemEvent;
-import fr.lule.acad.event.ItemId;
-import fr.lule.acad.event.JournalEvent;
-import fr.lule.acad.projection.ItemDisplayed;
-import fr.lule.acad.projection.ItemList;
-import fr.lule.acad.projection.JournalEntry;
-import fr.lule.acad.projection.JournalProjection;
+import fr.lule.acad.item.Item;
+import fr.lule.acad.item.ItemId;
+import fr.lule.acad.item.ItemType;
+import fr.lule.acad.item.event.ItemEvent;
+import fr.lule.acad.item.projection.ItemDisplayed;
+import fr.lule.acad.item.projection.ItemListProjection;
+import fr.lule.acad.journal.Journal;
+import fr.lule.acad.journal.event.JournalEvent;
+import fr.lule.acad.journal.projection.JournalEntry;
+import fr.lule.acad.journal.projection.JournalProjection;
 import fr.lule.acad.util.IdFactory;
 
 public class AcadShould {
@@ -26,7 +26,7 @@ public class AcadShould {
 	@Test
 	public void displayItemInItemListWhenAddItem() {
 		EventBus bus = new EventBus();
-		ItemList list = new ItemList(new ArrayList<ItemEvent>());
+		ItemListProjection list = new ItemListProjection(new ArrayList<ItemEvent>());
 		bus.register(list);
 
 		ItemId id = Item.add(bus, "buy bread", "2017-05", ItemType.TASK, TestUtils.DATE_ZERO_FACTORY, new IdFactory());
