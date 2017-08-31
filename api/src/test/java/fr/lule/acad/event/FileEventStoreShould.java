@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.junit.After;
 import org.junit.Test;
 
-import fr.lule.acad.event.FileEventStore;
 import fr.lule.acad.item.ItemId;
 import fr.lule.acad.item.ItemType;
 import fr.lule.acad.item.event.ItemAdded;
@@ -42,7 +41,7 @@ public class FileEventStoreShould {
 		store.add(event2);
 		store.add(event3);
 
-		store = new FileEventStore<ItemEvent, ItemId>("src/test/resources/temp.json");
+		store = new FileEventStore<ItemEvent, ItemId>(FILENAME);
 
 		List<ItemEvent> events = store.getAllEvents();
 
